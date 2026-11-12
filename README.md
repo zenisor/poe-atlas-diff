@@ -19,6 +19,8 @@ npm run build        # static site in dist/ (serve with `npm run preview` or any
 
 `.github/workflows/pages.yml` runs the tests, builds, and publishes `dist/` to GitHub Pages on every push to `main`. Enable it once under **Settings → Pages → Source: GitHub Actions**. The app uses hash routing and relative paths, so it works from the `/<repo>/` sub-path without extra configuration.
 
+Visits are counted with [GoatCounter](https://www.goatcounter.com/) (cookieless; script in `index.html`). Each hash route (`#/scarabs`, `#/map/Essence`…) is counted as its own page, so the dashboard shows which tabs and mechanics people open. Local dev on `localhost` is not counted.
+
 ## Tabs
 
 | Tab | What it shows |

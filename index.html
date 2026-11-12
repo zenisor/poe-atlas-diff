@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PoE 3.30 Atlas & Scarab Rework Diff</title>
     <link rel="icon" type="image/png" href="art/items/Horned-Scarab-of-Preservation.png" />
+    <!-- GoatCounter (cookieless). The app uses hash routes (#/scarabs, #/map/Essence…),
+         so include the hash in the counted path and count each route change as a view. -->
+    <script>
+      window.goatcounter = {
+        path: function (p) {
+          return p + location.hash;
+        },
+      };
+      window.addEventListener('hashchange', function () {
+        if (window.goatcounter.count) window.goatcounter.count({ path: location.pathname + location.hash });
+      });
+    </script>
+    <script data-goatcounter="https://memo.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
   </head>
   <body>
     <div id="root"></div>
