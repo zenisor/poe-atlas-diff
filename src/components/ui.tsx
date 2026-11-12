@@ -37,11 +37,12 @@ export const FATE_COLOR: Record<Fate, string> = {
   partial: 'var(--f-partial)',
   chance: 'var(--f-chance)',
   thread: 'var(--f-thread)',
+  ember: 'var(--f-ember)',
   reworked: 'var(--f-reworked)',
   removed: 'var(--f-removed)',
 };
 
-export const FATES: Fate[] = ['full', 'reduced', 'partial', 'chance', 'thread', 'reworked', 'removed'];
+export const FATES: Fate[] = ['full', 'reduced', 'partial', 'chance', 'thread', 'ember', 'reworked', 'removed'];
 
 export function StatusBadge({ status }: { status: string }) {
   return <span className={`badge s-${status}`}>{STATUS_LABEL[status] ?? status}</span>;
@@ -53,6 +54,7 @@ const FATE_SHORT: Record<Fate, string> = {
   partial: 'Partly',
   chance: 'Chance only',
   thread: 'Threads',
+  ember: 'Ember',
   reworked: 'Reworked',
   removed: 'Gone',
 };

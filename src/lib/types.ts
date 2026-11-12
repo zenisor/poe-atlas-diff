@@ -138,7 +138,7 @@ export interface NotableDiff {
 
 // ---------- Scarabs ----------
 
-export type Fate = 'full' | 'reduced' | 'partial' | 'chance' | 'thread' | 'reworked' | 'removed';
+export type Fate = 'full' | 'reduced' | 'partial' | 'chance' | 'thread' | 'ember' | 'reworked' | 'removed';
 
 export interface TreeMatch {
   /** Case-insensitive substring of the stat *template* (numbers replaced by '#'). */
@@ -173,6 +173,15 @@ export interface ScarabEffectSpec {
   treeUnit?: string;
   weight?: number;
   note?: string;
+  /** The 3.30 item that now gives this effect (fate 'ember'), shown with its icon. */
+  item?: string;
+}
+
+/** A 3.30 change outside the Atlas tree (patch notes, Endgame section) that matters for this scarab. */
+export interface OutsideNote {
+  note: string;
+  /** Set when the scarab's effect itself can still be had this way, e.g. 'Rare Map suffix'. */
+  via?: string;
 }
 
 export interface ScarabSpec {
@@ -181,6 +190,7 @@ export interface ScarabSpec {
   mechanics?: string[];
   /** 3.30 nodes that are related to this scarab but not counted in its numbers (different unit/target). */
   related?: { node: string; note: string }[];
+  outside?: OutsideNote;
   note?: string;
 }
 
@@ -221,6 +231,7 @@ export interface ScarabEffectResult {
   matches329: MatchedContribution[];
   matches330: MatchedContribution[];
   note?: string;
+  item?: string;
 }
 
 export interface ScarabResult {
@@ -239,6 +250,7 @@ export interface ScarabResult {
   /** Weighted best-case retention over quantifiable effects (0..). Null if nothing is quantifiable. */
   retention: number | null;
   effects: ScarabEffectResult[];
+  outside?: OutsideNote;
   note?: string;
 }
 

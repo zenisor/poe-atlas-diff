@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { cleanStat, parseStat, splitSurpassing, toTemplate } from '../src/lib/stats.ts';
-import { likeText, surpassLong, withValue } from '../src/lib/format.ts';
+import { effectTitle, likeText, surpassLong, withValue } from '../src/lib/format.ts';
 import { resemblance } from '../src/lib/resemblance.ts';
 import { evaluateEffect, overallFate, sumMatches } from '../src/lib/scarabs.ts';
 import { compareNotables } from '../src/lib/diff.ts';
@@ -225,5 +225,39 @@ describe('search ranking', () => {
 
   it('returns nothing for an empty query', () => {
     expect(rank(entries, '   ')).toEqual([]);
+  });
+});
+
+describe('effect names', () => {
+  it('keeps numbers every node shares, hides the headline value', () => {
+    const t = '#% chance for a Strongbox in your Tier # Maps to be replaced with the Empyrean Apparatus';
+    expect(effectTitle(t, ['10% chance for a Strongbox in your Tier 16 Maps to be replaced with the Empyrean Apparatus'])).toBe(
+      'X% chance for a Strongbox in your Tier 16 Maps to be replaced with the Empyrean Apparatus',
+    );
+  });
+
+  it('hides numbers that differ between nodes', () => {
+    expect(effectTitle('Your Maps have a #% chance to contain # additional Rogue Exiles', ['Your Maps have a 5% chance to contain 20 additional Rogue Exiles', 'Your Maps have a 5% chance to contain 10 additional Rogue Exiles'])).toBe(
+      'Your Maps have a X% chance to contain X additional Rogue Exiles',
+    );
+  });
+
+  it('shows a range whole or not at all', () => {
+    expect(effectTitle('Maps modified in this way have #-# additional random Map Modifiers', ['Maps modified in this way have 1-3 additional random Map Modifiers'])).toBe(
+      'Maps modified in this way have X-X additional random Map Modifiers',
+    );
+    expect(effectTitle('Tier #-# Maps found have #% chance to become # tier higher', ['Tier 1-15 Maps found have 3% chance to become 1 tier higher'])).toBe(
+      'Tier 1-15 Maps found have X% chance to become 1 tier higher',
+    );
+  });
+});
+
+describe('effects that became an item', () => {
+  it('keeps the ember fate and the item, without a retention', () => {
+    const r = evaluateEffect({ label: 'Packs', scarab: 1, unit: 'content', stacks: false, fate: 'ember', item: 'Allflame Ember of the Cloister' }, 1, [], []);
+    expect(r.fate).toBe('ember');
+    expect(r.item).toBe('Allflame Ember of the Cloister');
+    expect(r.retention).toBeNull();
+    expect(overallFate([r, { ...r, fate: 'removed' }])).toBe('ember');
   });
 });

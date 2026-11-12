@@ -7,7 +7,7 @@ import type { SearchEntry } from './lib/search.ts';
 import { normalize } from './lib/search.ts';
 import { CATEGORY_LABEL, categoryOf } from './lib/mechanics.ts';
 import { FATE_LABEL } from './lib/scarabs.ts';
-import { prettyTemplate } from './lib/format.ts';
+import { effectTexts, effectTitle } from './lib/format.ts';
 
 const STATUS_WORD: Record<string, string> = {
   added: 'new in 3.30',
@@ -80,7 +80,7 @@ function effectEntries(): SearchEntry[] {
   return data.effects.map((e) => {
     const c = e.new?.contributions[0] ?? e.old?.contributions[0];
     const node = c && (e.new ? mapNodeById.new : mapNodeById.old).get(c.nodeId);
-    const label = e.key.startsWith('link:') ? e.label : prettyTemplate(e.label);
+    const label = e.key.startsWith('link:') ? e.label : effectTitle(e.label, effectTexts(e));
     const names = [...new Set([...(e.old?.contributions ?? []), ...(e.new?.contributions ?? [])].map((x) => x.nodeName))];
     return {
       id: `effect:${e.key}`,

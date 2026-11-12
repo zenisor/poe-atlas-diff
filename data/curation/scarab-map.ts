@@ -13,10 +13,15 @@
  * Every scarab removed in 3.30 must have an entry; the build fails on a missing id or on a
  * match that hits no node.
  */
-import type { ScarabSpec } from '../../src/lib/types.ts';
+import type { OutsideNote, ScarabSpec } from '../../src/lib/types.ts';
 
 const removed = (label: string, note?: string): ScarabSpec => ({
   effects: [{ label, scarab: 1, unit: 'binary', stacks: false, fate: 'removed', ...(note ? { note } : {}) }],
+});
+
+/** The scarab's effect is now an Allflame Ember (3.30 currency that enchants a Map). */
+const ember = (label: string, item: string, note: string): ScarabSpec => ({
+  effects: [{ label, scarab: 1, unit: 'content', stacks: false, fate: 'ember', item, note }],
 });
 
 const thread = (label: string, threadName: string, note?: string): ScarabSpec => ({
@@ -26,7 +31,7 @@ const thread = (label: string, threadName: string, note?: string): ScarabSpec =>
       scarab: 1,
       unit: 'content',
       fate: 'thread',
-      note: `Primary league content now comes from ${threadName} (up to 8 Threads per map, max 3 types). ${note ?? ''}`.trim(),
+      note: `Primary league content now comes from ${threadName} (up to 8 Threads per map, max 3 types). It no longer appears in Maps on its own; Shaped Regions give their Maps free Threads of their type. ${note ?? ''}`.trim(),
     },
   ],
 });
@@ -75,14 +80,15 @@ export const SCARAB_MAP: Record<string, ScarabSpec> = {
   ScarabStrongboxNew4: {
     effects: [
       {
-        label: 'Many extra Strongboxes + ambush packs',
+        // The wiki: this scarab "functions identically to Monstrous Treasure" (packs replaced by strongboxes).
+        label: 'Monstrous Treasure map (packs become Strongboxes)',
         scarab: 100,
         unit: '%',
         stacks: false,
-        fate: 'partial',
-        treeUnit: 'see nodes',
-        tree330: [{ text: 'Strongboxes in your Maps spawn #% increased number of Packs' }],
-        note: 'The "lying in ambush" half lives on in Hidden Horrors (25% more strongbox packs, 40% more likely Magic/Rare). The "many additional Strongboxes" half only comes from Surpassing Chance nodes (see Ambush Scarab).',
+        fate: 'chance',
+        treeUnit: '% chance per Strongbox (T16)',
+        tree330: [{ text: 'to be replaced with the Empyrean Apparatus' }],
+        note: 'The scarab worked like Monstrous Treasure: the map\'s monster packs are replaced with Strongboxes. In 3.30, Explorer\'s Reliquary gives Strongboxes in Tier 16 Maps a 10% chance to be the Empyrean Apparatus, which drops a Tier 16 Map enchanted with Monstrous Treasure (plus a Unique Map). You get the effect by chance, on a later map.',
       },
     ],
   },
@@ -271,9 +277,10 @@ export const SCARAB_MAP: Record<string, ScarabSpec> = {
   ScarabMapsNew2: {
     effects: [{ label: 'Additional random map modifiers', scarab: 2, unit: 'count', tree330: [{ text: 'Your Maps have an additional random Modifier', fixed: 1 }] }],
   },
-  ScarabMapsNew5: removed(
+  ScarabMapsNew5: ember(
     '8–12 difficult packs that drop 300% more maps',
-    'Invasive Adversaries ("10% more difficult and rewarding packs") was already on the 3.29 tree. Nothing replaced the scarab.',
+    'Allflame Ember of the Multitude',
+    'The new Allflame Ember of the Multitude enchants a Map with this effect: Monster Packs are replaced by Difficult and Rewarding Monsters that drop 300% increased Maps. It swaps existing packs instead of adding 8–12. Invasive Adversaries on the tree is a separate, smaller effect.',
   ),
 
   // ───────────────────────── Delirium ─────────────────────────
@@ -327,7 +334,11 @@ export const SCARAB_MAP: Record<string, ScarabSpec> = {
   ScarabDivinationCardsNew2: {
     effects: [{ label: 'Divination-touched magic packs', scarab: 8, unit: 'count (packs)', tree330: [{ text: 'additional Packs of Divination-Touched Magic Monsters' }], note: 'Scarab: 6–10 packs (avg 8). Haruspicy: 4 packs.' }],
   },
-  ScarabDivinationCardsNew1: removed("Doedre's Devoted packs (Stacked Decks)"),
+  ScarabDivinationCardsNew1: ember(
+    "Doedre's Devoted packs (Stacked Decks)",
+    'Allflame Ember of the Cloister',
+    "The new Allflame Ember of the Cloister enchants a Map with this effect: Monster Packs are replaced by Doedre's Devoted, which have 1% additional chance to drop a Stacked Deck. It swaps existing packs instead of adding 8–12.",
+  ),
 
   // ───────────────────────── Shrines (Domination) ─────────────────────────
   ScarabDomination1: {
@@ -632,7 +643,11 @@ export const SCARAB_MAP: Record<string, ScarabSpec> = {
   ScarabMisc2: {
     effects: [{ label: 'Packs with mirrored rares', scarab: 4, unit: 'count (packs)', tree330: [{ text: 'additional Packs with Mirrored Rare Monsters' }], note: 'Imperfect Reflections: 3 packs.' }],
   },
-  ScarabMisc3: removed('Pantheon-touched rares'),
+  ScarabMisc3: ember(
+    'Pantheon-touched rares',
+    'Allflame Ember of the Divine',
+    'The new Allflame Ember of the Divine enchants a Map so 5 Monster Packs are replaced by packs led by a Pantheon-Touched Rare Monster. The scarab made up to 3 Rares in the Map Pantheon-Touched instead.',
+  ),
   ScarabMisc4: removed('Hunted Traitors'),
   ScarabMisc1: {
     effects: [
@@ -873,6 +888,7 @@ for (const [id, mechanics] of Object.entries(MECHANIC_OVERRIDES)) {
  * They show up on the node ("related scarab") so nothing looks like a plain "New" notable.
  */
 const RELATED: Record<string, { node: string; note: string }[]> = {
+  ScarabStrongboxNew4: [{ node: 'Hidden Horrors', note: '25% more packs from Strongboxes: more of the "ambush", but not a map full of Strongboxes.' }],
   ScarabUber1: [{ node: 'Group Solidarity', note: 'Upgrades 4 Monster Packs to Magic: more magic monsters, counted in packs not %.' }],
   ScarabMisc1: [{ node: 'Group Solidarity', note: 'Upgrades 4 Monster Packs to Magic: more magic packs, but not a pack-size bonus.' }],
   ScarabTormentNew2: [
@@ -890,6 +906,37 @@ const RELATED: Record<string, { node: string; note: string }[]> = {
   ScarabUber7: [{ node: 'Destructive Play', note: 'The Maven summons extra Atlas Bosses at map bosses (already on the 3.29 tree).' }],
   ScarabTormentNew4: [{ node: 'Seance', note: 'Up to 5 Rare Monsters Possessed (already on the 3.29 tree).' }],
 };
+/**
+ * 3.30 changes outside the Atlas tree (patch notes, Endgame section) that matter for a scarab.
+ * `via` marks the ones where the scarab's effect itself can still be had another way.
+ */
+const OUTSIDE: Record<string, OutsideNote> = {
+  ScarabDelirium1: { via: 'Rare Map suffix', note: 'Rare Maps can now roll the suffix "Area contains a Mirror of Delirium", which does what the scarab did.' },
+  ScarabBeyond1: {
+    via: 'Rare Map suffix',
+    note: 'Maps now have a base chance for a Demonic Evocator, and Rare Maps can roll "Area contains an Evocator of Beidat / K\'Tash / Ghorr". Kills in Maps also have a small natural chance to attract Demons from Beyond.',
+  },
+  ScarabMisc8: { via: 'Rare Map suffix', note: 'Rare Maps can roll "Area contains the Viridian Wildwood", and the Wildwood can now spawn in any Map tier (was Tier 16 only).' },
+  ScarabDelirium2: { note: 'Fog from Mirrors of Delirium now spreads much faster at the start and lasts longer, more so at higher area levels.' },
+  ScarabDelirium3: { note: 'Starting a Delirium encounter from a Mirror now has a chance for 1–3 bonus rewards.' },
+  ScarabDelirium4: { note: 'Delirium Bosses now spawn more often in the fog, more so at higher area levels.' },
+  ScarabDelirium5: { note: 'Layered Delirium Maps are legacy. Delirium Orbs now reroll a Rare Map with a Delirious modifier instead (5–50% per orb, up to 100%).' },
+  ScarabBetrayal2: { note: 'Allflame Embers are now currency used on a Map, and each one states how many packs it replaces.' },
+  ScarabAnarchy1: { note: 'Rogue Exiles now have much higher base item rarity and give more experience.' },
+  ScarabAnarchy2: { note: 'Gigantic Rogue Exiles were buffed (more Life and Item Quantity, split clones keep their modifiers), but the tree has nothing that makes them more common.' },
+  ScarabAnarchy4: { note: 'Exceptional Rogue Exiles no longer have the bonus that dropped their items Mirrored or upgraded their rarity.' },
+  ScarabMapsNew4: { note: 'The Vaal Orb outcome that rerolled a Map with 8 modifiers is gone too. It now adds 2 modifiers (up to 9).' },
+  ScarabTormentNew2: { note: 'Tormented Heretics, one of the unusual variants, now have a base chance to spawn. Monsters they touch can drop Threads.' },
+  ScarabDomination1: { note: 'Covetous Shrines now have a base chance to spawn, and Gloom and Resonating Shrines spawn more often.' },
+  ScarabEssence1: { note: 'The average number of Essences on Imprisoned Monsters now scales with the Map\'s Atlas Drop scaling.' },
+  ScarabEssence2: { note: 'Weeping Essences no longer appear in yellow or red Maps, and Wailing Essences no longer in red Maps.' },
+};
+
+for (const [id, outside] of Object.entries(OUTSIDE)) {
+  if (!SCARAB_MAP[id]) throw new Error(`OUTSIDE: unknown scarab id ${id}`);
+  SCARAB_MAP[id] = { ...SCARAB_MAP[id], outside };
+}
+
 for (const [id, related] of Object.entries(RELATED)) {
   if (!SCARAB_MAP[id]) throw new Error(`RELATED: unknown scarab id ${id}`);
   SCARAB_MAP[id] = { ...SCARAB_MAP[id], related };

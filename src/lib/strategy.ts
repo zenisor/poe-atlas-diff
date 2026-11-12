@@ -70,6 +70,8 @@ export interface StrategyEvaluation {
   /** Share of scarab "weight" whose fate could be quantified. */
   coverage: number;
   threadSlots: number;
+  /** Slots whose scarab is now an Allflame Ember. */
+  emberSlots: number;
   removedSlots: number;
   notableCounts: { kept: number; changed: number; removed: number };
   verdict: Verdict;
@@ -146,6 +148,7 @@ export function evaluateStrategy(
 ): StrategyEvaluation {
   const scarabRows: StrategyScarabRow[] = [];
   let threadSlots = 0;
+  let emberSlots = 0;
   let removedSlots = 0;
   let slotsUsed = 0;
 
@@ -156,6 +159,7 @@ export function evaluateStrategy(
     const effects = scarab.effects.map((e) => effectForCount(e, count));
     const { retention } = aggregate([{ scarab, count: 1, effects } as StrategyScarabRow]);
     if (scarab.fate === 'thread') threadSlots += count;
+    if (scarab.fate === 'ember') emberSlots += count;
     if (scarab.fate === 'removed') removedSlots += count;
     scarabRows.push({ scarab, layer: layerOf(scarab.category), count, overLimit: count > scarab.limit, effects, fate: scarab.fate, retention });
   }
@@ -192,6 +196,7 @@ export function evaluateStrategy(
     scarabRetention,
     coverage,
     threadSlots,
+    emberSlots,
     removedSlots,
     notableCounts,
     verdict: verdictFor(scarabRetention),

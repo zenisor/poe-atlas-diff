@@ -92,14 +92,14 @@ async function fetchAtlasArt() {
   }
 }
 
-/** Inventory icons for scarabs and Threads from the wiki (missing files are skipped). */
+/** Inventory icons for scarabs, Threads and Allflame Embers from the wiki (missing files are skipped). */
 async function fetchItemIcons() {
   const params = new URLSearchParams({
     action: 'cargoquery',
     format: 'json',
     tables: 'items',
     fields: 'items.name=name,items.inventory_icon=icon',
-    where: '(items.class_id="MapFragment" AND items.tags HOLDS "scarab") OR (items.name LIKE "%Thread" AND items.release_version="3.30.0")',
+    where: '(items.class_id="MapFragment" AND items.tags HOLDS "scarab") OR (items.name LIKE "%Thread" AND items.release_version="3.30.0") OR items.name IN ("Allflame Ember of the Cloister", "Allflame Ember of the Divine", "Allflame Ember of the Multitude", "Allflame Ember of The Shaper")',
     limit: '500',
   });
   const rows = (JSON.parse(await fetchText(`https://www.poewiki.net/w/api.php?${params}`)) as { cargoquery: { title: { name: string; icon: string | null } }[] }).cargoquery.map(

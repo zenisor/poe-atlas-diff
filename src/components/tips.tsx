@@ -3,10 +3,10 @@
  * built on the raw sprite components in art.tsx and the shared tooltip layer.
  */
 import { data, effectByTemplate, lineStacks, mapNodeById, mechanicSummary, notableDiffByNodeId, relatedScarabsByNode, scarabLinksByNode, scarabsByName, type ScarabLink } from '../data.ts';
-import type { MapNode, MatchedContribution, NodeKind, NotableDiff, ScarabResult, Version } from '../lib/types.ts';
+import type { MapNode, MatchedContribution, NodeKind, NotableDiff, OutsideNote, ScarabResult, Version } from '../lib/types.ts';
 import { FATE_LABEL } from '../lib/scarabs.ts';
 import { CATEGORY_LABEL, CATEGORY_NOTE, categoryOf } from '../lib/mechanics.ts';
-import { fmtValue, likeText, pct, prettyTemplate, signedPct, surpass, surpassLong, trimNum, withValue } from '../lib/format.ts';
+import { fmtValue, lcFirst, likeText, pct, prettyTemplate, signedPct, surpass, surpassLong, trimNum, withValue } from '../lib/format.ts';
 import { toTemplate } from '../lib/stats.ts';
 import { CATEGORY_COLOR, FATE_COLOR, FateBadge, FATES, Retention, STATUS_LABEL, StatList, StatusBadge } from './ui.tsx';
 import { ItemIcon, MechanicIcon, NodeIcon } from './art.tsx';
@@ -73,12 +73,18 @@ export function ScarabTooltip({ s }: { s: ScarabResult }) {
           <div key={i} className="pt-eff">
             <div>
               <i className="sw" style={{ background: FATE_COLOR[e.fate] }} />
-              <b>{e.label}</b>: <span style={{ color: FATE_COLOR[e.fate] }}>{FATE_LABEL[e.fate].toLowerCase()}</span>
+              <b>{e.label}</b>: <span style={{ color: FATE_COLOR[e.fate] }}>{lcFirst(FATE_LABEL[e.fate])}</span>
             </div>
             {e.fate === 'thread' && (
               <div className="with-icon" style={{ gap: 6, marginTop: 3 }}>
                 <ItemIcon name={`${s.mechanic} Thread`} size={22} fallbackMechanic={s.mechanic} />
                 <span style={{ color: 'var(--f-thread)' }}>Now from {s.mechanic} Threads</span>
+              </div>
+            )}
+            {e.item && (
+              <div className="with-icon" style={{ gap: 6, marginTop: 3 }}>
+                <ItemIcon name={e.item} size={22} />
+                <span style={{ color: 'var(--f-ember)' }}>Now from {e.item}</span>
               </div>
             )}
             {e.retention != null && e.unit !== 'binary' && (
@@ -92,13 +98,14 @@ export function ScarabTooltip({ s }: { s: ScarabResult }) {
                 </div>
               </div>
             )}
-            {e.retention == null && e.fate !== 'thread' && e.treeUnit && e.treeUnit !== 'see nodes' && (
+            {e.retention == null && e.fate !== 'thread' && e.fate !== 'ember' && e.treeUnit && e.treeUnit !== 'see nodes' && (
               <div className="small muted">3.30 tree: {fmtValue(e.tree330, e.treeUnit)}</div>
             )}
             {e.matches330.length > 0 && nodeList(e.matches330, '3.30', e.unit)}
             {e.note && <div className="note">{e.note}</div>}
           </div>
         ))}
+        {s.outside && <OutsideInfo outside={s.outside} className="pt-eff" />}
         {s.related.length > 0 && (
           <div className="pt-eff">
             <div className="small muted">Related on the 3.30 tree (not counted):</div>
@@ -117,6 +124,16 @@ export function ScarabTooltip({ s }: { s: ScarabResult }) {
         )}
       </div>
     </>
+  );
+}
+
+/** A 3.30 change outside the Atlas tree (from the patch notes) that matters for a scarab. */
+export function OutsideInfo({ outside, className }: { outside: OutsideNote; className?: string }) {
+  return (
+    <div className={className}>
+      <div className="small muted">{outside.via ? `Also in 3.30 as a ${outside.via}` : 'Elsewhere in 3.30 (patch notes)'}</div>
+      <div className="small">{outside.note}</div>
+    </div>
   );
 }
 
@@ -237,7 +254,7 @@ export function ScarabLinks({ links, compact = false }: { links: ScarabLink[]; c
           <ScarabIcon s={scarab} size={compact ? 26 : 32} />
           <div className="small">
             <span className="item-name">{scarab.name}</span>
-            {!compact && <span className="muted">: {effect.label.toLowerCase()}</span>}
+            {!compact && <span className="muted">: {effect.label}</span>}
             <div>
               <span style={{ color: FATE_COLOR[effect.fate] }}>{FATE_LABEL[effect.fate]}</span>
               {effect.retention != null && effect.unit !== 'binary' && (
@@ -379,7 +396,7 @@ export function MechanicTooltip({ mechanic }: { mechanic: string }) {
             </div>
             <div className="pt-center small muted" style={{ marginTop: 4 }}>
               {FATES.filter((f) => scarabs.some((s) => s.fate === f))
-                .map((f) => `${scarabs.filter((s) => s.fate === f).length} ${FATE_LABEL[f].toLowerCase()}`)
+                .map((f) => `${scarabs.filter((s) => s.fate === f).length} ${lcFirst(FATE_LABEL[f])}`)
                 .join(', ')}
             </div>
           </>

@@ -48,6 +48,7 @@
   --f-chance: var(--shape);
   --f-reworked: var(--shape);
   --f-thread: var(--threads);
+  --f-ember: var(--threads);
   --f-removed: var(--gone);
 
   --sans: 'Alegreya Sans', system-ui, sans-serif;
@@ -160,7 +161,7 @@ td.num, th.num { text-align: right; white-space: nowrap; }
 .s-nerfed { color: var(--nerfed); } .s-changed, .s-mixed, .s-replaced, .s-reworded, .s-reshuffled { color: var(--changed); }
 .s-unchanged { color: var(--unchanged); }
 .f-full { color: var(--f-full); } .f-reduced { color: var(--f-reduced); } .f-partial { color: var(--f-partial); }
-.f-chance { color: var(--f-chance); } .f-thread { color: var(--f-thread); } .f-reworked { color: var(--f-reworked); }
+.f-chance { color: var(--f-chance); } .f-thread { color: var(--f-thread); } .f-ember { color: var(--f-ember); } .f-reworked { color: var(--f-reworked); }
 .f-removed { color: var(--f-removed); }
 .v-better, .v-same { color: var(--kept); } .v-mild { color: var(--weaker); } .v-nerfed { color: var(--weaker); }
 .v-gutted { color: var(--gone); } .v-unknown { color: var(--dim); }
@@ -357,16 +358,16 @@ tr.cat-row td { padding-top: 22px; border-bottom-color: var(--line-strong); }
   .tip-anchor { cursor: pointer; }
 }
 
-@media (max-width: 900px) {
-  main { padding: 16px 14px 32px; }
-  h1 { font-size: 26px; }
-  h2 { font-size: 22px; }
-
-  .topbar { gap: 8px; padding: 6px 12px; min-height: 0; flex-wrap: wrap; align-items: center; }
-  .topbar .tabs { display: none; }
-  .brand { font-size: 17px; gap: 6px; }
+/* Header: the subtitle goes first, then the search box shrinks, then the tabs fold into the page menu. */
+@media (max-width: 1500px) {
   .brand small { display: none; }
-  .mobile-nav { display: block; position: relative; }
+  .topbar { gap: 20px; }
+  .topbar .global-search { flex: 0 1 240px; min-width: 150px; }
+  .topbar .global-search .ac, .topbar .ac.global input[type='search'] { width: 100%; min-width: 0; }
+}
+@media (max-width: 1180px) {
+  .topbar .tabs { display: none; }
+  .mobile-nav { display: flex; align-items: center; position: relative; }
   .mobile-page { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; white-space: nowrap; }
   .menu-backdrop { position: fixed; inset: 0; z-index: 65; }
   .mobile-menu {
@@ -375,6 +376,15 @@ tr.cat-row td { padding-top: 22px; border-bottom-color: var(--line-strong); }
   }
   .mobile-menu button { text-align: left; padding: 12px 14px; background: none; border: 0; border-bottom: 1px solid var(--line); color: var(--text); cursor: pointer; font-size: 16px; }
   .mobile-menu button.active { color: var(--title); background: var(--raised); }
+}
+
+@media (max-width: 900px) {
+  main { padding: 16px 14px 32px; }
+  h1 { font-size: 26px; }
+  h2 { font-size: 22px; }
+
+  .topbar { gap: 8px; padding: 6px 12px; min-height: 0; flex-wrap: wrap; align-items: center; }
+  .brand { font-size: 17px; gap: 6px; }
   .mobile-search-btn { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 34px; padding: 0; }
   .topbar .global-search { display: none; flex-basis: 100%; order: 10; }
   .topbar.search-open .global-search { display: block; }
@@ -432,3 +442,28 @@ tr.cat-row td { padding-top: 22px; border-bottom-color: var(--line-strong); }
 .stack-tip { width: 100%; font-size: 14px; }
 .stack-tip td { padding: 3px 4px; border: 0; }
 .overall-bar { max-width: 760px; margin-top: 10px; }
+
+/* scarab effect also available outside the tree (e.g. a Rare Map suffix): small brass corner */
+.slot.elsewhere::before { content: ''; position: absolute; top: 2px; right: 2px; width: 0; height: 0; border-top: 9px solid var(--gold); border-left: 9px solid transparent; }
+.legend .mark-sample { position: relative; background: var(--slot); border: 1px solid var(--line-strong); }
+.legend .mark-sample::before { content: ''; position: absolute; top: 0; right: 0; border-top: 7px solid var(--gold); border-left: 7px solid transparent; }
+.outside-tag { color: var(--gold); margin-top: 3px; }
+
+/* changelog: rendered from CHANGELOG.md */
+.changelog h1 { margin-bottom: 6px; }
+.changelog h2 { margin-top: 34px; padding-top: 14px; border-top: 1px solid var(--line); }
+.changelog h3 { margin: 20px 0 6px; font-size: 17px; color: var(--title); }
+.changelog ul ul { margin: 4px 0 6px; }
+.changelog code { font-size: .92em; color: var(--dim); }
+.cl-scarab { display: inline-flex; align-items: center; gap: 5px; vertical-align: middle; }
+.cl-scarab .tip-anchor { line-height: 0; }
+
+/* numeric cells that may hold a short sentence (e.g. "tree: 25% chance (Wild Rogue Exiles only)") */
+td.num.wrap { white-space: normal; min-width: 110px; }
+/* columns that are also in the expanded row; dropped on mid-size screens so the table fits next to the sidebar */
+@media (min-width: 901px) and (max-width: 1300px) {
+  .rtable .opt { display: none; }
+  .rtable th { white-space: normal; }
+  .rtable .retention .bar { min-width: 40px; }
+}
+@media (min-width: 1001px) and (max-width: 1300px) { .mech-layout { grid-template-columns: 200px minmax(0, 1fr); gap: 20px; } }

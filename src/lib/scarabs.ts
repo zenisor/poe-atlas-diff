@@ -31,6 +31,7 @@ export const FATE_LABEL: Record<Fate, string> = {
   partial: 'Partly on the tree',
   chance: 'Only a chance on the tree',
   thread: 'Now comes from Threads',
+  ember: 'Now an Allflame Ember',
   reworked: 'Mechanic reworked',
   removed: 'Gone',
 };
@@ -187,6 +188,7 @@ export function evaluateEffect(spec: ScarabEffectSpec, limit: number, oldNodes: 
     matches329: m329.contributions,
     matches330: m330.contributions,
     ...(note ? { note } : {}),
+    ...(spec.item ? { item: spec.item } : {}),
   };
 }
 
@@ -195,7 +197,7 @@ export function overallFate(effects: ScarabEffectResult[]): Fate {
   if (fates.every((f) => f === fates[0])) return fates[0];
   if (fates.every((f) => f === 'removed')) return 'removed';
   const primary = fates[0];
-  if (primary === 'thread' || primary === 'chance' || primary === 'reworked') return primary;
+  if (primary === 'thread' || primary === 'ember' || primary === 'chance' || primary === 'reworked') return primary;
   return 'reduced';
 }
 
@@ -233,6 +235,7 @@ export function evaluateScarab(row: WikiScarabRow, spec: ScarabSpec, oldNodes: T
     fate: overallFate(effects),
     retention: overallRetention(effects),
     effects,
+    ...(spec.outside ? { outside: spec.outside } : {}),
     ...(spec.note ? { note: spec.note } : {}),
   };
 }

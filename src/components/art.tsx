@@ -56,8 +56,12 @@ export function MechanicIcon({ mechanic, size = 24 }: { mechanic: string; size?:
 }
 
 /** Inventory art for an item (scarab / Thread). Threads without art yet use their mechanic's mastery. */
+/** Items the wiki has no icon for yet borrow the art of a sibling item. */
+const STAND_IN: [prefix: string, item: string][] = [['Allflame Ember of ', 'Allflame Ember of The Shaper']];
+
 export function ItemIcon({ name, size = 36, fallbackMechanic }: { name: string; size?: number; fallbackMechanic?: string }) {
-  const src = data.art.itemIcons[name];
+  const standIn = STAND_IN.find(([prefix]) => name.startsWith(prefix))?.[1];
+  const src = data.art.itemIcons[name] ?? (standIn ? data.art.itemIcons[standIn] : undefined);
   if (src) return <img className="item-icon" src={src} width={size} height={size} alt={name} loading="lazy" />;
   if (fallbackMechanic) return <MechanicIcon mechanic={fallbackMechanic} size={size} />;
   return <span className="sprite missing" style={{ width: size, height: size }} />;

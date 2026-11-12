@@ -7,6 +7,7 @@ import { FATE_COLOR, FATES, Stack, STATUS_COLOR, STATUS_LABEL } from '../compone
 import { FATE_LABEL } from '../lib/scarabs.ts';
 import { MechanicIcon } from '../components/art.tsx';
 import { MechIcon, ScarabIcon } from '../components/tips.tsx';
+import { LAST_UPDATED } from './Changelog.tsx';
 
 const nodeTotal = (s: MechanicSummary['old']) => s.small + s.notable + s.keystone;
 const EFFECT_PARTS = ['buffed', 'nerfed', 'added', 'removed', 'reworded', 'unchanged'] as const;
@@ -17,14 +18,14 @@ const LEGEND: { label: string; fates: Fate[]; color: string }[] = [
   { label: 'Kept on the tree', fates: ['full'], color: 'var(--kept)' },
   { label: 'Weaker on the tree', fates: ['reduced'], color: 'var(--weaker)' },
   { label: 'Partly, as a chance, or reworked', fates: ['partial', 'chance', 'reworked'], color: 'var(--shape)' },
-  { label: 'Now from Threads', fates: ['thread'], color: 'var(--threads)' },
+  { label: 'Now from Threads or an Ember', fates: ['thread', 'ember'], color: 'var(--threads)' },
   { label: 'Gone', fates: ['removed'], color: 'var(--gone)' },
 ];
 
 /** One stash slot: the scarab's art, a fate-coloured edge, greyed out when the effect is gone. */
 function Slot({ s }: { s: ScarabResult }) {
   return (
-    <span className={`slot${s.fate === 'removed' ? ' gone' : ''}`} style={{ '--fate': FATE_COLOR[s.fate] } as CSSProperties}>
+    <span className={`slot${s.fate === 'removed' ? ' gone' : ''}${s.outside?.via ? ' elsewhere' : ''}`} style={{ '--fate': FATE_COLOR[s.fate] } as CSSProperties}>
       <ScarabIcon s={s} size={34} />
     </span>
   );
@@ -61,6 +62,10 @@ export function Overview({ go }: { go: (tab: TabId, mechanic?: string) => void }
               {l.label} <b style={{ color: 'var(--text)', fontWeight: 500 }}>{count(l.fates)}</b>
             </span>
           ))}
+          <span>
+            <i className="mark-sample" />
+            Also on a Rare Map suffix <b style={{ color: 'var(--text)', fontWeight: 500 }}>{scarabs.filter((s) => s.outside?.via).length}</b>
+          </span>
         </div>
 
         <div className="overall-bar">
@@ -96,7 +101,8 @@ export function Overview({ go }: { go: (tab: TabId, mechanic?: string) => void }
           ))}
         </div>
         <p className="stash-foot">
-          Based on GGG's 3.30 preview tree. <a href="#/about">How the numbers work</a>
+          Based on GGG's 3.30.0 Atlas tree and patch notes, last updated {LAST_UPDATED}. <a href="#/about">How the numbers work</a> or{' '}
+          <a href="#/changelog">see what changed</a>.
         </p>
       </section>
 

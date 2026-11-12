@@ -10,7 +10,7 @@ import { Autocomplete } from '../components/Autocomplete.tsx';
 import { SEARCH_INDEX } from '../searchIndex.ts';
 import { flashFocus, useFocusTarget } from '../lib/focus.ts';
 import { ItemIcon } from '../components/art.tsx';
-import { MechIcon, NodeTip, ScarabIcon } from '../components/tips.tsx';
+import { MechIcon, NodeTip, OutsideInfo, ScarabIcon } from '../components/tips.tsx';
 
 type SortKey = 'mechanic' | 'retention' | 'name';
 
@@ -88,12 +88,12 @@ export function Scarabs({ mechanic, embedded = false, focus, focusNonce }: { mec
           <thead>
             <tr>
               <th style={{ width: '24%' }}>Scarab</th>
-              <th className="num">Limit</th>
+              <th className="num opt">Limit</th>
               <th style={{ width: '27%' }}>Effect → 3.30</th>
               <th className="num">Max power</th>
               <th className="num">3.29 best → 3.30</th>
-              <th style={{ width: 130 }}>Retention</th>
-              <th className="num">Absorbed</th>
+              <th style={{ width: 110 }}>Retention</th>
+              <th className="num opt">Absorbed</th>
               <th>Fate</th>
             </tr>
           </thead>
@@ -150,10 +150,11 @@ export function Scarabs({ mechanic, embedded = false, focus, focusNonce }: { mec
                               <div key={i}>{d}</div>
                             ))}
                           </div>
+                          {s.outside?.via && <div className="small outside-tag">Also via a {s.outside.via}</div>}
                         </div>
                       </div>
                     </td>
-                    <td className="num" data-label="Limit">{s.limit}</td>
+                    <td className="num opt" data-label="Limit">{s.limit}</td>
                     <td className="small full" data-label="Effect → 3.30">
                       {s.effects.map((e, i) => (
                         <div key={i} style={{ marginBottom: 4 }}>
@@ -163,6 +164,12 @@ export function Scarabs({ mechanic, embedded = false, focus, focusNonce }: { mec
                             <div className="with-icon" style={{ marginTop: 3 }}>
                               <ItemIcon name={`${s.mechanic} Thread`} size={24} fallbackMechanic={s.mechanic} />
                               <span style={{ color: 'var(--f-thread)' }}>{s.mechanic} Thread</span>
+                            </div>
+                          )}
+                          {e.item && (
+                            <div className="with-icon" style={{ marginTop: 3 }}>
+                              <ItemIcon name={e.item} size={24} />
+                              <span style={{ color: 'var(--f-ember)' }}>{e.item}</span>
                             </div>
                           )}
                           {e.matches330.length > 0 && (
@@ -186,7 +193,7 @@ export function Scarabs({ mechanic, embedded = false, focus, focusNonce }: { mec
                       ))}
                     </td>
                     <td className="num" data-label="Max power">{main.unit === 'binary' || main.unit === 'content' ? '—' : fmtValue(main.scarabMax, main.unit)}</td>
-                    <td className="num" data-label="3.29 best → 3.30">{bestCase(main)}</td>
+                    <td className="num wrap" data-label="3.29 best → 3.30">{bestCase(main)}</td>
                     <td data-label="Retention">
                       <Retention value={s.retention} />
                       {quantified > 0 && quantified < s.effects.length && (
@@ -195,7 +202,7 @@ export function Scarabs({ mechanic, embedded = false, focus, focusNonce }: { mec
                         </div>
                       )}
                     </td>
-                    <td className="num" data-label="Absorbed">{main.absorbed == null ? '–' : pct(main.absorbed)}</td>
+                    <td className="num opt" data-label="Absorbed">{main.absorbed == null ? '–' : pct(main.absorbed)}</td>
                     <td data-label="Fate">
                       <FateBadge fate={s.fate} short />
                     </td>
@@ -236,6 +243,7 @@ function uniqueNodes(list: MatchedContribution[]) {
 
 function bestCase(e: ScarabEffectResult): string {
   if (e.fate === 'thread') return 'via Threads';
+  if (e.fate === 'ember') return 'via an Allflame Ember';
   if (e.unit === 'binary') return 'yes → no';
   if (e.retention == null) {
     return e.treeUnit && e.treeUnit !== 'see nodes' ? `tree: ${fmtValue(e.tree330, e.treeUnit)}` : '—';
@@ -287,6 +295,11 @@ function ScarabDetail({ s }: { s: ScarabResult }) {
           )}
         </div>
       ))}
+      {s.outside && (
+        <div className="card">
+          <OutsideInfo outside={s.outside} />
+        </div>
+      )}
       {s.related.length > 0 && (
         <div className="card">
           <div className="small muted" style={{ marginBottom: 6 }}>

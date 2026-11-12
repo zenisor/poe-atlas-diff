@@ -351,6 +351,7 @@ function EvaluationPanel({ ev }: { ev: StrategyEvaluation }) {
         <span className="muted">
           Keeps <b>{pct(ev.scarabRetention)}</b> of its scarab power ({pct(ev.coverage)} of the setup can be measured).
           {ev.threadSlots > 0 && ` ${ev.threadSlots} slot${ev.threadSlots === 1 ? ' now comes' : 's now come'} from Threads.`}
+          {ev.emberSlots > 0 && ` ${ev.emberSlots} slot${ev.emberSlots === 1 ? ' is' : 's are'} now an Allflame Ember.`}
           {ev.removedSlots > 0 && ` ${ev.removedSlots} slot${ev.removedSlots === 1 ? ' is' : 's are'} gone entirely.`}
         </span>
       </div>
@@ -400,9 +401,9 @@ function EvaluationPanel({ ev }: { ev: StrategyEvaluation }) {
                 </td>
                 <td className="num" data-label="Your scarab power">{e.unit === 'binary' || e.unit === 'content' ? '—' : fmtValue(e.scarabPower, e.unit)}</td>
                 <td className="num" data-label="3.29 best → 3.30">
-                  {e.fate === 'thread' ? 'via Threads' : e.retention == null ? '—' : `${fmtValue(e.before, e.unit)} → ${fmtValue(e.after, e.unit, e.surpassing)}`}
+                  {e.fate === 'thread' ? 'via Threads' : e.fate === 'ember' ? 'via an Ember' : e.retention == null ? '—' : `${fmtValue(e.before, e.unit)} → ${fmtValue(e.after, e.unit, e.surpassing)}`}
                 </td>
-                <td data-label="Kept">{e.fate === 'thread' ? <span className="small muted">needs Threads</span> : <Retention value={e.retention} />}</td>
+                <td data-label="Kept">{e.fate === 'thread' ? <span className="small muted">needs Threads</span> : e.fate === 'ember' ? <span className="small muted">needs an Ember</span> : <Retention value={e.retention} />}</td>
                 <td data-label="Fate">
                   <FateBadge fate={e.fate} short />
                 </td>

@@ -106,7 +106,7 @@ export const scarabLinksByNode = (() => {
   for (const scarab of data.scarabs) {
     for (const effect of scarab.effects) {
       // 'removed' = the tree adds nothing beyond 3.29, so its nodes didn't take anything over.
-      if (effect.fate === 'thread' || effect.fate === 'removed') continue;
+      if (effect.fate === 'thread' || effect.fate === 'ember' || effect.fate === 'removed') continue;
       for (const id of new Set(effect.matches330.map((m) => m.nodeId))) {
         const list = map.get(id) ?? [];
         if (!list.some((l) => l.scarab.id === scarab.id && l.effect.label === effect.label)) list.push({ scarab, effect });

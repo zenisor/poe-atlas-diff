@@ -27,21 +27,24 @@ export function About() {
         </li>
         <li>Pick-one notables count with their best option. Repeated small nodes count as if you took all of them.</li>
         <li>
-          Strategies are recalculated for the number of scarabs you actually use. Scarabs whose content now comes from Threads, or that only became
-          a chance, are shown but not scored.
+          Strategies are recalculated for the number of scarabs you actually use. Scarabs whose content now comes from Threads or an Allflame
+          Ember, or that only became a chance, are shown but not scored.
         </li>
       </ul>
 
       <h2>What to keep in mind</h2>
       <ul>
-        <li>The 3.30 data is GGG's preview 2 export, so values can still change.</li>
+        <li>
+          Most of this is about the Atlas tree. Where the patch notes moved a scarab's effect somewhere else, the scarab says so: three are now
+          Allflame Embers, a few can roll as Rare Map suffixes, and other relevant Endgame changes are noted on the scarab.
+        </li>
         <li>Base spawn rates of content and the random Thread modifiers aren't modelled, only what the tree and scarabs add.</li>
         <li>
           Which node replaces which scarab effect is a judgment call. Every pairing is listed with its numbers on the Scarab fates page, and the build
           flags new notables that resemble a scarab.
         </li>
         <li>
-          Spotted a mistake?{' '}
+          Every data correction is listed in the <a href="#/changelog">changelog</a>. Spotted a mistake?{' '}
           <a href={REPORT_URL} target="_blank" rel="noopener noreferrer">
             Report it on GitHub
           </a>
@@ -58,6 +61,13 @@ export function About() {
           </a>
           , {meta.old.label} (<span className="mono">{meta.old.commit.slice(0, 7)}</span>) and {meta.new.label} (
           <span className="mono">{meta.new.commit.slice(0, 7)}</span>).
+        </li>
+        <li>
+          Endgame changes:{' '}
+          <a href="https://www.pathofexile.com/forum/view-thread/4013680" target="_blank" rel="noopener noreferrer">
+            3.30.0 patch notes
+          </a>
+          .
         </li>
         <li>
           Scarab effects, limits and icons:{' '}

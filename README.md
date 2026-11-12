@@ -2,6 +2,8 @@
 
 A static web app that compares the Path of Exile **3.29.3** and **3.30.0** Atlas passive trees. For each of the 116 scarabs removed in 3.30, it shows whether the effect moved to the tree, at what strength, or is gone. It also lets you check how 3.29 farming strategies hold up.
 
+Data and site changes are listed in [CHANGELOG.md](CHANGELOG.md), which the site also shows at `#/changelog`. Add an entry there whenever a scarab's fate or a curated link changes.
+
 ## Run
 
 ```bash
@@ -108,7 +110,7 @@ Matching scarab effects to tree nodes takes judgment, so it lives in reviewed fi
 
 ## Assumptions & limits
 
-- 3.30 data is **preview 2** of the export. Values can still change before launch.
+- 3.30 data is the `3.30.0` export (same commit as preview 2). Effects that moved off the tree (Allflame Embers, Rare Map suffixes, other Endgame changes) come from the [3.30.0 patch notes](https://www.pathofexile.com/forum/view-thread/4013680) and the wiki, curated in `data/curation/scarab-map.ts` (`ember()` and `OUTSIDE`).
 - Scarab text and limits are the wiki's final 3.29 values.
 - Base spawn chances of content in maps are not modelled. Example: patch notes say Essences now have a base chance; the tool only compares atlas tree + scarab contributions.
 - "Increased chance" effects multiply an unknown base, so they are shown but not scored.

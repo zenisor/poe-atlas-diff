@@ -107,7 +107,7 @@ for (const n of newNodes) {
   if (n.kind !== 'notable' && n.kind !== 'keystone') continue;
   const text = [...n.stats, ...(n.variants ?? []).flat()].map((l) => l.text).join(' ');
   for (const sc of scarabs) {
-    if (sc.fate === 'thread' || sc.fate === 'full' || accountedNodes.has(n.id) || REVIEWED_LOOKALIKES[`${n.name}|${sc.name}`]) continue;
+    if (sc.fate === 'thread' || sc.fate === 'ember' || sc.fate === 'full' || accountedNodes.has(n.id) || REVIEWED_LOOKALIKES[`${n.name}|${sc.name}`]) continue;
     const score = resemblance(sc.description.join(' '), text);
     if (score >= REVIEW_THRESHOLD) reviewHints.push(`${score.toFixed(2)}  ${n.name}  <->  ${sc.name} [${sc.fate}]`);
   }
@@ -219,7 +219,7 @@ function toMapNodes(nodes: TreeNode[], statuses: Map<string, MapNodeStatus>): Ma
 const zero = <K extends string>(keys: readonly K[]) => Object.fromEntries(keys.map((k) => [k, 0])) as Record<K, number>;
 const EFFECT_KEYS = ['added', 'removed', 'buffed', 'nerfed', 'unchanged', 'reshuffled', 'reworded'] as const;
 const NOTABLE_KEYS = ['unchanged', 'buffed', 'nerfed', 'mixed', 'changed', 'replaced', 'removed', 'added'] as const;
-const FATE_KEYS = ['full', 'reduced', 'partial', 'chance', 'thread', 'reworked', 'removed'] as const;
+const FATE_KEYS = ['full', 'reduced', 'partial', 'chance', 'thread', 'ember', 'reworked', 'removed'] as const;
 
 function summarize(): MechanicSummary[] {
   const map = new Map<string, MechanicSummary>();

@@ -5,7 +5,7 @@ import { SEARCH_INDEX } from '../searchIndex.ts';
 import { flashFocus, useFocusTarget } from '../lib/focus.ts';
 import { data, scarabLinksByNode } from '../data.ts';
 import type { EffectDiff, EffectSide, EffectStatus } from '../lib/types.ts';
-import { likeText, prettyTemplate, signedPct, surpass, trimNum } from '../lib/format.ts';
+import { effectTexts, effectTitle, likeText, prettyTemplate, signedPct, surpass, trimNum } from '../lib/format.ts';
 import { CATEGORY_COLOR, Chip, makeGroupHeaders, STATUS_COLOR, STATUS_LABEL, StatText, StatusBadge, toggle } from '../components/ui.tsx';
 import { CATEGORY_LABEL, matchesMechanic } from '../lib/mechanics.ts';
 import { MechIcon, NodeTip, ScarabIcon } from '../components/tips.tsx';
@@ -154,7 +154,7 @@ export function Effects({ mechanic, embedded = false, focus, focusNonce }: { mec
                         return n ? <NodeTip version={n.version} id={n.id} kind={n.kind} icon={n.icon} size={n.kind === 'small' ? 28 : 34} /> : <span style={{ width: 28 }} />;
                       })()}
                       <div>
-                      {e.key.startsWith('link:') ? <b>{e.label}</b> : <span className="mod">{prettyTemplate(e.label)}</span>}
+                      {e.key.startsWith('link:') ? <b>{e.label}</b> : <span className="mod">{effectTitle(e.label, effectTexts(e))}</span>}
                       {scarabsOf(e).length > 0 && (
                         <span className="icon-strip" style={{ marginLeft: 8 }} onClick={(ev) => ev.stopPropagation()}>
                           {scarabsOf(e).map((sc) => (

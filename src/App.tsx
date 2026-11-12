@@ -8,6 +8,7 @@ import { Effects } from './views/Effects.tsx';
 import { Scarabs } from './views/Scarabs.tsx';
 import { Strategies } from './views/Strategies.tsx';
 import { About } from './views/About.tsx';
+import { Changelog, LAST_UPDATED } from './views/Changelog.tsx';
 import { Icon } from './components/icons.tsx';
 import { MechanicIcon } from './components/art.tsx';
 import { MechanicSidebar } from './components/sidebar.tsx';
@@ -28,7 +29,10 @@ const TABS = [
   { id: 'strategies', label: 'Strategies', short: 'Strategies' },
   { id: 'about', label: 'About', short: 'About' },
 ] as const;
-export type TabId = (typeof TABS)[number]['id'];
+/** Pages reachable by URL but not shown as a tab. */
+const EXTRA_PAGES = [{ id: 'changelog', label: 'Changelog', short: 'Changelog' }] as const;
+const PAGES = [...TABS, ...EXTRA_PAGES];
+export type TabId = (typeof PAGES)[number]['id'];
 
 const countBy = <T,>(list: T[], has: (t: T, m: string) => boolean) => (m: string) => list.filter((t) => has(t, m)).length;
 /** What the sidebar numbers mean on each list page. */
@@ -46,7 +50,7 @@ const SIDEBAR_COUNT = {
 function readHash(): { tab: TabId; mechanic: string; focus: string } {
   const [path, query] = window.location.hash.replace(/^#\/?/, '').split('?');
   const [tab, mech] = path.split('/');
-  const valid = TABS.some((t) => t.id === tab) ? (tab as TabId) : 'overview';
+  const valid = PAGES.some((t) => t.id === tab) ? (tab as TabId) : 'overview';
   return { tab: valid, mechanic: mech ? decodeURIComponent(mech) : '', focus: new URLSearchParams(query ?? '').get('focus') ?? '' };
 }
 
@@ -102,7 +106,7 @@ export function App() {
         </div>
         <div className="mobile-nav">
           <button className="btn mobile-page" aria-haspopup="menu" aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>
-            <Icon name="menu" size={16} /> {TABS.find((t) => t.id === tab)?.short}
+            <Icon name="menu" size={16} /> {PAGES.find((t) => t.id === tab)?.short}
           </button>
           {menuOpen && (
             <>
@@ -173,14 +177,16 @@ export function App() {
         )}
         {tab === 'strategies' && <Strategies {...focusProps} />}
         {tab === 'about' && <About />}
+        {tab === 'changelog' && <Changelog />}
       </main>
       <TooltipLayer />
       <footer className="footer">
         <span>Fan-made, not affiliated with Grinding Gear Games.</span>
         <span>
-          Data: 3.29.3 vs 3.30.0 preview 2, built {new Date(data.meta.generatedAt).toLocaleDateString()}.
+          Data: {data.meta.old.label} vs {data.meta.new.label}, updated {LAST_UPDATED}.
         </span>
         <a href="#/about">About and sources</a>
+        <a href="#/changelog">Changelog</a>
         <a href={REPORT_URL} target="_blank" rel="noopener noreferrer">
           Report a mistake
         </a>
