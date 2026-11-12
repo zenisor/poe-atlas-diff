@@ -35,6 +35,12 @@ const SIDEBAR_COUNT = {
   },
 };
 
+/**
+ * Absolute URL on purpose: the variable is consumed inside the built stylesheet
+ * (assets/*.css), where a relative url() would resolve against assets/.
+ */
+const ATLAS_BG = new URL(data.art.atlas['3.30'].background, document.baseURI).href;
+
 function readHash(): { tab: TabId; mechanic: string } {
   const [tab, mech] = window.location.hash.replace(/^#\/?/, '').split('/');
   const valid = TABS.some((t) => t.id === tab) ? (tab as TabId) : 'overview';
@@ -62,7 +68,7 @@ export function App() {
   };
 
   return (
-    <div className="app" style={{ '--atlas-bg': `url(${data.art.atlas['3.30'].background})` } as CSSProperties}>
+    <div className="app" style={{ '--atlas-bg': `url(${ATLAS_BG})` } as CSSProperties}>
       <header className="topbar">
         <div className="brand">
           <MechanicIcon mechanic="Maps" size={30} />
