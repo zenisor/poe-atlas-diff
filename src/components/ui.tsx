@@ -2,13 +2,14 @@ import type { ReactNode } from 'react';
 import type { Fate } from '../lib/types.ts';
 import { FATE_LABEL } from '../lib/scarabs.ts';
 import { pct } from '../lib/format.ts';
+import { Tip } from './tooltip.tsx';
 import { CATEGORY_LABEL, categoryOf, type MechanicCategory } from '../lib/mechanics.ts';
 
 export const STATUS_LABEL: Record<string, string> = {
   added: 'New',
   removed: 'Removed',
-  buffed: 'Buffed',
-  nerfed: 'Nerfed',
+  buffed: 'Stronger',
+  nerfed: 'Weaker',
   unchanged: 'Unchanged',
   reshuffled: 'Redistributed',
   reworded: 'Reworded',
@@ -47,13 +48,13 @@ export function StatusBadge({ status }: { status: string }) {
 }
 
 const FATE_SHORT: Record<Fate, string> = {
-  full: 'Full power',
-  reduced: 'Reduced',
-  partial: 'Partial',
+  full: 'Kept',
+  reduced: 'Weaker',
+  partial: 'Partly',
   chance: 'Chance only',
   thread: 'Threads',
   reworked: 'Reworked',
-  removed: 'Removed',
+  removed: 'Gone',
 };
 
 export function FateBadge({ fate, short = false }: { fate: Fate; short?: boolean }) {
@@ -79,12 +80,49 @@ export function Retention({ value, title }: { value: number | null; title?: stri
   );
 }
 
-export function Stack({ parts }: { parts: { value: number; color: string; label: string }[] }) {
-  const total = parts.reduce((a, p) => a + p.value, 0) || 1;
+type StackPart = { value: number; color: string; label: string };
+
+/** Breakdown shown when hovering/tapping a stacked bar. */
+function StackTip({ title, parts }: { title: string; parts: StackPart[] }) {
+  const total = parts.reduce((a, p) => a + p.value, 0);
   return (
-    <div className="stack" title={parts.filter((p) => p.value).map((p) => `${p.label}: ${p.value}`).join(' · ')}>
+    <>
+      <div className="pt-head">{title}</div>
+      <div className="pt-body">
+        <table className="stack-tip">
+          <tbody>
+            {parts
+              .filter((p) => p.value)
+              .map((p) => (
+                <tr key={p.label}>
+                  <td>
+                    <i className="sw" style={{ background: p.color }} />
+                    {p.label}
+                  </td>
+                  <td className="num">{p.value}</td>
+                  <td className="num muted">{Math.round((p.value / (total || 1)) * 100)}%</td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </div>
+    </>
+  );
+}
+
+/** Proportional bar; with a `title` it gets a tooltip listing every segment. */
+export function Stack({ parts, title }: { parts: StackPart[]; title?: string }) {
+  const total = parts.reduce((a, p) => a + p.value, 0) || 1;
+  const bar = (
+    <div className="stack">
       {parts.map((p) => (p.value ? <span key={p.label} style={{ width: `${(p.value / total) * 100}%`, background: p.color }} /> : null))}
     </div>
+  );
+  if (!title) return bar;
+  return (
+    <Tip className="stack-anchor" content={() => <StackTip title={title} parts={parts} />}>
+      {bar}
+    </Tip>
   );
 }
 
@@ -129,7 +167,7 @@ export function StatList({ stats, variants }: { stats: string[]; variants?: stri
       ))}
       {variants?.map((v, i) => (
         <li key={`v${i}`} className="choice">
-          <StatText text={v.join(' · ')} />
+          <StatText text={v.join('; ')} />
         </li>
       ))}
     </ul>
@@ -165,13 +203,14 @@ export function toggle<T>(set: Set<T>, v: T): Set<T> {
 
 // ---------- mechanics ----------
 
+// Categories are told apart by their headings, not by colour.
 export const CATEGORY_COLOR: Record<MechanicCategory, string> = {
-  primary: '#d9a54f',
-  secondary: '#7fbf6a',
-  tertiary: '#9f8fe0',
-  overlay: '#e06a9f',
-  juice: '#4fb3d9',
-  removed: '#8a7f70',
+  primary: 'var(--dim)',
+  secondary: 'var(--dim)',
+  tertiary: 'var(--dim)',
+  overlay: 'var(--dim)',
+  juice: 'var(--dim)',
+  removed: 'var(--faint)',
 };
 
 export function CategoryBadge({ mechanic, category }: { mechanic?: string; category?: MechanicCategory }) {

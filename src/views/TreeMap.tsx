@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type PointerEvent, type WheelEvent } from 'react';
+import { Icon } from '../components/icons.tsx';
 import { track, trackToggle, useTrackedSearch } from '../lib/analytics.ts';
 import { data, relatedScarabsByNode, scarabLinksByNode } from '../data.ts';
 import type { MapNode, MapNodeStatus, SheetKey, Version } from '../lib/types.ts';
@@ -15,12 +16,12 @@ const VERSION: Record<Side, Version> = { old: '3.29', new: '3.30' };
 const STATUSES: MapNodeStatus[] = ['added', 'removed', 'buffed', 'nerfed', 'changed', 'unchanged'];
 // Canvas can't read CSS variables cheaply, so the status palette is mirrored here.
 const COLOR: Record<MapNodeStatus, string> = {
-  added: '#62c94f',
-  removed: '#d9443a',
-  buffed: '#7d8cff',
-  nerfed: '#e8944a',
-  changed: '#c58cf0',
-  unchanged: '#6f675a',
+  added: '#6fbf73',
+  removed: '#e0605a',
+  buffed: '#8f9bff',
+  nerfed: '#e0a84a',
+  changed: '#a99be8',
+  unchanged: '#6b7487',
 };
 
 /** World-unit sizes (sheet px / sprite zoom 0.5): [icon, frame]. */
@@ -185,7 +186,7 @@ export function TreeMap({ mechanic, focus, focusNonce }: { mechanic: string; foc
     canvas.height = size.h * dpr;
     const ctx = canvas.getContext('2d')!;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.fillStyle = '#050403';
+    ctx.fillStyle = '#070a12';
     ctx.fillRect(0, 0, size.w, size.h);
     const { cx, cy, scale } = view;
     const sx = (x: number) => (x - cx) * scale + size.w / 2;
@@ -226,7 +227,7 @@ export function TreeMap({ mechanic, focus, focusNonce }: { mechanic: string; foc
         const m = byId.get(to);
         if (!m || m.kind === 'mastery') continue;
         const lit = isLit(n) && isLit(m);
-        ctx.strokeStyle = lit ? '#8a6d3b' : '#2a2116';
+        ctx.strokeStyle = lit ? '#7d6a45' : '#1c2333';
         ctx.globalAlpha = lit ? 0.85 : 0.35;
         ctx.lineWidth = Math.max(1, (lit ? 12 : 8) * scale);
         ctx.beginPath();
@@ -255,7 +256,7 @@ export function TreeMap({ mechanic, focus, focusNonce }: { mechanic: string; foc
       const alpha = lit ? 1 : 0.12;
       ctx.globalAlpha = alpha;
       if (n.kind === 'root') {
-        ctx.fillStyle = '#c9a463';
+        ctx.fillStyle = '#c9a45c';
         ctx.beginPath();
         ctx.arc(x, y, Math.max(3, 40 * scale), 0, Math.PI * 2);
         ctx.fill();
@@ -303,7 +304,7 @@ export function TreeMap({ mechanic, focus, focusNonce }: { mechanic: string; foc
         const d = Math.max(n.kind === 'small' ? 9 : 14, frameW * 0.55 * scale);
         const bx = x + (frameW / 2) * 0.62 * scale;
         const by = y - (frameW / 2) * 0.62 * scale;
-        ctx.fillStyle = 'rgba(10,8,5,.85)';
+        ctx.fillStyle = 'rgba(9,12,20,.88)';
         ctx.strokeStyle = '#aa9e82';
         ctx.lineWidth = 1;
         ctx.beginPath();
@@ -318,7 +319,7 @@ export function TreeMap({ mechanic, focus, focusNonce }: { mechanic: string; foc
 
     // notable/keystone names once zoomed in
     if (scale > 0.22) {
-      ctx.font = `600 ${Math.round(Math.min(14, 40 * scale))}px Cinzel, serif`;
+      ctx.font = `500 ${Math.round(Math.min(15, 42 * scale))}px 'Alegreya SC', serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'top';
       for (const n of nodes) {
@@ -329,7 +330,7 @@ export function TreeMap({ mechanic, focus, focusNonce }: { mechanic: string; foc
         ctx.lineWidth = 3;
         ctx.strokeStyle = 'rgba(0,0,0,.9)';
         ctx.strokeText(n.name, x, y);
-        ctx.fillStyle = n.status === 'unchanged' ? '#a89a7c' : COLOR[n.status];
+        ctx.fillStyle = n.status === 'unchanged' ? '#a7b0c2' : COLOR[n.status];
         ctx.fillText(n.name, x, y);
       }
     }
@@ -471,13 +472,13 @@ export function TreeMap({ mechanic, focus, focusNonce }: { mechanic: string; foc
         </Chip>
         <Chip
           on={onlyScarab}
-          color="var(--poe-currency)"
+          color="var(--item)"
           onClick={() => {
             setOnlyScarab(!onlyScarab);
             trackToggle('map', 'took-over-scarab', !onlyScarab);
           }}
         >
-          ❖ Took over a scarab
+          Took over a scarab
         </Chip>
         <Autocomplete
           entries={localEntries}
@@ -486,7 +487,7 @@ export function TreeMap({ mechanic, focus, focusNonce }: { mechanic: string; foc
           onSelect={(h) => showNode(h.entry.label, h.entry.art?.type === 'node' ? h.entry.art.version : undefined)}
           placeholder="Find a node or stat…"
         />
-        <span className="small muted">Greyed = unchanged · lit + coloured ring = changed · scarab badge = took over a scarab effect. <span className="hint-mouse">Scroll to zoom, drag to pan.</span><span className="hint-touch">Pinch to zoom, drag to pan, tap a node.</span></span>
+        <span className="small muted">Grey nodes are unchanged; changed nodes are lit and ringed in their colour. A scarab badge marks a node that took over a scarab effect. <span className="hint-mouse">Scroll to zoom, drag to pan.</span><span className="hint-touch">Pinch to zoom, drag to pan, tap a node.</span></span>
       </div>
       <div className="map-wrap" ref={wrapRef}>
         <div className="map-controls">
@@ -521,7 +522,7 @@ export function TreeMap({ mechanic, focus, focusNonce }: { mechanic: string; foc
         {hover && !dragging && (
           <div className="poe-tip" style={{ position: 'absolute', left: Math.max(4, Math.min(hover.x + 16, size.w - 450)), top: Math.max(4, Math.min(hover.y + 16, size.h - 260)) }}>
             <button className="pt-close" aria-label="Close" onClick={() => setHover(null)}>
-              ✕
+              <Icon name="close" size={16} />
             </button>
             <NodeTooltip node={hover.node} version={version} />
           </div>

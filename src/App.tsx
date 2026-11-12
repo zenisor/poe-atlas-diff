@@ -7,10 +7,11 @@ import { Notables } from './views/Notables.tsx';
 import { Effects } from './views/Effects.tsx';
 import { Scarabs } from './views/Scarabs.tsx';
 import { Strategies } from './views/Strategies.tsx';
+import { About } from './views/About.tsx';
+import { Icon } from './components/icons.tsx';
 import { MechanicIcon } from './components/art.tsx';
 import { MechanicSidebar } from './components/sidebar.tsx';
 import { TooltipLayer } from './components/tooltip.tsx';
-import type { CSSProperties } from 'react';
 import { REPO_URL, REPORT_URL } from './links.ts';
 import { Autocomplete } from './components/Autocomplete.tsx';
 import { SEARCH_INDEX } from './searchIndex.ts';
@@ -25,6 +26,7 @@ const TABS = [
   { id: 'effects', label: 'All tree effects', short: 'Effects' },
   { id: 'map', label: 'Tree map', short: 'Tree map' },
   { id: 'strategies', label: 'Strategies', short: 'Strategies' },
+  { id: 'about', label: 'About', short: 'About' },
 ] as const;
 export type TabId = (typeof TABS)[number]['id'];
 
@@ -39,12 +41,6 @@ const SIDEBAR_COUNT = {
     count: countBy(data.nodes.new, (n, m) => n.mechanic === m && n.status !== 'unchanged' && (n.kind === 'small' || n.kind === 'notable' || n.kind === 'keystone')),
   },
 };
-
-/**
- * Absolute URL on purpose: the variable is consumed inside the built stylesheet
- * (assets/*.css), where a relative url() would resolve against assets/.
- */
-const ATLAS_BG = new URL(data.art.atlas['3.30'].background, document.baseURI).href;
 
 /** Routes look like #/<tab>/<mechanic>?focus=<item>; focus = what a search result points at. */
 function readHash(): { tab: TabId; mechanic: string; focus: string } {
@@ -97,16 +93,16 @@ export function App() {
   const focusProps = { focus, focusNonce };
 
   return (
-    <div className="app" style={{ '--atlas-bg': `url(${ATLAS_BG})` } as CSSProperties}>
+    <div className="app">
       <header className={`topbar${searchOpen ? ' search-open' : ''}`}>
         <div className="brand">
           <MechanicIcon mechanic="Maps" size={30} />
           <span className="brand-word">Atlas</span> {data.meta.old.version} → {data.meta.new.version}
-          <small>scarab rework diff</small>
+          <small>Atlas tree and scarab changes</small>
         </div>
         <div className="mobile-nav">
           <button className="btn mobile-page" aria-haspopup="menu" aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>
-            ☰ {TABS.find((t) => t.id === tab)?.short}
+            <Icon name="menu" size={16} /> {TABS.find((t) => t.id === tab)?.short}
           </button>
           {menuOpen && (
             <>
@@ -145,7 +141,7 @@ export function App() {
             setSearchFocus((n) => n + 1);
           }}
         >
-          {searchOpen ? '✕' : '⌕'}
+          <Icon name={searchOpen ? 'close' : 'search'} />
         </button>
         <div className="global-search">
           <Autocomplete
@@ -176,40 +172,21 @@ export function App() {
           </div>
         )}
         {tab === 'strategies' && <Strategies {...focusProps} />}
+        {tab === 'about' && <About />}
       </main>
       <TooltipLayer />
       <footer className="footer">
-        <div className="footer-links">
-          <a href={REPORT_URL} target="_blank" rel="noopener noreferrer">
-            Report a mistake
-          </a>
-          <span>·</span>
-          <a href={REPO_URL} target="_blank" rel="noopener noreferrer">
-            Source on GitHub
-          </a>
-        </div>
-        <div>
-          Fan-made and non-commercial. Not affiliated with or endorsed by Grinding Gear Games. Path of Exile, its game data and art are © Grinding Gear Games.
-        </div>
-        <div>
-          Atlas trees and art:{' '}
-          <a href="https://github.com/grindinggear/atlastree-export" target="_blank" rel="noopener noreferrer">
-            grindinggear/atlastree-export
-          </a>{' '}
-          {data.meta.old.label} (<span className="mono">{data.meta.old.commit.slice(0, 7)}</span>) vs {data.meta.new.label} (
-          <span className="mono">{data.meta.new.commit.slice(0, 7)}</span>) · Scarab effects, limits and icons:{' '}
-          <a href="https://www.poewiki.net/wiki/Scarab" target="_blank" rel="noopener noreferrer">
-            poewiki.net
-          </a>{' '}
-          (CC BY-NC-SA 3.0) · Built {new Date(data.meta.generatedAt).toLocaleDateString()}
-        </div>
-        <div>
-          Anonymous, cookieless visit and click counts via{' '}
-          <a href="https://www.goatcounter.com/" target="_blank" rel="noopener noreferrer">
-            GoatCounter
-          </a>
-          . No cookies, no personal data, nothing you type is recorded.
-        </div>
+        <span>Fan-made, not affiliated with Grinding Gear Games.</span>
+        <span>
+          Data: 3.29.3 vs 3.30.0 preview 2, built {new Date(data.meta.generatedAt).toLocaleDateString()}.
+        </span>
+        <a href="#/about">About and sources</a>
+        <a href={REPORT_URL} target="_blank" rel="noopener noreferrer">
+          Report a mistake
+        </a>
+        <a href={REPO_URL} target="_blank" rel="noopener noreferrer">
+          Source
+        </a>
       </footer>
     </div>
   );

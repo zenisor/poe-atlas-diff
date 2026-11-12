@@ -7,7 +7,7 @@ export type StrategyLayer = 'content' | 'overlay' | 'juice';
 export const LAYERS: StrategyLayer[] = ['content', 'overlay', 'juice'];
 export const LAYER_LABEL: Record<StrategyLayer, string> = {
   content: 'Content',
-  overlay: 'Additive layers',
+  overlay: 'Layers on top',
   juice: 'Map juice',
 };
 export function layerOf(category: MechanicCategory): StrategyLayer {
@@ -109,10 +109,10 @@ export function verdictFor(retention: number | null): Verdict {
 export const VERDICT_LABEL: Record<Verdict, string> = {
   better: 'Better in 3.30',
   same: 'About the same',
-  mild: 'Mild nerf',
-  nerfed: 'Nerfed',
-  gutted: 'Gutted',
-  unknown: 'Not quantifiable',
+  mild: 'Slightly weaker',
+  nerfed: 'Weaker',
+  gutted: 'Mostly lost',
+  unknown: "Can't be measured",
 };
 
 export function notableIndex(notables: NotableDiff[]): Map<string, NotableDiff> {

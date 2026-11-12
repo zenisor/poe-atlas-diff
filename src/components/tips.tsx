@@ -53,8 +53,8 @@ export function ScarabTooltip({ s }: { s: ScarabResult }) {
       </div>
       <div className="pt-body">
         <div className="pt-center">
-          <span className="muted">Limit:</span> <b>{s.limit}</b>
-          <span className="muted"> · </span>
+          <span className="muted">Limit</span> <b>{s.limit}</b>
+          <span className="muted">, </span>
           {s.mechanics.join(', ')}
         </div>
         <Sep />
@@ -67,12 +67,13 @@ export function ScarabTooltip({ s }: { s: ScarabResult }) {
         <div className="pt-center" style={{ marginBottom: 6 }}>
           <span className="muted">In 3.30: </span>
           <FateBadge fate={s.fate} />
-          {s.retention != null && <span className="muted"> · keeps {pct(s.retention)} of the 3.29 best case</span>}
+          {s.retention != null && <div className="muted">Keeps {pct(s.retention)} of the 3.29 best case</div>}
         </div>
         {s.effects.map((e, i) => (
           <div key={i} className="pt-eff">
             <div>
-              <span style={{ color: FATE_COLOR[e.fate] }}>◆</span> <b>{e.label}</b> <span className="small" style={{ color: FATE_COLOR[e.fate] }}>{FATE_LABEL[e.fate]}</span>
+              <i className="sw" style={{ background: FATE_COLOR[e.fate] }} />
+              <b>{e.label}</b>: <span style={{ color: FATE_COLOR[e.fate] }}>{FATE_LABEL[e.fate].toLowerCase()}</span>
             </div>
             {e.fate === 'thread' && (
               <div className="with-icon" style={{ gap: 6, marginTop: 3 }}>
@@ -236,13 +237,13 @@ export function ScarabLinks({ links, compact = false }: { links: ScarabLink[]; c
           <ScarabIcon s={scarab} size={compact ? 26 : 32} />
           <div className="small">
             <span className="item-name">{scarab.name}</span>
-            {!compact && <span className="muted"> · {effect.label}</span>}
+            {!compact && <span className="muted">: {effect.label.toLowerCase()}</span>}
             <div>
               <span style={{ color: FATE_COLOR[effect.fate] }}>{FATE_LABEL[effect.fate]}</span>
               {effect.retention != null && effect.unit !== 'binary' && (
                 <span className="muted">
                   {' '}
-                  · {fmtValue(effect.before, effect.unit)} → {fmtValue(effect.after, effect.unit, effect.surpassing)} ({pct(effect.retention)})
+                  , {fmtValue(effect.before, effect.unit)} → {fmtValue(effect.after, effect.unit, effect.surpassing)} ({pct(effect.retention)})
                 </span>
               )}
             </div>
@@ -283,7 +284,7 @@ export function NodeTooltip({ node, version }: { node: MapNode; version: Version
       </div>
       <div className="pt-body">
         <div className="pt-center small muted">
-          {version} · {node.kind} · {node.mechanic}
+          {node.kind === 'small' ? 'Node' : node.kind === 'keystone' ? 'Keystone' : 'Notable'} on the {version} tree, {node.mechanic}
         </div>
         <Sep />
         <div className="pt-center">
@@ -293,8 +294,8 @@ export function NodeTooltip({ node, version }: { node: MapNode; version: Version
         {version === '3.30' && scarabLinksByNode.get(node.id) && (
           <>
             <Sep />
-            <div className="pt-center small" style={{ color: 'var(--poe-currency)', marginBottom: 4 }}>
-              ❖ Took over a scarab effect
+            <div className="pt-center small" style={{ color: 'var(--item)', marginBottom: 4 }}>
+              Took over a scarab effect
             </div>
             <ScarabLinks links={scarabLinksByNode.get(node.id)!} />
           </>
@@ -379,7 +380,7 @@ export function MechanicTooltip({ mechanic }: { mechanic: string }) {
             <div className="pt-center small muted" style={{ marginTop: 4 }}>
               {FATES.filter((f) => scarabs.some((s) => s.fate === f))
                 .map((f) => `${scarabs.filter((s) => s.fate === f).length} ${FATE_LABEL[f].toLowerCase()}`)
-                .join(' · ')}
+                .join(', ')}
             </div>
           </>
         )}

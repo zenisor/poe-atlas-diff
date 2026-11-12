@@ -15,7 +15,7 @@ const OLD_NOTABLE_ENTRIES: SearchEntry[] = oldNotableNames.map((name) => {
     id: `old-notable:${name}`,
     kind: n.kind === 'keystone' ? 'keystone' : 'notable',
     label: name,
-    sub: `${n.mechanic} · ${n.stats[0] ?? ''}`,
+    sub: `${n.mechanic}. ${n.stats[0] ?? ''}`,
     keywords: normalize(`${n.mechanic} ${n.stats.join(' ')}`),
     mechanics: [n.mechanic],
     target: { tab: 'strategies' },
@@ -43,7 +43,8 @@ function loadCustom(): Strategy[] {
 const newId = () => `custom-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`;
 const evaluate = (s: Strategy) => evaluateStrategy(s, scarabsById, notablesByOldName, oldNotableMechanic);
 
-const LAYER_COLOR: Record<StrategyLayer, string> = { content: '#d9a54f', overlay: '#e06a9f', juice: '#4fb3d9' };
+// Layers are named, not colour-coded.
+const LAYER_COLOR: Record<StrategyLayer, string> = { content: 'var(--title)', overlay: 'var(--title)', juice: 'var(--title)' };
 const LAYER_HINT: Record<StrategyLayer, string> = {
   content: 'the mechanic you farm (Abyss, Essence, Delirium…)',
   overlay: 'stacked on top of any map (Maven, Exarch, Eater, Shaper/Elder…)',
@@ -73,8 +74,8 @@ function LayerCards({ layers }: { layers: LayerBreakdown[] }) {
           </div>
           {l.slots > 0 ? <Retention value={l.scarabRetention} /> : <span className="small muted">no scarabs</span>}
           <div className="small muted" style={{ marginTop: 4 }}>
-            {l.slots} scarab slot{l.slots === 1 ? '' : 's'} · {l.notables} notable{l.notables === 1 ? '' : 's'}
-            {l.slots > 0 && l.coverage < 1 && ` · ${pct(l.coverage)} quantifiable`}
+            {l.slots} scarab slot{l.slots === 1 ? '' : 's'}, {l.notables} notable{l.notables === 1 ? '' : 's'}
+            {l.slots > 0 && l.coverage < 1 && `, ${pct(l.coverage)} measurable`}
           </div>
         </div>
       ))}
@@ -123,11 +124,7 @@ export function Strategies({ focus, focusNonce }: { focus?: string; focusNonce?:
   return (
     <>
       <h2>Strategies</h2>
-      <p className="lead">
-        Describe a 3.29 farming setup (scarabs + the Atlas notables it relied on) to see how much of it carries over to 3.30. Scarab power is
-        re-evaluated for the counts you use, not the limit: best case 3.29 (full tree + your scarabs) vs 3.30 (full tree). Scarabs replaced by
-        Threads, or only kept as a chance, are listed but not scored. Your strategies are saved in this browser.
-      </p>
+      <p className="lead">Enter a 3.29 farming setup to see how much of it 3.30 keeps. Your strategies are saved in this browser.</p>
       <div className="toolbar">
         <button className={`btn${mode === 'edit' ? ' primary' : ''}`} onClick={() => setMode('edit')}>
           Edit & evaluate
@@ -238,7 +235,7 @@ function Editor({ strategy, onChange, onClone, onDelete }: { strategy: Strategy;
         ) : (
           <input type="text" value={strategy.name} onChange={(e) => onChange({ ...strategy, name: e.target.value })} style={{ fontWeight: 600, minWidth: 280 }} />
         )}
-        {ro && <span className="badge" style={{ color: 'var(--muted)' }}>preset</span>}
+        {ro && <span className="small muted">Example</span>}
         <div style={{ flex: 1 }} />
         <button className="btn" onClick={onClone}>
           {ro ? 'Clone to edit' : 'Duplicate'}
@@ -278,7 +275,7 @@ function Editor({ strategy, onChange, onClone, onDelete }: { strategy: Strategy;
                         <ScarabIcon s={sc} size={34} />
                         <div>
                           <span className="item-name">{sc.name}</span>
-                          <div className="small mod">{sc.description.join(' · ')}</div>
+                          <div className="small mod">{sc.description.join(' ')}</div>
                         </div>
                       </div>
                     </td>
@@ -352,9 +349,9 @@ function EvaluationPanel({ ev }: { ev: StrategyEvaluation }) {
       <div className="card-head">
         <span className={`verdict v-${ev.verdict}`}>{VERDICT_LABEL[ev.verdict]}</span>
         <span className="muted">
-          scarab power kept: <b>{pct(ev.scarabRetention)}</b> · {pct(ev.coverage)} of the scarab setup is quantifiable
-          {ev.threadSlots > 0 && ` · ${ev.threadSlots} slot(s) now come from Threads`}
-          {ev.removedSlots > 0 && ` · ${ev.removedSlots} slot(s) removed outright`}
+          Keeps <b>{pct(ev.scarabRetention)}</b> of its scarab power ({pct(ev.coverage)} of the setup can be measured).
+          {ev.threadSlots > 0 && ` ${ev.threadSlots} slot${ev.threadSlots === 1 ? ' now comes' : 's now come'} from Threads.`}
+          {ev.removedSlots > 0 && ` ${ev.removedSlots} slot${ev.removedSlots === 1 ? ' is' : 's are'} gone entirely.`}
         </span>
       </div>
       <div style={{ maxWidth: 420, marginBottom: 14 }}>
@@ -398,7 +395,8 @@ function EvaluationPanel({ ev }: { ev: StrategyEvaluation }) {
                   )}
                 </td>
                 <td className="small full" data-label="Effect">
-                  <span style={{ color: FATE_COLOR[e.fate] }}>●</span> {e.label}
+                  <i className="sw" style={{ background: FATE_COLOR[e.fate] }} />
+                  {e.label}
                 </td>
                 <td className="num" data-label="Your scarab power">{e.unit === 'binary' || e.unit === 'content' ? '—' : fmtValue(e.scarabPower, e.unit)}</td>
                 <td className="num" data-label="3.29 best → 3.30">
@@ -420,7 +418,7 @@ function EvaluationPanel({ ev }: { ev: StrategyEvaluation }) {
       <h3 style={{ marginTop: 18 }}>
         Notables{' '}
         <span className="small muted">
-          {ev.notableCounts.kept} kept · {ev.notableCounts.changed} changed/replaced · {ev.notableCounts.removed} removed
+          {ev.notableCounts.kept} kept, {ev.notableCounts.changed} reworked, {ev.notableCounts.removed} removed
         </span>
       </h3>
       <table className="rtable">

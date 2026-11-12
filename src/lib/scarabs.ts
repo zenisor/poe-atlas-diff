@@ -26,13 +26,13 @@ export interface WikiScarabRow {
 export const FULL_THRESHOLD = 0.95;
 
 export const FATE_LABEL: Record<Fate, string> = {
-  full: 'Moved to tree (full power)',
-  reduced: 'Moved to tree (reduced)',
-  partial: 'Partially on tree',
-  chance: 'Only as a chance on tree',
-  thread: 'Replaced by Threads',
+  full: 'Kept on the tree',
+  reduced: 'Weaker on the tree',
+  partial: 'Partly on the tree',
+  chance: 'Only a chance on the tree',
+  thread: 'Now comes from Threads',
   reworked: 'Mechanic reworked',
-  removed: 'Removed',
+  removed: 'Gone',
 };
 
 const FAMILY_MECHANIC: Record<string, string> = {

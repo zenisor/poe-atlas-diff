@@ -1,4 +1,5 @@
 import { useState, type CSSProperties, type ReactNode } from 'react';
+import { Icon } from './icons.tsx';
 import { mechanicsByCategory } from '../data.ts';
 import { CATEGORY_LABEL, type MechanicCategory } from '../lib/mechanics.ts';
 import { CATEGORY_COLOR } from './ui.tsx';
@@ -22,7 +23,7 @@ export function MechanicSidebar({
   countLabel?: string;
   allowGroups?: boolean;
 }) {
-  // On narrow screens the list collapses behind a "Mechanic: … ▾" button.
+  // On narrow screens the list collapses behind a "Mechanic: …" button.
   const [open, setOpen] = useState(false);
   const current = !value ? 'All mechanics' : value.startsWith('cat:') ? CATEGORY_LABEL[value.slice(4) as MechanicCategory] : value;
   const link = (v: string, active: boolean, children: ReactNode, className = '', style?: CSSProperties) => (
@@ -47,7 +48,9 @@ export function MechanicSidebar({
       <span>
         <span className="muted">Mechanic:</span> {current}
       </span>
-      <span className="caret">{open ? '▴' : '▾'}</span>
+      <span className="caret">
+        <Icon name={open ? 'up' : 'down'} size={16} />
+      </span>
     </button>
     <nav className="mech-nav">
       {allowGroups && link('', value === '', <span className="all">All mechanics</span>, 'all-link')}

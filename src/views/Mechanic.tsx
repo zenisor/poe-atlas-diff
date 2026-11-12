@@ -34,13 +34,13 @@ export function MechanicView({ mechanic, go }: { mechanic: string; go: (tab: Tab
           <CategoryBadge category={category} />
           <div style={{ flex: 1 }} />
           <a href="#" className="small" onClick={(e) => (e.preventDefault(), go('map', current))}>
-            show on tree map →
+            Show on the tree map
           </a>
         </div>
         <p className="lead">{CATEGORY_NOTE[category]}</p>
 
         <div className="grid tiles">
-          <Tile label="Nodes" value={`${total(m.old)} → ${total(m.new)}`} sub={`notables ${m.old.notable} → ${m.new.notable} · keystones ${m.old.keystone} → ${m.new.keystone}`} />
+          <Tile label="Nodes" value={`${total(m.old)} → ${total(m.new)}`} sub={`Notables ${m.old.notable} → ${m.new.notable}, keystones ${m.old.keystone} → ${m.new.keystone}`} />
           <Tile
             label="Notables"
             value={
@@ -48,7 +48,7 @@ export function MechanicView({ mechanic, go }: { mechanic: string; go: (tab: Tab
                 <span className="s-added">+{m.notables.added}</span> <span className="s-removed">−{m.notables.removed}</span>
               </>
             }
-            sub={`${changedNotables} changed/replaced · ${m.notables.buffed} buffed · ${m.notables.nerfed} nerfed · ${m.notables.unchanged} unchanged`}
+            sub={`${changedNotables} reworked, ${m.notables.buffed} stronger, ${m.notables.nerfed} weaker, ${m.notables.unchanged} unchanged`}
           />
           <Tile
             label="Tree effects"
@@ -57,12 +57,12 @@ export function MechanicView({ mechanic, go }: { mechanic: string; go: (tab: Tab
                 <span className="s-buffed">{m.effects.buffed}↑</span> <span className="s-nerfed">{m.effects.nerfed}↓</span>
               </>
             }
-            sub={`${m.effects.added} new · ${m.effects.removed} removed · ${m.effects.unchanged} unchanged`}
+            sub={`${m.effects.added} new, ${m.effects.removed} gone, ${m.effects.unchanged} unchanged`}
           />
           <Tile
             label="Scarabs"
             value={scarabs.length || '—'}
-            sub={scarabs.length ? <Stack parts={FATES.map((f) => ({ value: scarabs.filter((s) => s.fate === f).length, color: FATE_COLOR[f], label: FATE_LABEL[f] }))} /> : 'none in 3.29'}
+            sub={scarabs.length ? <Stack title={`${current} scarabs`} parts={FATES.map((f) => ({ value: scarabs.filter((s) => s.fate === f).length, color: FATE_COLOR[f], label: FATE_LABEL[f] }))} /> : 'none in 3.29'}
           />
         </div>
 

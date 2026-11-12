@@ -1,173 +1,186 @@
-import { Fragment } from 'react';
+import { Fragment, type CSSProperties } from 'react';
 import { data, mechanicsByCategory } from '../data.ts';
 import type { TabId } from '../App.tsx';
-import { REPORT_URL } from '../links.ts';
-import type { MechanicSummary } from '../lib/types.ts';
+import type { Fate, MechanicSummary, ScarabResult } from '../lib/types.ts';
+import { CATEGORY_LABEL } from '../lib/mechanics.ts';
+import { FATE_COLOR, FATES, Stack, STATUS_COLOR, STATUS_LABEL } from '../components/ui.tsx';
 import { FATE_LABEL } from '../lib/scarabs.ts';
-import { CATEGORY_LABEL, CATEGORY_NOTE } from '../lib/mechanics.ts';
-import { CATEGORY_COLOR, FATE_COLOR, FATES, Legend, Stack, STATUS_COLOR, Tile } from '../components/ui.tsx';
+import { MechanicIcon } from '../components/art.tsx';
 import { MechIcon, ScarabIcon } from '../components/tips.tsx';
 
-const EFFECT_PARTS = ['buffed', 'nerfed', 'added', 'removed', 'reworded', 'unchanged'] as const;
 const nodeTotal = (s: MechanicSummary['old']) => s.small + s.notable + s.keystone;
+const EFFECT_PARTS = ['buffed', 'nerfed', 'added', 'removed', 'reworded', 'unchanged'] as const;
+const fateParts = (list: ScarabResult[]) => FATES.map((f) => ({ value: list.filter((s) => s.fate === f).length, color: FATE_COLOR[f], label: FATE_LABEL[f] }));
+
+/** The legend groups the seven fates into the five colours used in the stash. */
+const LEGEND: { label: string; fates: Fate[]; color: string }[] = [
+  { label: 'Kept on the tree', fates: ['full'], color: 'var(--kept)' },
+  { label: 'Weaker on the tree', fates: ['reduced'], color: 'var(--weaker)' },
+  { label: 'Partly, as a chance, or reworked', fates: ['partial', 'chance', 'reworked'], color: 'var(--shape)' },
+  { label: 'Now from Threads', fates: ['thread'], color: 'var(--threads)' },
+  { label: 'Gone', fates: ['removed'], color: 'var(--gone)' },
+];
+
+/** One stash slot: the scarab's art, a fate-coloured edge, greyed out when the effect is gone. */
+function Slot({ s }: { s: ScarabResult }) {
+  return (
+    <span className={`slot${s.fate === 'removed' ? ' gone' : ''}`} style={{ '--fate': FATE_COLOR[s.fate] } as CSSProperties}>
+      <ScarabIcon s={s} size={34} />
+    </span>
+  );
+}
 
 export function Overview({ go }: { go: (tab: TabId, mechanic?: string) => void }) {
   const { meta, scarabs, notables, effects } = data;
-  const fateCounts = Object.fromEntries(FATES.map((f) => [f, scarabs.filter((s) => s.fate === f).length]));
+  const count = (fates: Fate[]) => scarabs.filter((s) => fates.includes(s.fate)).length;
   const notableCount = (s: string) => notables.filter((n) => n.status === s).length;
   const effectCount = (s: string) => effects.filter((e) => e.status === s).length;
   const kindCount = (side: 'old' | 'new', kind: string) => data.nodes[side].filter((n) => n.kind === kind).length;
-  const link = (tab: TabId, m: string, label: string) => (
-    <a href="#" onClick={(e) => (e.preventDefault(), go(tab, m))}>
-      {label}
-    </a>
-  );
+
+  // Stash rows: one per mechanic that had scarabs, in category order; slots sorted from kept to gone.
+  const rows = mechanicsByCategory
+    .map(({ category, items }) => ({
+      category,
+      mechanics: items
+        .map((m) => ({ m, list: scarabs.filter((s) => s.mechanic === m.name).sort((a, b) => FATES.indexOf(a.fate) - FATES.indexOf(b.fate)) }))
+        .filter((r) => r.list.length),
+    }))
+    .filter((g) => g.mechanics.length);
 
   return (
     <>
-      <h2>Overview</h2>
-      <p className="lead">
-        Comparing the 3.29.3 Atlas tree with the 3.30.0 tree (preview 2). Scarabs are removed in 3.30. For every 3.29 scarab, <b>Scarab fates</b>{' '}
-        shows whether its effect moved to the tree, at what strength (measured against the scarab's <i>max power = effect × map limit</i>), or
-        is gone. Mechanics are grouped the way the patch notes split them: <b>content</b> (primary / secondary / tertiary), <b>additive endgame
-        layers</b> that stack on top of any map (Maven, Exarch, Eater…), and generic <b>map juice</b>. Surpassing Chance counts as +1 guaranteed
-        per 100%.
-      </p>
+      <section className="hero">
+        <h1>What 3.30 did to your scarabs</h1>
+        <p className="hero-sub">
+          All {scarabs.length} scarabs are gone in 3.30. Each slot shows what the new Atlas tree gives back. Hover or tap a scarab for the numbers.
+        </p>
+        <div className="legend">
+          {LEGEND.map((l) => (
+            <span key={l.label}>
+              <i style={{ background: l.color }} />
+              {l.label} <b style={{ color: 'var(--text)', fontWeight: 500 }}>{count(l.fates)}</b>
+            </span>
+          ))}
+        </div>
 
-      <div className="caveat">
-        <div className="caveat-title">Before you trust a number</div>
-        <ul>
-          <li>
-            Built from the <b>3.30.0 preview 2</b> Atlas tree export. GGG can still change values before or after launch.
-          </li>
-          <li>
-            <b>Surpassing Chance</b> is read as +1 guaranteed per 100% (the remainder is the chance for one more). Content base spawn rates aren't
-            modelled, only what the Atlas tree and scarabs add.
-          </li>
-          <li>
-            Which tree node replaces which scarab effect is a <b>curated judgment call</b> (every pairing and note is on the Scarab fates tab).
-            Thread modifiers are random and not scored.
-          </li>
-          <li>
-            Spotted something wrong?{' '}
-            <a href={REPORT_URL} target="_blank" rel="noopener noreferrer">
-              Report a mistake
-            </a>{' '}
-            and it gets fixed for everyone.
-          </li>
-        </ul>
-      </div>
-
-      <div className="grid tiles">
-        <Tile label="Atlas points" value={`${meta.old.totalPoints} → ${meta.new.totalPoints}`} sub={`+${meta.new.totalPoints - meta.old.totalPoints} points`} />
-        <Tile label="Allocatable nodes" value={`${meta.old.nodeCount} → ${meta.new.nodeCount}`} sub="small + notable + keystone" />
-        <Tile
-          label="Notables"
-          value={`${kindCount('old', 'notable')} → ${kindCount('new', 'notable')}`}
-          sub={`${notableCount('removed')} removed · ${notableCount('added')} new · ${notableCount('replaced')} replaced`}
-        />
-        <Tile label="Keystones" value={`${kindCount('old', 'keystone')} → ${kindCount('new', 'keystone')}`} />
-        <Tile
-          label="Tree effects"
-          value={`${effectCount('buffed')}↑ ${effectCount('nerfed')}↓`}
-          sub={`${effectCount('added')} new · ${effectCount('removed')} removed · ${effectCount('unchanged')} unchanged`}
-        />
-        <Tile label="Scarabs removed" value={scarabs.length} sub={`${fateCounts.full} kept at full power on the tree`} />
-      </div>
-
-      <div className="panel" style={{ marginBottom: 20 }}>
-        <h3>What happened to the {scarabs.length} scarabs</h3>
-        <Stack parts={FATES.map((f) => ({ value: fateCounts[f], color: FATE_COLOR[f], label: FATE_LABEL[f] }))} />
-        <Legend items={FATES.map((f) => ({ label: `${FATE_LABEL[f]} (${fateCounts[f]})`, color: FATE_COLOR[f] }))} />
-        <table className="rtable" style={{ marginTop: 14 }}>
-          <tbody>
-            {mechanicsByCategory.map(({ category }) => {
-              const list = scarabs.filter((s) => s.category === category);
-              if (!list.length) return null;
-              return (
-                <tr key={category}>
-                  <td style={{ width: 230 }}>
-                    <a href="#" style={{ color: CATEGORY_COLOR[category] }} onClick={(e) => (e.preventDefault(), go('scarabs', `cat:${category}`))}>
-                      {CATEGORY_LABEL[category]}
-                    </a>{' '}
-                    <span className="muted small">({list.length})</span>
-                  </td>
-                  <td>
-                    <div className="icon-strip">
-                      {[...list]
-                        .sort((a, b) => FATES.indexOf(a.fate) - FATES.indexOf(b.fate))
-                        .map((s) => (
-                          <ScarabIcon key={s.id} s={s} size={30} underline />
-                        ))}
+        <div className="overall-bar">
+          <Stack parts={fateParts(scarabs)} title={`All ${scarabs.length} scarabs`} />
+        </div>
+        <div className="stash">
+          {rows.map(({ category, mechanics }) => (
+            <div key={category} className="stash-section">
+              <div className="stash-cat">{CATEGORY_LABEL[category]}</div>
+              <div className="stash-groups">
+                {mechanics.map(({ m, list }) => (
+                  <div key={m.name} className="stash-group">
+                    <a
+                      href={`#/scarabs/${encodeURIComponent(m.name)}`}
+                      className="stash-label"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        go('scarabs', m.name);
+                      }}
+                    >
+                      <MechanicIcon mechanic={m.name} size={18} />
+                      {m.name}
+                    </a>
+                    <div className="stash-slots">
+                      {list.map((s) => (
+                        <Slot key={s.id} s={s} />
+                      ))}
                     </div>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+        <p className="stash-foot">
+          Based on GGG's 3.30 preview tree. <a href="#/about">How the numbers work</a>
+        </p>
+      </section>
 
+      <h2 className="section-title">The Atlas tree itself</h2>
+      <dl className="facts">
+        <dt>Atlas points</dt>
+        <dd>
+          {meta.old.totalPoints} → {meta.new.totalPoints}
+        </dd>
+        <dt>Nodes you can take</dt>
+        <dd>
+          {meta.old.nodeCount} → {meta.new.nodeCount}
+        </dd>
+        <dt>Notables</dt>
+        <dd>
+          {kindCount('old', 'notable')} → {kindCount('new', 'notable')}, with {notableCount('removed')} removed, {notableCount('added')} new and{' '}
+          {notableCount('replaced')} renamed or merged
+        </dd>
+        <dt>Keystones</dt>
+        <dd>
+          {kindCount('old', 'keystone')} → {kindCount('new', 'keystone')}
+        </dd>
+        <dt>Stat lines</dt>
+        <dd>
+          {effectCount('buffed')} stronger, {effectCount('nerfed')} weaker, {effectCount('added')} new, {effectCount('removed')} gone
+        </dd>
+      </dl>
+
+      <h2 className="section-title">By mechanic</h2>
       <div className="panel">
-        <h3>By mechanic</h3>
         <table className="rtable">
           <thead>
             <tr>
               <th>Mechanic</th>
-              <th className="num">Nodes 3.29 → 3.30</th>
+              <th className="num">Nodes</th>
               <th>Notables</th>
-              <th>Effects</th>
-              <th style={{ width: 220 }}>Scarab fates</th>
-              <th />
+              <th style={{ width: 200 }}>Stat lines</th>
+              <th style={{ width: 200 }}>Scarab fates</th>
             </tr>
           </thead>
           <tbody>
             {mechanicsByCategory.map(({ category, items }) => (
               <Fragment key={category}>
                 <tr className="cat-row">
-                  <td colSpan={6}>
-                    <div className="cat-title" style={{ color: CATEGORY_COLOR[category] }}>
-                      {CATEGORY_LABEL[category]}
-                    </div>
-                    <div className="cat-note">{CATEGORY_NOTE[category]}</div>
+                  <td colSpan={5}>
+                    <span className="cat-title">{CATEGORY_LABEL[category]}</span>
                   </td>
                 </tr>
                 {items.map((m) => {
                   const oldN = nodeTotal(m.old);
                   const newN = nodeTotal(m.new);
-                  const scarabTotal = FATES.reduce((a, f) => a + m.scarabs[f], 0);
+                  const list = scarabs.filter((s) => s.mechanic === m.name);
+                  const kept = list.filter((s) => s.fate !== 'removed').length;
                   return (
                     <tr key={m.name}>
                       <td>
-                        <a href="#" className="with-icon" style={{ color: 'var(--text)', fontWeight: 600, textDecoration: 'none' }} onClick={(e) => (e.preventDefault(), go('mechanic', m.name))}>
-                          <MechIcon mechanic={m.name} size={30} />
-                          {m.name}
-                        </a>
-                      </td>
-                      <td className="num" data-label="Nodes">
-                        {oldN} → {newN}{' '}
-                        <span className={newN > oldN ? 's-added' : newN < oldN ? 's-removed' : 'muted'}>
-                          ({newN - oldN >= 0 ? '+' : ''}
-                          {newN - oldN})
+                        <span className="with-icon">
+                          <MechIcon mechanic={m.name} size={26} />
+                          <a href={`#/mechanic/${encodeURIComponent(m.name)}`} onClick={(e) => (e.preventDefault(), go('mechanic', m.name))} style={{ color: 'var(--text)' }}>
+                            {m.name}
+                          </a>
                         </span>
                       </td>
-                      <td className="small" data-label="Notables">
-                        <span className="s-added">+{m.notables.added}</span> <span className="s-removed">−{m.notables.removed}</span>{' '}
-                        <span className="s-changed">~{m.notables.replaced + m.notables.changed + m.notables.mixed}</span>{' '}
-                        <span className="s-buffed">↑{m.notables.buffed}</span> <span className="s-nerfed">↓{m.notables.nerfed}</span>
+                      <td className="num" data-label="Nodes">
+                        {oldN} → {newN}
                       </td>
-                      <td data-label="Effects">
-                        <Stack parts={EFFECT_PARTS.map((s) => ({ value: m.effects[s], color: STATUS_COLOR[s], label: s }))} />
+                      <td data-label="Notables">
+                        {m.notables.added > 0 && <span className="s-added">{m.notables.added} new</span>}
+                        {m.notables.added > 0 && m.notables.removed > 0 && ', '}
+                        {m.notables.removed > 0 && <span className="s-removed">{m.notables.removed} removed</span>}
+                        {!m.notables.added && !m.notables.removed && <span className="muted">no change in count</span>}
+                      </td>
+                      <td data-label="Stat lines">
+                        <Stack
+                          title={`${m.name}: stat lines`}
+                          parts={EFFECT_PARTS.map((st) => ({ value: m.effects[st], color: STATUS_COLOR[st], label: STATUS_LABEL[st] }))}
+                        />
                       </td>
                       <td data-label="Scarab fates">
-                        {scarabTotal ? (
-                          <Stack parts={FATES.map((f) => ({ value: m.scarabs[f], color: FATE_COLOR[f], label: FATE_LABEL[f] }))} />
+                        {list.length ? (
+                          <Stack title={`${m.name}: ${kept} of ${list.length} scarabs still do something`} parts={fateParts(list)} />
                         ) : (
-                          <span className="muted small">no scarabs</span>
+                          <span className="muted">no scarabs</span>
                         )}
-                      </td>
-                      <td className="small" data-label="Open" style={{ whiteSpace: 'nowrap' }}>
-                        {link('mechanic', m.name, 'details')} {link('map', m.name, 'map')}
                       </td>
                     </tr>
                   );
@@ -176,7 +189,6 @@ export function Overview({ go }: { go: (tab: TabId, mechanic?: string) => void }
             ))}
           </tbody>
         </table>
-        <Legend items={EFFECT_PARTS.map((s) => ({ label: `effect ${s}`, color: STATUS_COLOR[s] }))} />
       </div>
     </>
   );

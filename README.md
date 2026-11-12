@@ -55,15 +55,12 @@ Page actions are sent as GoatCounter events (`src/lib/analytics.ts`), named `are
 
 ## Look & feel
 
-- The game's own art: node icons, frames, mastery art and the atlas background come from the sprite sheets in `grindinggear/atlastree-export` (same pinned commits). Scarab icons come from the wiki. Everything is downloaded into `public/art/` by `npm run fetch-data` (or `node scripts/fetch-data.ts art`), so the app works offline.
-- Hover any **scarab, node or mechanic icon** for a PoE-style tooltip:
-  - scarab: mods, limit, 3.30 fate, max power, 3.29 → 3.30 best case, replacement nodes
-  - node: stats and what changed
-  - mechanic: summary and its scarabs
-- The **tree map** is drawn on a canvas with the real sprites. Unchanged nodes look unallocated (greyed); changed nodes are lit with a ring in their status colour.
-- Every list page has the **mechanic sidebar**. Click a mechanic, or a category header to filter that whole group.
-- Headings use Cinzel (open licence, bundled) as a stand-in for PoE's Fontin.
-- 3.30 Thread icons aren't on the wiki yet, so Threads show their mechanic's mastery art until then.
+- **Overview opens with a stash tab**: all 116 scarabs in their mechanic groups. Scarabs whose effect survives keep their colour; gone ones are greyed out like empty slots. A coloured edge on each slot shows its fate.
+- **Palette "Atlas night"**: ink navy from the Atlas of Worlds screen, brass for interaction, and Path of Exile's own text colours (currency beige for item names, magic blue for modifiers). Fates use five colours: kept, weaker, partly/chance/reworked, Threads, gone. All tokens are at the top of `src/styles.css`.
+- **Type**: Alegreya SC (small caps, close in spirit to PoE's Fontin) for item names and titles; Alegreya Sans for everything else, sentence case throughout. Both are open-licence and bundled.
+- Game art comes from the sprite sheets in `grindinggear/atlastree-export` (same pinned commits) and the wiki's scarab icons, downloaded into `public/art/` by `npm run fetch-data`.
+- Hover or tap any scarab, node, mechanic icon or stacked bar for a tooltip. On touch screens it opens as a bottom sheet.
+- The methodology, caveats, sources and privacy notes are on the **About** page.
 
 ## Mechanic categories (`src/lib/mechanics.ts`)
 

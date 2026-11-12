@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState, type MouseEvent, type PointerEvent, type ReactNode } from 'react';
+import { Icon } from './icons.tsx';
 
 /**
  * One shared tooltip layer for the whole app. `Tip` wrappers push lazily-built
@@ -68,7 +69,7 @@ export function TooltipLayer() {
   return (
     <div ref={ref} className="poe-tip" style={{ left: pos.left, top: pos.top }}>
       <button className="pt-close" aria-label="Close" onClick={() => push?.(null)}>
-        ✕
+        <Icon name="close" size={16} />
       </button>
       {tip.render()}
     </div>

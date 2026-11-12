@@ -78,11 +78,7 @@ export function Effects({ mechanic, embedded = false, focus, focusNonce }: { mec
     <>
       {!embedded && <h2>All tree effects</h2>}
       {!embedded && (
-      <p className="lead">
-        Every stat line on the tree, grouped by wording (numbers ignored), with totals for taking every node that has it. "3.30" includes the best
-        variant of multiple-choice notables. Effects marked <b>Surpassing</b> show the total as guaranteed + chance (every 100% = +1). Click a row
-        to see which nodes give it.
-      </p>
+      <p className="lead">Every stat line on the tree, with the total you would get by taking every node that has it. Open a row to see the nodes.</p>
       )}
       <div className="toolbar">
         <Autocomplete

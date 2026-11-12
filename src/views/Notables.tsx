@@ -64,10 +64,7 @@ export function Notables({ mechanic, embedded = false, focus, focusNonce }: { me
     <>
       {!embedded && <h2>Notables & keystones</h2>}
       {!embedded && (
-      <p className="lead">
-        Matched by name, plus curated links for renames and merges (several 3.29 notables became one multiple-choice notable). "Replaced" = the
-        3.29 notable(s) on the left became the 3.30 notable(s) on the right. ◇ marks a variant of a multiple-choice notable (you pick one).
-      </p>
+      <p className="lead">Notables and keystones in 3.29 and 3.30, including renames and the ones merged into pick-one notables.</p>
       )}
       <div className="toolbar">
         <Autocomplete
@@ -77,11 +74,11 @@ export function Notables({ mechanic, embedded = false, focus, focusNonce }: { me
           onSelect={(h) => reveal(h.entry.target.focus!, h.entry.label)}
           placeholder="Search name or stat…"
         />
-        <Chip on={onlyScarab} color="var(--poe-currency)" onClick={() => {
+        <Chip on={onlyScarab} color="var(--item)" onClick={() => {
             setOnlyScarab(!onlyScarab);
             trackToggle('notables', 'took-over-scarab', !onlyScarab);
           }}>
-          ❖ Took over a scarab ({data.notables.filter((n) => (linksOf(n).length || relatedOf(n).length) && matchesMechanic(n.mechanic, mechanic)).length})
+          Took over a scarab ({data.notables.filter((n) => (linksOf(n).length || relatedOf(n).length) && matchesMechanic(n.mechanic, mechanic)).length})
         </Chip>
         <select value={kind} onChange={(e) => {
             setKind(e.target.value as typeof kind);
@@ -156,11 +153,14 @@ function NotableCard({ n }: { n: NotableDiff }) {
       <div className="card-head">
         <StatusBadge status={n.status} />
         {linksOf(n).length > 0 && (
-          <span className="badge" style={{ color: 'var(--poe-currency)' }}>
-            from scarab
+          <span className="small" style={{ color: 'var(--item)' }}>
+            took over a scarab effect
           </span>
         )}
-        <span className="name">{[...new Set([...n.old, ...n.new].map((r) => r.name))].join(' → ')}</span>
+        {/* Only renames/merges need a header name; otherwise it's shown next to the icon below. */}
+        {new Set([...n.old, ...n.new].map((r) => r.name)).size > 1 && (
+          <span className="name">{[...new Set([...n.old, ...n.new].map((r) => r.name))].join(' → ')}</span>
+        )}
         {n.similar && <span className="small muted">closest {n.status === 'removed' ? 'new' : 'old'} notable: {n.similar.name}</span>}
       </div>
       {n.old.length && n.new.length ? (
@@ -192,8 +192,8 @@ function NotableCard({ n }: { n: NotableDiff }) {
       {n.note && <div className="note">{n.note}</div>}
       {linksOf(n).length > 0 && (
         <div className="scarab-box">
-          <div className="small" style={{ color: 'var(--poe-currency)', marginBottom: 4 }}>
-            ❖ Took over a scarab effect
+          <div className="small" style={{ color: 'var(--item)', marginBottom: 4 }}>
+            Took over a scarab effect
           </div>
           <ScarabLinks links={linksOf(n)} />
         </div>

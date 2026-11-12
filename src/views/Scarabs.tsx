@@ -56,11 +56,7 @@ export function Scarabs({ mechanic, embedded = false, focus, focusNonce }: { mec
     <>
       {!embedded && <h2>Scarab fates in 3.30</h2>}
       {!embedded && (
-      <p className="lead">
-        <b>Max power</b> = one scarab's effect × its map limit. <b>Best case</b> compares 3.29 (full tree + max scarabs) with 3.30 (full tree, no
-        scarabs). Its <b>retention</b> drives the verdict. <b>Absorbed</b> is how much of the scarab's max power the 3.30 tree added on top of what
-        3.29's tree already gave. Surpassing Chance converts to counts (100% = +1). Choice notables count their best variant.
-      </p>
+      <p className="lead">Every 3.29 scarab next to what the 3.30 Atlas tree gives back. Open a row for the numbers and the nodes involved.</p>
       )}
       <div className="toolbar">
         <Autocomplete
@@ -91,9 +87,9 @@ export function Scarabs({ mechanic, embedded = false, focus, focusNonce }: { mec
         <table className="rtable">
           <thead>
             <tr>
-              <th style={{ minWidth: 240 }}>Scarab</th>
+              <th style={{ width: '24%' }}>Scarab</th>
               <th className="num">Limit</th>
-              <th>Effect → 3.30</th>
+              <th style={{ width: '27%' }}>Effect → 3.30</th>
               <th className="num">Max power</th>
               <th className="num">3.29 best → 3.30</th>
               <th style={{ width: 130 }}>Retention</th>
@@ -142,7 +138,7 @@ export function Scarabs({ mechanic, embedded = false, focus, focusNonce }: { mec
                         <div>
                           <span className="item-name">{s.name}</span>
                           {s.mechanics.length > 1 && (
-                            <div className="small" style={{ color: 'var(--gold-dim)', display: 'flex', gap: 4, alignItems: 'center', margin: '2px 0' }}>
+                            <div className="small" style={{ color: 'var(--faint)', display: 'flex', gap: 4, alignItems: 'center', margin: '2px 0' }}>
                               {s.mechanics.map((m) => (
                                 <MechIcon key={m} mechanic={m} size={18} />
                               ))}
@@ -161,7 +157,8 @@ export function Scarabs({ mechanic, embedded = false, focus, focusNonce }: { mec
                     <td className="small full" data-label="Effect → 3.30">
                       {s.effects.map((e, i) => (
                         <div key={i} style={{ marginBottom: 4 }}>
-                          <span style={{ color: FATE_COLOR[e.fate] }}>◆</span> {e.label}
+                          <i className="sw" style={{ background: FATE_COLOR[e.fate] }} />
+                          {e.label}
                           {e.fate === 'thread' && (
                             <div className="with-icon" style={{ marginTop: 3 }}>
                               <ItemIcon name={`${s.mechanic} Thread`} size={24} fallbackMechanic={s.mechanic} />
@@ -173,9 +170,14 @@ export function Scarabs({ mechanic, embedded = false, focus, focusNonce }: { mec
                               {uniqueNodes(e.matches330).map((n) => (
                                 <span key={n.name} className="with-icon muted" style={{ gap: 4 }}>
                                   <NodeTip version="3.30" id={n.id} kind={n.kind} icon={n.icon} size={n.kind === 'small' ? 22 : 28} />
-                                  {n.name}
-                                  {n.count > 1 && ` ×${n.count}`}
-                                  {e.unit !== 'binary' && e.unit !== 'content' && <span style={{ color: 'var(--text)' }}>&nbsp;{fmtValue(n.sum, e.unit, n.surpassing)}</span>}
+                                  {/* one text run, so it wraps like a sentence instead of per piece */}
+                                  <span>
+                                    {n.name}
+                                    {n.count > 1 && ` ×${n.count}`}
+                                    {e.unit !== 'binary' && e.unit !== 'content' && (
+                                      <span style={{ color: 'var(--text)', whiteSpace: 'nowrap' }}> {fmtValue(n.sum, e.unit, n.surpassing)}</span>
+                                    )}
+                                  </span>
                                 </span>
                               ))}
                             </div>
@@ -257,7 +259,7 @@ function ScarabDetail({ s }: { s: ScarabResult }) {
                 <dt>Per scarab</dt>
                 <dd>
                   {fmtValue(e.perScarab, e.unit)} {e.stacks ? `× limit ${s.limit} = ${fmtValue(e.scarabMax, e.unit)}` : '(does not stack)'}
-                  {e.cap != null && <span className="muted"> · capped at {e.cap}</span>}
+                  {e.cap != null && <span className="muted">, capped at {e.cap}</span>}
                 </dd>
                 <dt>3.29 tree</dt>
                 <dd>{fmtValue(e.tree329, e.treeUnit && e.retention == null ? e.treeUnit : e.unit)}</dd>
