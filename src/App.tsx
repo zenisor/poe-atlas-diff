@@ -18,13 +18,13 @@ import type { SearchHit } from './lib/search.ts';
 import { track } from './lib/analytics.ts';
 
 const TABS = [
-  { id: 'overview', label: 'Overview' },
-  { id: 'mechanic', label: 'By mechanic' },
-  { id: 'scarabs', label: 'Scarab fates' },
-  { id: 'notables', label: 'Notables & keystones' },
-  { id: 'effects', label: 'All tree effects' },
-  { id: 'map', label: 'Tree map' },
-  { id: 'strategies', label: 'Strategies' },
+  { id: 'overview', label: 'Overview', short: 'Overview' },
+  { id: 'mechanic', label: 'By mechanic', short: 'Mechanics' },
+  { id: 'scarabs', label: 'Scarab fates', short: 'Scarabs' },
+  { id: 'notables', label: 'Notables & keystones', short: 'Notables' },
+  { id: 'effects', label: 'All tree effects', short: 'Effects' },
+  { id: 'map', label: 'Tree map', short: 'Tree map' },
+  { id: 'strategies', label: 'Strategies', short: 'Strategies' },
 ] as const;
 export type TabId = (typeof TABS)[number]['id'];
 
@@ -63,6 +63,10 @@ export function App() {
   // Bumped on every search pick so re-selecting the same item still scrolls to it.
   const [focusNonce, setFocusNonce] = useState(0);
   const [globalQuery, setGlobalQuery] = useState('');
+  // Mobile header: page menu + expandable search row.
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchFocus, setSearchFocus] = useState(0);
 
   // New page (or a different mechanic page) starts at the top; filter changes on the same tab keep the scroll.
   const pageKey = tab === 'mechanic' ? `${tab}/${mechanic}` : tab;
@@ -87,17 +91,43 @@ export function App() {
     if (window.location.hash !== next) window.location.hash = next;
     setFocusNonce((n) => n + 1);
     setGlobalQuery('');
+    setSearchOpen(false);
     track(`search/global/${hit.entry.kind}/${hit.entry.label}`);
   };
   const focusProps = { focus, focusNonce };
 
   return (
     <div className="app" style={{ '--atlas-bg': `url(${ATLAS_BG})` } as CSSProperties}>
-      <header className="topbar">
+      <header className={`topbar${searchOpen ? ' search-open' : ''}`}>
         <div className="brand">
           <MechanicIcon mechanic="Maps" size={30} />
-          Atlas {data.meta.old.version} → {data.meta.new.version}
+          <span className="brand-word">Atlas</span> {data.meta.old.version} → {data.meta.new.version}
           <small>scarab rework diff</small>
+        </div>
+        <div className="mobile-nav">
+          <button className="btn mobile-page" aria-haspopup="menu" aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>
+            ☰ {TABS.find((t) => t.id === tab)?.short}
+          </button>
+          {menuOpen && (
+            <>
+              <div className="menu-backdrop" onClick={() => setMenuOpen(false)} />
+              <div className="mobile-menu" role="menu">
+                {TABS.map((t) => (
+                  <button
+                    key={t.id}
+                    role="menuitem"
+                    className={tab === t.id ? 'active' : ''}
+                    onClick={() => {
+                      setMenuOpen(false);
+                      go(t.id);
+                    }}
+                  >
+                    {t.label}
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
         </div>
         <nav className="tabs">
           {TABS.map((t) => (
@@ -107,16 +137,29 @@ export function App() {
           ))}
         </nav>
         <div className="spacer" />
-        <Autocomplete
-          className="global"
-          entries={SEARCH_INDEX}
-          value={globalQuery}
-          onChange={setGlobalQuery}
-          onSelect={openHit}
-          placeholder="Search scarabs, notables, mechanics…"
-          hotkey="/"
-          limit={14}
-        />
+        <button
+          className="btn mobile-search-btn"
+          aria-label="Search"
+          onClick={() => {
+            setSearchOpen(!searchOpen);
+            setSearchFocus((n) => n + 1);
+          }}
+        >
+          {searchOpen ? '✕' : '⌕'}
+        </button>
+        <div className="global-search">
+          <Autocomplete
+            className="global"
+            entries={SEARCH_INDEX}
+            value={globalQuery}
+            onChange={setGlobalQuery}
+            onSelect={openHit}
+            placeholder="Search scarabs, notables, mechanics…"
+            hotkey="/"
+            limit={14}
+            focusSignal={searchFocus}
+          />
+        </div>
       </header>
       <main>
         {tab === 'overview' && <Overview go={go} />}

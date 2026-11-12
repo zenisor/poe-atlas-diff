@@ -353,3 +353,118 @@ tr.flash td { animation: focus-flash 2.2s ease-out; }
 .tab { padding: 6px 10px; }
 .topbar .ac.global input[type='search'] { min-width: 230px; width: 230px; }
 .topbar .ac-list { left: auto; right: 0; }
+
+/* ======================= mobile / touch ======================= */
+.mobile-nav, .mobile-search-btn, .mech-toggle, .pt-close, .hint-touch { display: none; }
+.map-wrap canvas { touch-action: none; }
+.zoom-btn { width: 34px; padding: 4px 0; font-size: 16px; font-family: inherit; }
+
+/* Touch screens (any width): tooltips become a bottom sheet with a close button. */
+@media (hover: none), (max-width: 900px) {
+  .poe-tip {
+    position: fixed !important; left: 0 !important; right: 0; top: auto !important; bottom: 0;
+    min-width: 0; max-width: none; max-height: 62vh; overflow-y: auto; pointer-events: auto;
+    border-width: 1px 0 0; padding-bottom: env(safe-area-inset-bottom);
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, .85);
+  }
+  .pt-close {
+    display: block; position: absolute; top: 6px; right: 8px; z-index: 2; width: 32px; height: 32px;
+    background: rgba(0, 0, 0, .5); border: 1px solid #6e5a35; border-radius: 2px; color: var(--title); font-size: 15px; cursor: pointer;
+  }
+  .hint-mouse { display: none; }
+  .hint-touch { display: inline; }
+  .tip-anchor { cursor: pointer; }
+}
+
+@media (max-width: 900px) {
+  main { padding: 12px; }
+  h2 { font-size: 19px; }
+  p.lead { font-size: 13px; }
+  .caveat { font-size: 12px; }
+
+  /* header: one compact row (logo · page menu · search) */
+  .topbar { gap: 8px; padding: 6px 10px; flex-wrap: wrap; }
+  .topbar .tabs { display: none; }
+  .brand { font-size: 15px; gap: 6px; }
+  .brand .brand-word, .brand small { display: none; }
+  .mobile-nav { display: block; position: relative; }
+  .mobile-page { font-size: 13px; padding: 6px 10px; white-space: nowrap; }
+  .menu-backdrop { position: fixed; inset: 0; z-index: 65; }
+  .mobile-menu {
+    position: absolute; top: calc(100% + 6px); left: 0; z-index: 70; min-width: 230px; display: flex; flex-direction: column;
+    background: rgba(10, 8, 5, .98); border: 1px solid #6e5a35; box-shadow: 0 12px 30px rgba(0, 0, 0, .85);
+  }
+  .mobile-menu button {
+    text-align: left; padding: 12px 14px; background: none; border: 0; border-bottom: 1px solid #2a2116;
+    font-family: var(--serif); letter-spacing: .04em; color: var(--text); cursor: pointer;
+  }
+  .mobile-menu button.active { color: var(--title); background: rgba(201, 164, 99, .12); }
+  .mobile-search-btn { display: inline-flex; justify-content: center; width: 38px; font-size: 17px; padding: 4px 0; font-family: inherit; }
+  .topbar .global-search { display: none; flex-basis: 100%; order: 10; }
+  .topbar.search-open .global-search { display: block; }
+  .topbar .global-search .ac, .topbar .ac.global input[type='search'] { width: 100%; min-width: 0; }
+  .topbar .ac-kbd { display: none; }
+  .topbar .ac-list { left: 0; right: 0; width: 100%; }
+
+  /* mechanic sidebar collapses behind a button */
+  .mech-layout { gap: 10px; }
+  .mech-toggle { display: flex; align-items: center; gap: 8px; width: 100%; text-align: left; font-size: 14px; padding: 9px 12px; }
+  .mech-toggle .caret { margin-left: auto; color: var(--gold); }
+  .mech-side .mech-nav { display: none; }
+  .mech-side.open .mech-nav {
+    display: block; position: static; max-height: 62vh; overflow-y: auto; margin-top: 6px; padding: 4px 6px 10px;
+    border: 1px solid #4a3a22; background: rgba(10, 8, 5, .96);
+  }
+  .mech-nav a { padding: 7px 8px; font-size: 14px; }
+  .mech-title h2 { font-size: 22px; }
+
+  /* inputs and toolbars */
+  .toolbar { gap: 6px; }
+  .toolbar .ac { flex: 1 1 100%; }
+  .ac, .ac input[type='search'], .toolbar input[type='search'] { width: 100%; min-width: 0; }
+  .ac-list { width: 100%; }
+  .chip { padding: 5px 9px; }
+
+  /* tiles */
+  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .tile { padding: 10px; }
+  .tile .value { font-size: 19px; }
+
+  /* tables -> cards: first cell is the header, the rest become labelled fields */
+  table.rtable, table.rtable tbody { display: block; }
+  table.rtable thead { display: none; }
+  table.rtable tr { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 14px; padding: 12px 4px; border-bottom: 1px solid #2e2416; }
+  table.rtable td { display: block; border: 0; padding: 0; text-align: left !important; white-space: normal !important; min-width: 0; }
+  table.rtable td:first-child, table.rtable td.full { grid-column: 1 / -1; }
+  table.rtable td:empty { display: none; }
+  table.rtable td[data-label]::before {
+    content: attr(data-label); display: block; margin-bottom: 2px;
+    font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: var(--gold-dim);
+  }
+  table.rtable tr.group-row, table.rtable tr.cat-row, table.rtable tr.detail-row { display: block; padding: 8px 4px; }
+  table.rtable tr.clickable:hover td { background: none; }
+  .retention .bar { min-width: 50px; }
+
+  /* strategies */
+  .strat-list { display: flex; flex-wrap: wrap; gap: 6px; }
+  .strat-list > * { flex: none; }
+  .strat-list > .small, .strat-list > details { flex-basis: 100%; margin: 4px 0 0 !important; }
+  .strat-list button { width: auto; margin: 0; font-size: 12px; padding: 5px 10px; }
+  .layer-cards { grid-template-columns: 1fr !important; }
+  .verdict { font-size: 19px; }
+
+  /* tree map */
+  .map-wrap { height: 68vh; min-height: 360px; }
+  .map-controls { top: 8px; right: 8px; }
+
+  .cols-2 { gap: 10px; }
+  .notable-line { gap: 10px; }
+  .footer { padding: 14px 10px; }
+}
+
+@media (max-width: 900px) {
+  /* let grid content shrink below its widest child instead of widening the page */
+  .mech-layout { grid-template-columns: minmax(0, 1fr); }
+  .mech-layout > * { min-width: 0; }
+  .mech-title { flex-wrap: wrap; gap: 8px 12px; }
+}

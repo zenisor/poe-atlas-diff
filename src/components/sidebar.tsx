@@ -1,6 +1,6 @@
-import type { CSSProperties, ReactNode } from 'react';
+import { useState, type CSSProperties, type ReactNode } from 'react';
 import { mechanicsByCategory } from '../data.ts';
-import { CATEGORY_LABEL } from '../lib/mechanics.ts';
+import { CATEGORY_LABEL, type MechanicCategory } from '../lib/mechanics.ts';
 import { CATEGORY_COLOR } from './ui.tsx';
 import { MechanicIcon } from './art.tsx';
 
@@ -22,6 +22,9 @@ export function MechanicSidebar({
   countLabel?: string;
   allowGroups?: boolean;
 }) {
+  // On narrow screens the list collapses behind a "Mechanic: … ▾" button.
+  const [open, setOpen] = useState(false);
+  const current = !value ? 'All mechanics' : value.startsWith('cat:') ? CATEGORY_LABEL[value.slice(4) as MechanicCategory] : value;
   const link = (v: string, active: boolean, children: ReactNode, className = '', style?: CSSProperties) => (
     <a
       key={v}
@@ -30,6 +33,7 @@ export function MechanicSidebar({
       style={style}
       onClick={(e) => {
         e.preventDefault();
+        setOpen(false);
         onChange(v);
       }}
     >
@@ -37,6 +41,14 @@ export function MechanicSidebar({
     </a>
   );
   return (
+    <div className={`mech-side${open ? ' open' : ''}`}>
+    <button className="btn mech-toggle" aria-expanded={open} onClick={() => setOpen(!open)}>
+      {value && !value.startsWith('cat:') && <MechanicIcon mechanic={value} size={22} />}
+      <span>
+        <span className="muted">Mechanic:</span> {current}
+      </span>
+      <span className="caret">{open ? '▴' : '▾'}</span>
+    </button>
     <nav className="mech-nav">
       {allowGroups && link('', value === '', <span className="all">All mechanics</span>, 'all-link')}
       {countLabel && <div className="small muted" style={{ margin: '6px 8px 0' }}>numbers = {countLabel}</div>}
@@ -65,5 +77,6 @@ export function MechanicSidebar({
         </div>
       ))}
     </nav>
+    </div>
   );
 }

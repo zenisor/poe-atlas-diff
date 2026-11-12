@@ -43,6 +43,7 @@ export function Autocomplete({
   hotkey,
   limit = 10,
   className,
+  focusSignal,
 }: {
   entries: SearchEntry[];
   value: string;
@@ -52,6 +53,8 @@ export function Autocomplete({
   hotkey?: string;
   limit?: number;
   className?: string;
+  /** Changing this number focuses the input (e.g. when a mobile search row opens). */
+  focusSignal?: number;
 }) {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(0);
@@ -60,6 +63,9 @@ export function Autocomplete({
   const hits = useMemo(() => rank(entries, value, limit), [entries, value, limit]);
 
   useEffect(() => setActive(0), [value]);
+  useEffect(() => {
+    if (focusSignal) inputRef.current?.focus();
+  }, [focusSignal]);
 
   useEffect(() => {
     if (!hotkey) return;

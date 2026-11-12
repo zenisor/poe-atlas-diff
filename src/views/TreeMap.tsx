@@ -339,43 +339,98 @@ export function TreeMap({ mechanic, focus, focusNonce }: { mechanic: string; foc
   const toWorld = (clientX: number, clientY: number) => {
     const rect = canvasRef.current!.getBoundingClientRect();
     const v = view!;
-    return { x: (clientX - rect.left - size.w / 2) / v.scale + v.cx, y: (clientY - rect.top - size.h / 2) / v.scale + v.cy, rect };
+    return { x: (clientX - rect.left - size.w / 2) / v.scale + v.cx, y: (clientY - rect.top - size.h / 2) / v.scale + v.cy, rect, scaleHint: v.scale };
+  };
+  const minScale = () => Math.min(size.w / bounds.w, size.h / bounds.h) * 0.6;
+  const clampScale = (k: number) => Math.min(Math.max(k, minScale()), 1.5);
+  /** Zoom to `scale`, keeping the world point under screen point (sx, sy) fixed. */
+  const zoomAt = (scale: number, clientX: number, clientY: number, base = view!) => {
+    const rect = canvasRef.current!.getBoundingClientRect();
+    const wx = (clientX - rect.left - size.w / 2) / base.scale + base.cx;
+    const wy = (clientY - rect.top - size.h / 2) / base.scale + base.cy;
+    const k = clampScale(scale);
+    setView({ scale: k, cx: wx - (clientX - rect.left - size.w / 2) / k, cy: wy - (clientY - rect.top - size.h / 2) / k });
+  };
+  const zoomBy = (factor: number) => {
+    if (!view) return;
+    const rect = canvasRef.current!.getBoundingClientRect();
+    zoomAt(view.scale * factor, rect.left + size.w / 2, rect.top + size.h / 2);
   };
   const onWheel = (e: WheelEvent<HTMLCanvasElement>) => {
     if (!view) return;
-    const p = toWorld(e.clientX, e.clientY);
-    const minScale = Math.min(size.w / bounds.w, size.h / bounds.h) * 0.6;
-    const scale = Math.min(Math.max(view.scale * (e.deltaY > 0 ? 1 / 1.18 : 1.18), minScale), 1.5);
-    const k = view.scale / scale;
-    setView({ scale, cx: p.x - (p.x - view.cx) * k, cy: p.y - (p.y - view.cy) * k });
+    zoomAt(view.scale * (e.deltaY > 0 ? 1 / 1.18 : 1.18), e.clientX, e.clientY);
   };
-  const onDown = (e: PointerEvent<HTMLCanvasElement>) => {
-    if (!view) return;
-    drag.current = { x: e.clientX, y: e.clientY, cx: view.cx, cy: view.cy };
-    setDragging(true);
-    e.currentTarget.setPointerCapture(e.pointerId);
-  };
-  const onMove = (e: PointerEvent<HTMLCanvasElement>) => {
-    if (!view) return;
-    if (drag.current) {
-      const d = drag.current;
-      setView({ ...view, cx: d.cx - (e.clientX - d.x) / view.scale, cy: d.cy - (e.clientY - d.y) / view.scale });
-      return;
-    }
-    const p = toWorld(e.clientX, e.clientY);
+
+  const nodeAt = (clientX: number, clientY: number) => {
+    const p = toWorld(clientX, clientY);
     let best: MapNode | null = null;
     let bestD = Infinity;
     for (const n of nodes) {
       if (n.kind === 'mastery' || n.kind === 'root') continue;
-      const r = (SIZE[n.kind] ?? SIZE.small)[1] / 2;
+      // Fingers are less precise than a cursor: allow a slightly bigger hit area on touch.
+      const r = (SIZE[n.kind] ?? SIZE.small)[1] / 2 + (matchMedia('(hover: none)').matches ? 14 / p.scaleHint : 0);
       const d = Math.hypot(n.x - p.x, n.y - p.y);
       if (d < r && d < bestD) [best, bestD] = [n, d];
     }
-    setHover(best ? { node: best, x: e.clientX - p.rect.left, y: e.clientY - p.rect.top } : null);
+    return best ? { node: best, x: clientX - p.rect.left, y: clientY - p.rect.top } : null;
   };
-  const onUp = () => {
-    drag.current = null;
-    setDragging(false);
+
+  // Active pointers: one = pan, two = pinch-zoom. A short touch without movement = tap (select node).
+  const pointers = useRef(new Map<number, { x: number; y: number }>());
+  const pinch = useRef<{ dist: number; view: { cx: number; cy: number; scale: number } } | null>(null);
+  const tap = useRef<{ id: number; x: number; y: number; t: number } | null>(null);
+  const spread = () => {
+    const [a, b] = [...pointers.current.values()];
+    return { dist: Math.hypot(a.x - b.x, a.y - b.y), mx: (a.x + b.x) / 2, my: (a.y + b.y) / 2 };
+  };
+
+  const onDown = (e: PointerEvent<HTMLCanvasElement>) => {
+    if (!view) return;
+    e.currentTarget.setPointerCapture(e.pointerId);
+    pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (pointers.current.size === 1) {
+      drag.current = { x: e.clientX, y: e.clientY, cx: view.cx, cy: view.cy };
+      tap.current = { id: e.pointerId, x: e.clientX, y: e.clientY, t: Date.now() };
+      setDragging(true);
+    } else if (pointers.current.size === 2) {
+      drag.current = null;
+      tap.current = null;
+      pinch.current = { dist: spread().dist, view };
+    }
+  };
+  const onMove = (e: PointerEvent<HTMLCanvasElement>) => {
+    if (!view) return;
+    if (!pointers.current.has(e.pointerId)) {
+      if (e.pointerType === 'mouse') setHover(nodeAt(e.clientX, e.clientY));
+      return;
+    }
+    pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (tap.current && Math.hypot(e.clientX - tap.current.x, e.clientY - tap.current.y) > 8) tap.current = null;
+    if (pointers.current.size >= 2 && pinch.current) {
+      const { dist, mx, my } = spread();
+      zoomAt(pinch.current.view.scale * (dist / pinch.current.dist), mx, my, pinch.current.view);
+      return;
+    }
+    if (drag.current) {
+      const d = drag.current;
+      setView({ ...view, cx: d.cx - (e.clientX - d.x) / view.scale, cy: d.cy - (e.clientY - d.y) / view.scale });
+    }
+  };
+  const onUp = (e: PointerEvent<HTMLCanvasElement>) => {
+    const wasTap = tap.current && tap.current.id === e.pointerId && Date.now() - tap.current.t < 400;
+    pointers.current.delete(e.pointerId);
+    if (wasTap && e.pointerType !== 'mouse') setHover(nodeAt(e.clientX, e.clientY));
+    tap.current = null;
+    if (pointers.current.size === 1 && view) {
+      // Lifted one finger of a pinch: continue panning with the other.
+      const [p] = [...pointers.current.values()];
+      drag.current = { x: p.x, y: p.y, cx: view.cx, cy: view.cy };
+      pinch.current = null;
+    } else if (pointers.current.size === 0) {
+      drag.current = null;
+      pinch.current = null;
+      setDragging(false);
+    }
   };
 
   const counts = useMemo(() => {
@@ -431,10 +486,16 @@ export function TreeMap({ mechanic, focus, focusNonce }: { mechanic: string; foc
           onSelect={(h) => showNode(h.entry.label, h.entry.art?.type === 'node' ? h.entry.art.version : undefined)}
           placeholder="Find a node or stat…"
         />
-        <span className="small muted">Greyed = unchanged · lit + coloured ring = changed · scarab badge = took over a scarab effect. Scroll to zoom, drag to pan.</span>
+        <span className="small muted">Greyed = unchanged · lit + coloured ring = changed · scarab badge = took over a scarab effect. <span className="hint-mouse">Scroll to zoom, drag to pan.</span><span className="hint-touch">Pinch to zoom, drag to pan, tap a node.</span></span>
       </div>
       <div className="map-wrap" ref={wrapRef}>
         <div className="map-controls">
+          <button className="btn zoom-btn" aria-label="Zoom in" onClick={() => zoomBy(1.4)}>
+            +
+          </button>
+          <button className="btn zoom-btn" aria-label="Zoom out" onClick={() => zoomBy(1 / 1.4)}>
+            −
+          </button>
           <button
             className="btn"
             onClick={() => {
@@ -452,13 +513,16 @@ export function TreeMap({ mechanic, focus, focusNonce }: { mechanic: string; foc
           onPointerDown={onDown}
           onPointerMove={onMove}
           onPointerUp={onUp}
-          onPointerLeave={() => {
-            onUp();
-            setHover(null);
+          onPointerCancel={onUp}
+          onPointerLeave={(e) => {
+            if (e.pointerType === 'mouse') setHover(null);
           }}
         />
         {hover && !dragging && (
           <div className="poe-tip" style={{ position: 'absolute', left: Math.max(4, Math.min(hover.x + 16, size.w - 450)), top: Math.max(4, Math.min(hover.y + 16, size.h - 260)) }}>
+            <button className="pt-close" aria-label="Close" onClick={() => setHover(null)}>
+              ✕
+            </button>
             <NodeTooltip node={hover.node} version={version} />
           </div>
         )}

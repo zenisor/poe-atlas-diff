@@ -88,7 +88,7 @@ export function Scarabs({ mechanic, embedded = false, focus, focusNonce }: { mec
         ))}
       </div>
       <div className="panel">
-        <table>
+        <table className="rtable">
           <thead>
             <tr>
               <th style={{ minWidth: 240 }}>Scarab</th>
@@ -157,8 +157,8 @@ export function Scarabs({ mechanic, embedded = false, focus, focusNonce }: { mec
                         </div>
                       </div>
                     </td>
-                    <td className="num">{s.limit}</td>
-                    <td className="small">
+                    <td className="num" data-label="Limit">{s.limit}</td>
+                    <td className="small full" data-label="Effect → 3.30">
                       {s.effects.map((e, i) => (
                         <div key={i} style={{ marginBottom: 4 }}>
                           <span style={{ color: FATE_COLOR[e.fate] }}>◆</span> {e.label}
@@ -183,9 +183,9 @@ export function Scarabs({ mechanic, embedded = false, focus, focusNonce }: { mec
                         </div>
                       ))}
                     </td>
-                    <td className="num">{main.unit === 'binary' || main.unit === 'content' ? '—' : fmtValue(main.scarabMax, main.unit)}</td>
-                    <td className="num">{bestCase(main)}</td>
-                    <td>
+                    <td className="num" data-label="Max power">{main.unit === 'binary' || main.unit === 'content' ? '—' : fmtValue(main.scarabMax, main.unit)}</td>
+                    <td className="num" data-label="3.29 best → 3.30">{bestCase(main)}</td>
+                    <td data-label="Retention">
                       <Retention value={s.retention} />
                       {quantified > 0 && quantified < s.effects.length && (
                         <div className="small muted">
@@ -193,8 +193,8 @@ export function Scarabs({ mechanic, embedded = false, focus, focusNonce }: { mec
                         </div>
                       )}
                     </td>
-                    <td className="num">{main.absorbed == null ? '–' : pct(main.absorbed)}</td>
-                    <td>
+                    <td className="num" data-label="Absorbed">{main.absorbed == null ? '–' : pct(main.absorbed)}</td>
+                    <td data-label="Fate">
                       <FateBadge fate={s.fate} short />
                     </td>
                   </tr>

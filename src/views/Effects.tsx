@@ -108,7 +108,7 @@ export function Effects({ mechanic, embedded = false, focus, focusNonce }: { mec
         ))}
       </div>
       <div className="panel">
-        <table>
+        <table className="rtable">
           <thead>
             <tr>
               <th>Effect</th>
@@ -172,10 +172,10 @@ export function Effects({ mechanic, embedded = false, focus, focusNonce }: { mec
                       </div>
                       </div>
                     </td>
-                    <td className="num">{sideSummary(e.old)}</td>
-                    <td className="num">{sideSummary(e.new)}</td>
-                    <td className={`num ${e.status === 'buffed' ? 's-buffed' : e.status === 'nerfed' ? 's-nerfed' : 'muted'}`}>{signedPct(e.deltaPct)}</td>
-                    <td>
+                    <td className="num" data-label="3.29 max">{sideSummary(e.old)}</td>
+                    <td className="num" data-label="3.30 max">{sideSummary(e.new)}</td>
+                    <td className={`num ${e.status === 'buffed' ? 's-buffed' : e.status === 'nerfed' ? 's-nerfed' : 'muted'}`} data-label="Change">{signedPct(e.deltaPct)}</td>
+                    <td data-label="Status">
                       <StatusBadge status={e.status} />
                     </td>
                   </tr>

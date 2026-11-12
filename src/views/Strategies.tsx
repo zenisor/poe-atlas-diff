@@ -53,7 +53,7 @@ const LAYER_HINT: Record<StrategyLayer, string> = {
 function LayerCards({ layers }: { layers: LayerBreakdown[] }) {
   if (!layers.length) return null;
   return (
-    <div className="grid" style={{ gridTemplateColumns: `repeat(${layers.length}, minmax(0, 1fr))`, marginBottom: 16 }}>
+    <div className="grid layer-cards" style={{ gridTemplateColumns: `repeat(${layers.length}, minmax(0, 1fr))`, marginBottom: 16 }}>
       {layers.map((l) => (
         <div key={l.layer} className="tile">
           <div className="label" style={{ color: LAYER_COLOR[l.layer] }}>
@@ -266,7 +266,7 @@ function Editor({ strategy, onChange, onClone, onDelete }: { strategy: Strategy;
           <div className="small muted" style={{ marginBottom: 6 }}>
             Scarabs ({slots}/{MAP_DEVICE_SLOTS} slots{slots > MAP_DEVICE_SLOTS ? ', over the usual map device limit' : ''})
           </div>
-          <table>
+          <table className="rtable">
             <tbody>
               {strategy.scarabs.map(({ id, count }) => {
                 const sc = scarabsById.get(id);
@@ -363,7 +363,7 @@ function EvaluationPanel({ ev }: { ev: StrategyEvaluation }) {
       <LayerCards layers={ev.layers} />
 
       <h3>Scarabs</h3>
-      <table>
+      <table className="rtable">
         <thead>
           <tr>
             <th>Scarab</th>
@@ -397,15 +397,15 @@ function EvaluationPanel({ ev }: { ev: StrategyEvaluation }) {
                     </span>
                   )}
                 </td>
-                <td className="small">
+                <td className="small full" data-label="Effect">
                   <span style={{ color: FATE_COLOR[e.fate] }}>●</span> {e.label}
                 </td>
-                <td className="num">{e.unit === 'binary' || e.unit === 'content' ? '—' : fmtValue(e.scarabPower, e.unit)}</td>
-                <td className="num">
+                <td className="num" data-label="Your scarab power">{e.unit === 'binary' || e.unit === 'content' ? '—' : fmtValue(e.scarabPower, e.unit)}</td>
+                <td className="num" data-label="3.29 best → 3.30">
                   {e.fate === 'thread' ? 'via Threads' : e.retention == null ? '—' : `${fmtValue(e.before, e.unit)} → ${fmtValue(e.after, e.unit, e.surpassing)}`}
                 </td>
-                <td>{e.fate === 'thread' ? <span className="small muted">needs Threads</span> : <Retention value={e.retention} />}</td>
-                <td>
+                <td data-label="Kept">{e.fate === 'thread' ? <span className="small muted">needs Threads</span> : <Retention value={e.retention} />}</td>
+                <td data-label="Fate">
                   <FateBadge fate={e.fate} short />
                 </td>
               </tr>
@@ -423,7 +423,7 @@ function EvaluationPanel({ ev }: { ev: StrategyEvaluation }) {
           {ev.notableCounts.kept} kept · {ev.notableCounts.changed} changed/replaced · {ev.notableCounts.removed} removed
         </span>
       </h3>
-      <table>
+      <table className="rtable">
         <tbody>
           {LAYERS.map((layer) => {
             const rows = ev.notables.filter((n) => n.layer === layer);
@@ -469,7 +469,7 @@ function CompareTable({ strategies, onOpen }: { strategies: Strategy[]; onOpen: 
     .sort((a, b) => (a.ev.scarabRetention ?? 9) - (b.ev.scarabRetention ?? 9));
   return (
     <div className="panel">
-      <table>
+      <table className="rtable">
         <thead>
           <tr>
             <th>Strategy</th>
@@ -502,13 +502,13 @@ function CompareTable({ strategies, onOpen }: { strategies: Strategy[]; onOpen: 
                   })}
                 </div>
               </td>
-              <td>
+              <td data-label="Scarab power kept">
                 <Retention value={ev.scarabRetention} />
               </td>
               {LAYERS.map((l) => {
                 const lb = ev.layers.find((x) => x.layer === l);
                 return (
-                  <td key={l} className="small">
+                  <td key={l} className="small" data-label={LAYER_LABEL[l]}>
                     {lb ? (
                       <>
                         <div>{lb.mechanics.join(', ')}</div>
@@ -520,14 +520,14 @@ function CompareTable({ strategies, onOpen }: { strategies: Strategy[]; onOpen: 
                   </td>
                 );
               })}
-              <td className="num">{pct(ev.coverage)}</td>
-              <td className="num">{ev.threadSlots}</td>
-              <td className="num">{ev.removedSlots}</td>
-              <td>
+              <td className="num" data-label="Quantifiable">{pct(ev.coverage)}</td>
+              <td className="num" data-label="Thread slots">{ev.threadSlots}</td>
+              <td className="num" data-label="Removed slots">{ev.removedSlots}</td>
+              <td data-label="Notables kept / changed / removed">
                 <span className="s-added">{ev.notableCounts.kept}</span> / <span className="s-changed">{ev.notableCounts.changed}</span> /{' '}
                 <span className="s-removed">{ev.notableCounts.removed}</span>
               </td>
-              <td>
+              <td data-label="Verdict">
                 <span className={`v-${ev.verdict}`}>{VERDICT_LABEL[ev.verdict]}</span>
               </td>
             </tr>

@@ -79,7 +79,7 @@ export function Overview({ go }: { go: (tab: TabId, mechanic?: string) => void }
         <h3>What happened to the {scarabs.length} scarabs</h3>
         <Stack parts={FATES.map((f) => ({ value: fateCounts[f], color: FATE_COLOR[f], label: FATE_LABEL[f] }))} />
         <Legend items={FATES.map((f) => ({ label: `${FATE_LABEL[f]} (${fateCounts[f]})`, color: FATE_COLOR[f] }))} />
-        <table style={{ marginTop: 14 }}>
+        <table className="rtable" style={{ marginTop: 14 }}>
           <tbody>
             {mechanicsByCategory.map(({ category }) => {
               const list = scarabs.filter((s) => s.category === category);
@@ -110,7 +110,7 @@ export function Overview({ go }: { go: (tab: TabId, mechanic?: string) => void }
 
       <div className="panel">
         <h3>By mechanic</h3>
-        <table>
+        <table className="rtable">
           <thead>
             <tr>
               <th>Mechanic</th>
@@ -144,29 +144,29 @@ export function Overview({ go }: { go: (tab: TabId, mechanic?: string) => void }
                           {m.name}
                         </a>
                       </td>
-                      <td className="num">
+                      <td className="num" data-label="Nodes">
                         {oldN} → {newN}{' '}
                         <span className={newN > oldN ? 's-added' : newN < oldN ? 's-removed' : 'muted'}>
                           ({newN - oldN >= 0 ? '+' : ''}
                           {newN - oldN})
                         </span>
                       </td>
-                      <td className="small">
+                      <td className="small" data-label="Notables">
                         <span className="s-added">+{m.notables.added}</span> <span className="s-removed">−{m.notables.removed}</span>{' '}
                         <span className="s-changed">~{m.notables.replaced + m.notables.changed + m.notables.mixed}</span>{' '}
                         <span className="s-buffed">↑{m.notables.buffed}</span> <span className="s-nerfed">↓{m.notables.nerfed}</span>
                       </td>
-                      <td>
+                      <td data-label="Effects">
                         <Stack parts={EFFECT_PARTS.map((s) => ({ value: m.effects[s], color: STATUS_COLOR[s], label: s }))} />
                       </td>
-                      <td>
+                      <td data-label="Scarab fates">
                         {scarabTotal ? (
                           <Stack parts={FATES.map((f) => ({ value: m.scarabs[f], color: FATE_COLOR[f], label: FATE_LABEL[f] }))} />
                         ) : (
                           <span className="muted small">no scarabs</span>
                         )}
                       </td>
-                      <td className="small" style={{ whiteSpace: 'nowrap' }}>
+                      <td className="small" data-label="Open" style={{ whiteSpace: 'nowrap' }}>
                         {link('mechanic', m.name, 'details')} {link('map', m.name, 'map')}
                       </td>
                     </tr>
