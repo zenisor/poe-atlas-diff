@@ -1,0 +1,164 @@
+/**
+ * Example 3.29 farming setups used as starting points in the Strategy tab.
+ * These are typical shapes, not exact meta builds. Edit or clone them in the UI.
+ * Scarab ids are wiki metadata ids; notables are 3.29 notable/keystone names.
+ * The build fails on an unknown id or name, or a count above the scarab's limit.
+ */
+import type { Strategy } from '../../src/lib/types.ts';
+
+export const PRESET_STRATEGIES: Strategy[] = [
+  {
+    id: 'preset-essence',
+    name: 'Essence farming',
+    description: 'Max Imprisoned Monsters with tier upgrades.',
+    scarabs: [
+      { id: 'ScarabEssence1', count: 3 },
+      { id: 'ScarabEssence2', count: 1 },
+      { id: 'ScarabEssence4', count: 1 },
+    ],
+    notables: ['Prolific Essence', 'Amplified Energies', 'Crystal Lattice', 'Crystal Resonance'],
+  },
+  {
+    id: 'preset-strongbox',
+    name: 'Strongbox (Ambush)',
+    description: 'Lots of Strongboxes with stronger modifiers and duplication notables.',
+    scarabs: [
+      { id: 'ScarabStrongboxNew1', count: 3 },
+      { id: 'ScarabStrongboxNew3', count: 1 },
+      { id: 'ScarabStrongboxNew2', count: 1 },
+    ],
+    notables: ['Twice Tempted', 'Secret Compartments', 'Tamper-Proof', 'Backup Cache', 'Concealed Logistics', 'Vault of Mysteries'],
+  },
+  {
+    id: 'preset-abyss',
+    name: 'Abyss',
+    description: 'Extra abysses with chasm monsters and depths.',
+    scarabs: [
+      { id: 'ScarabAbyssNew1', count: 2 },
+      { id: 'ScarabAbyssNew2', count: 2 },
+      { id: 'ScarabAbyssNew3', count: 1 },
+    ],
+    notables: ['Abyssal Army', 'Sustained Horde', 'Trail of Destruction', 'Inspired Darkness', 'Awakened Depths', 'Underground Kingdom'],
+  },
+  {
+    id: 'preset-legion',
+    name: 'Legion',
+    description: 'Multiple Legions with sergeants and reward spreading.',
+    scarabs: [
+      { id: 'ScarabLegionNew1', count: 3 },
+      { id: 'ScarabLegionNew2', count: 1 },
+      { id: 'ScarabLegionNew3', count: 1 },
+    ],
+    notables: ['Constant Battle', 'Monumental', 'Chain of Command', 'Face Off', 'War Supplies', 'Pillaged Treasures', 'Logistical Support'],
+  },
+  {
+    id: 'preset-unstable-breach',
+    name: 'Unstable Breach',
+    description: 'Many Unstable Breaches with the cascade scaling.',
+    scarabs: [
+      { id: 'ScarabBreachNew3', count: 2 },
+      { id: 'ScarabBreachNew6', count: 1 },
+      { id: 'ScarabBreachNew4', count: 1 },
+    ],
+    notables: ['Enemy at the Gates', 'Massing Forces', 'Clawed Open', 'Broken Border', 'Evolving Hives'],
+  },
+  {
+    id: 'preset-delirium',
+    name: 'Delirium rewards',
+    description: 'Mirror with many reward types and all bosses.',
+    scarabs: [
+      { id: 'ScarabDelirium1', count: 1 },
+      { id: 'ScarabDelirium3', count: 3 },
+      { id: 'ScarabDelirium4', count: 1 },
+    ],
+    notables: ['That Which You Seek', 'Compulsive Hoarder', 'Imagined Pursuits', 'Delusions of Persecution'],
+  },
+  {
+    id: 'preset-ritual',
+    name: 'Ritual',
+    description: 'More favours and rerolls.',
+    scarabs: [
+      { id: 'ScarabRitual3', count: 2 },
+      { id: 'ScarabRitual1', count: 2 },
+      { id: 'ScarabRitual4', count: 1 },
+    ],
+    notables: ['Sacred Lands', 'Occult Devotion', 'Profitable Prayers', 'Answered Appeals', 'Flexible Dogma'],
+  },
+  {
+    id: 'preset-shrines',
+    name: 'Shrines (Domination)',
+    description: 'Shrine stacking for buffs and covetous shrines.',
+    scarabs: [
+      { id: 'ScarabDomination1', count: 4 },
+      { id: 'ScarabDomination2', count: 1 },
+    ],
+    notables: ['Supplication', 'Drawn to Power', 'Syncretism', 'All That Glitters'],
+  },
+  {
+    id: 'preset-rogue-exiles',
+    name: 'Rogue Exiles (Anarchy)',
+    description: 'Exile density for currency/rarity.',
+    scarabs: [
+      { id: 'ScarabAnarchy1', count: 3 },
+      { id: 'ScarabAnarchy4', count: 2 },
+    ],
+    notables: ['Unexpected Stranger', 'Ruckus', 'Rogue Trader', 'Royal Guard'],
+  },
+  {
+    id: 'preset-juiced-generic',
+    name: 'Juiced generic (magic packs)',
+    description: 'Monster density for any build: magic packs, extra mods, more map mods.',
+    scarabs: [
+      { id: 'ScarabUber1', count: 1 },
+      { id: 'ScarabMisc1', count: 2 },
+      { id: 'ScarabMapsNew2', count: 1 },
+      { id: 'ScarabMapsNew1', count: 1 },
+    ],
+    notables: ['Shaping the Skies', 'Mounting Modifiers', 'Invasive Adversaries'],
+  },
+  {
+    id: 'preset-abyss-eater',
+    name: 'Abyss + Eater of Worlds layer',
+    description: 'Abyss as the base content, with Eater of Worlds altars/influence and influenced pack size on top.',
+    scarabs: [
+      { id: 'ScarabAbyssNew1', count: 2 },
+      { id: 'ScarabAbyssNew2', count: 2 },
+      { id: 'ScarabInfluenceNew3', count: 1 },
+    ],
+    notables: ['Abyssal Army', 'Sustained Horde', 'Trail of Destruction', 'The Shadow of Hunger', 'Rampant Growth', 'Eldritch Gaze', 'Etched by Acid'],
+  },
+  {
+    id: 'preset-maven-bosses',
+    name: 'Maven witness boss farming',
+    description: 'Boss-focused maps: Maven invitation bosses, extra guardian/conqueror bosses, juiced uniques.',
+    scarabs: [
+      { id: 'ScarabUber4', count: 1 },
+      { id: 'ScarabInfluenceNew4', count: 1 },
+      { id: 'ScarabUniquesNew3', count: 1 },
+      { id: 'ScarabUniquesNew2', count: 2 },
+    ],
+    notables: ['The Most Toys', 'Destructive Play', 'Conquered Conquerors', 'Remnants of the Past'],
+  },
+  {
+    id: 'preset-divination',
+    name: 'Divination cards',
+    description: 'Div-touched packs plus card duplication on the boss.',
+    scarabs: [
+      { id: 'ScarabDivinationCardsNew2', count: 4 },
+      { id: 'ScarabDivinationCardsNew3', count: 1 },
+    ],
+    notables: ['The Paths Not Taken'],
+  },
+  {
+    id: 'preset-ultimatum',
+    name: 'Ultimatum (inscribed)',
+    description: 'Ultimatum encounters converted into Inscribed Ultimatums.',
+    scarabs: [
+      { id: 'ScarabUltimatum1', count: 1 },
+      { id: 'ScarabUltimatum5', count: 1 },
+      { id: 'ScarabUltimatum2', count: 2 },
+      { id: 'ScarabUltimatum3', count: 1 },
+    ],
+    notables: ['Face The Ultimatum', 'Prove Yourself Worthy', 'Stand Your Ground', 'Worthy of the Present'],
+  },
+];

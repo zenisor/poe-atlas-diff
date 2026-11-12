@@ -1,0 +1,1154 @@
+[
+  {
+    "name": "Abyss Scarab",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabAbyssNew1",
+    "description": "Area contains an additional &lt;span class=&quot;keyword&quot;&gt;Abyss&lt;/span&gt;",
+    "tags": "scarab,scarab_grants_extra_content,abyss_scarab,common_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "5"
+  },
+  {
+    "name": "Abyss Scarab of Crystals",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabAbyssNew4",
+    "description": "Non-final &lt;span class=&quot;keyword&quot;&gt;Abyss&lt;/span&gt; Pits in Area create an &lt;span class=&quot;keyword&quot;&gt;Abyssal Crystal&lt;/span&gt; on closing",
+    "tags": "scarab,scarab_grants_extra_content,abyss_scarab,rare_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Abyss Scarab of Descending",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabAbyssNew3",
+    "description": "Area contains an &lt;span class=&quot;keyword&quot;&gt;Abyssal Depths&lt;/span&gt;",
+    "tags": "scarab,scarab_grants_extra_content,abyss_scarab,rare_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Abyss Scarab of Multitudes",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabAbyssNew2",
+    "description": "&lt;span class=&quot;keyword&quot;&gt;Abyss&lt;/span&gt; Chasms in Area spawn 100% increased Monsters per fed &lt;span class=&quot;keyword&quot;&gt;Soul&lt;/span&gt;",
+    "tags": "scarab,scarab_grants_extra_content,abyss_scarab,uncommon_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "2"
+  },
+  {
+    "name": "Abyss Scarab of the Consort",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabAbyssNew5",
+    "description": "An &lt;span class=&quot;keyword&quot;&gt;Abyss&lt;/span&gt; Pit in Area will spawn an &lt;span class=&quot;keyword&quot;&gt;Abyssal Consort&lt;/span&gt;",
+    "tags": "scarab,scarab_grants_extra_content,abyss_scarab,mythic_scarab,default",
+    "release_version": "3.24.2",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Ambush Scarab",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabStrongboxNew1",
+    "description": "Area contains 4 additional Strongboxes",
+    "tags": "scarab,scarab_grants_extra_content,strongbox_scarab,common_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "3"
+  },
+  {
+    "name": "Ambush Scarab of Containment",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabStrongboxNew4",
+    "description": "Area contains many additional Strongboxes&lt;br&gt;Area&#039;s inhabitants are lying in ambush",
+    "tags": "scarab,scarab_grants_extra_content,strongbox_scarab,mythic_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Ambush Scarab of Discernment",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabStrongboxNew5",
+    "description": "Strongboxes in Area are more likely to be rarer varieties",
+    "tags": "scarab,scarab_grants_extra_content,strongbox_scarab,rare_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Ambush Scarab of Hidden Compartments",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabStrongboxNew2",
+    "description": "15% Chance for Strongboxes in Area to be openable again",
+    "tags": "scarab,scarab_grants_extra_content,strongbox_scarab,uncommon_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Ambush Scarab of Potency",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabStrongboxNew3",
+    "description": "75% Increased effect of Explicit Modifiers on Strongboxes in Area",
+    "tags": "scarab,scarab_grants_extra_content,strongbox_scarab,uncommon_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Anarchy Scarab",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabAnarchy1",
+    "description": "Area contains 5 additional Rogue Exiles",
+    "tags": "scarab,scarab_grants_extra_content,anarchy_scarab,common_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "5"
+  },
+  {
+    "name": "Anarchy Scarab of Gigantification",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabAnarchy2",
+    "description": "Wild Rogue Exiles in Area have a 30% chance to be replaced with a Rogue Giant",
+    "tags": "scarab,scarab_grants_extra_content,anarchy_scarab,uncommon_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "2"
+  },
+  {
+    "name": "Anarchy Scarab of Partnership",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabAnarchy3",
+    "description": "Wild Rogue Exiles in Area have a 50% chance to appear in pairs",
+    "tags": "scarab,scarab_grants_extra_content,anarchy_scarab,rare_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Anarchy Scarab of the Exceptional",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabAnarchy4",
+    "description": "Area contains an additional Exceptional Rogue Exile",
+    "tags": "scarab,scarab_grants_extra_content,anarchy_scarab,rare_scarab,default",
+    "release_version": "3.28.0",
+    "removal_version": "3.30.0",
+    "limit": "2"
+  },
+  {
+    "name": "Bestiary Scarab",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabBeastsNew1",
+    "description": "Area contains Einhar",
+    "tags": "scarab,scarab_grants_extra_content,bestiary_scarab,common_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Bestiary Scarab of Duplicating",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabBeastsNew3",
+    "description": "Create a copy of Beasts captured in Area",
+    "tags": "scarab,scarab_grants_extra_content,bestiary_scarab,rare_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Bestiary Scarab of the Herd",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabBeastsNew2",
+    "description": "Area contains 5 additional Red Beasts if it contains Einhar",
+    "tags": "scarab,scarab_grants_extra_content,bestiary_scarab,uncommon_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "2"
+  },
+  {
+    "name": "Bestiary Scarab of the Shadowed Crow",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabBeastsNew4",
+    "description": "Area contains The Black Mórrigan if it contains Einhar",
+    "tags": "scarab,scarab_grants_extra_content,bestiary_scarab,mythic_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.25.0b",
+    "limit": "1"
+  },
+  {
+    "name": "Betrayal Scarab",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabBetrayal1",
+    "description": "Area contains Jun",
+    "tags": "scarab,scarab_grants_extra_content,betrayal_scarab,common_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Betrayal Scarab of Reinforcements",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabBetrayal3",
+    "description": "Immortal Syndicate Members in Area have 50% increased chance to be accompanied by reinforcements",
+    "tags": "scarab,scarab_grants_extra_content,betrayal_scarab,uncommon_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Betrayal Scarab of the Allflame",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabBetrayal2",
+    "description": "75% Increased number of Monster Packs Substituted by Allflame Embers in Area",
+    "tags": "scarab,scarab_grants_extra_content,betrayal_scarab,uncommon_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Betrayal Scarab of Unbreaking",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabBetrayal4",
+    "description": "Interrogated Immortal Syndicate targets in Area have a 50% chance to&lt;br&gt;not lose Rank upon completing Interrogation",
+    "tags": "scarab,scarab_grants_extra_content,betrayal_scarab,rare_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "2"
+  },
+  {
+    "name": "Beyond Scarab",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabBeyond1",
+    "description": "Slaying enemies close together in Area can attract monsters from Beyond this realm",
+    "tags": "scarab,scarab_grants_extra_content,beyond_scarab,common_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Beyond Scarab of Corruption",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabBeyond2",
+    "description": "Items dropped by Beyond Demons in Area are Corrupted",
+    "tags": "scarab,scarab_grants_extra_content,beyond_scarab,rare_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.25.0",
+    "limit": "1"
+  },
+  {
+    "name": "Beyond Scarab of Haemophilia",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabBeyond3",
+    "description": "Beyond Portals in Area have 50% increased Merging Radius&lt;br&gt;Characters that Kill Beyond Rare Monsters in Area have a 30% chance to gain their Modifiers for 20 seconds",
+    "tags": "scarab,scarab_grants_extra_content,beyond_scarab,rare_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "2"
+  },
+  {
+    "name": "Beyond Scarab of Resurgence",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabBeyond4",
+    "description": "Beyond Bosses Spawned in Area are accompanied by Beyond Bosses of other Factions&lt;br&gt;Beyond Bosses in Area drop 20% increased Tainted Currency&lt;br&gt;Beyond Portals in Area have 30% increased chance to spawn a Unique Boss",
+    "tags": "scarab,scarab_grants_extra_content,beyond_scarab,rare_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Beyond Scarab of the Invasion",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabBeyond5",
+    "description": "Rare and Unique Monsters slain in Area create 8 to 12 additional Beyond Portals",
+    "tags": "scarab,scarab_grants_extra_content,beyond_scarab,rare_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Blight Scarab",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabBlightNew1",
+    "description": "Area contains a Blight Encounter",
+    "tags": "scarab,scarab_grants_extra_content,blight_scarab,common_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Blight Scarab of Blooming",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabBlightNew4",
+    "description": "Blight Encounters in Area have up to 3 additional Unique Bosses&lt;br&gt;Unique enemies in Blight Encounters have 100% increased life&lt;br&gt;Tier 14+ Blighted Maps found in Area drop as Blight-Ravaged Maps instead",
+    "tags": "scarab,scarab_grants_extra_content,blight_scarab,mythic_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Blight Scarab of Bounty",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabBlightNew2",
+    "description": "Blight Chests in Area have a 20% chance to be openable again",
+    "tags": "scarab,scarab_grants_extra_content,blight_scarab,rare_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.25.0",
+    "limit": "2"
+  },
+  {
+    "name": "Blight Scarab of Invigoration",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabBlightNew5",
+    "description": "Each Empowering Tower in Areas grants Blighted Monsters in&lt;br&gt;range increased Difficulty and Reward",
+    "tags": "scarab,scarab_grants_extra_content,blight_scarab,mythic_scarab,default",
+    "release_version": "3.24.2",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Blight Scarab of the Blightheart",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabBlightNew3",
+    "description": "Blight Encounters in Area have one Blighted Chest&lt;br&gt;Blight Encounters in Area spawn additional waves of Enemies&lt;br&gt;Blighted Chests in Area grow larger and more&lt;br&gt;rewarding the more Blighted Enemies are slain",
+    "tags": "scarab,scarab_grants_extra_content,blight_scarab,rare_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Breach Scarab of Instability",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabBreachNew3",
+    "description": "Area contains 2 additional Unstable Breaches",
+    "tags": "scarab,scarab_grants_extra_content,breach_scarab,uncommon_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "2"
+  },
+  {
+    "name": "Breach Scarab of Resonant Cascade",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabBreachNew6",
+    "description": "Unstable Breaches in Areas are 10% faster for each Unstable Breach already opened&lt;br&gt;Monsters from Unstable Breaches in Areas have increased Difficulty and Reward for&lt;br&gt;each Unstable Breach already opened",
+    "tags": "scarab,scarab_grants_extra_content,breach_scarab,mythic_scarab,default",
+    "release_version": "3.24.2",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Breach Scarab of the Dreamer",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabBreachNew2",
+    "description": "Breaches in Area will always belong to Chayula",
+    "tags": "scarab,scarab_grants_extra_content,breach_scarab,mythic_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.25.0",
+    "limit": "1"
+  },
+  {
+    "name": "Breach Scarab of the Hive",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabBreachNew1",
+    "description": "Area contains a Breach Hive",
+    "tags": "scarab,scarab_grants_extra_content,breach_scarab,common_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Breach Scarab of the Incensed Swarm",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabBreachNew5",
+    "description": "Ailith&#039;s skills in Area instead enrage the Hive, increasing the Difficulty&lt;br&gt;and Reward of subsequent waves",
+    "tags": "scarab,scarab_grants_extra_content,breach_scarab,mythic_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Breach Scarab of the Marshal",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabBreachNew4",
+    "description": "Unstable Breaches in Area contain a Boss&lt;br&gt;Breach Hives in Area lead to a Hive Fortress",
+    "tags": "scarab,scarab_grants_extra_content,breach_scarab,rare_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Cartography Scarab of Corruption",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabMapsNew4",
+    "description": "Non-Unique Maps found in Area are Corrupted with 8 Modifiers",
+    "tags": "scarab,maps_scarab,rare_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Cartography Scarab of Escalation",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabMapsNew1",
+    "description": "10% increased Maps found in Area for each Map Modifier affecting Area",
+    "tags": "scarab,maps_scarab,common_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Cartography Scarab of Risk",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabMapsNew2",
+    "description": "Area has 2 additional random Modifiers",
+    "tags": "scarab,maps_scarab,mythic_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Cartography Scarab of Singularity",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabMapsNew3",
+    "description": "A Unique Map will drop from the Final Map Boss",
+    "tags": "scarab,maps_scarab,rare_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.25.0b",
+    "limit": "1"
+  },
+  {
+    "name": "Cartography Scarab of the Multitude",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabMapsNew5",
+    "description": "Area contains 8 to 12 additional packs of&lt;br&gt;Difficult and Rewarding Monsters which drop 300% increased Maps",
+    "tags": "scarab,maps_scarab,uncommon_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "3"
+  },
+  {
+    "name": "Delirium Scarab",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabDelirium1",
+    "description": "Area contains a Mirror of Delirium",
+    "tags": "scarab,scarab_grants_extra_content,delirium_scarab,common_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Delirium Scarab of Delusions",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabDelirium5",
+    "description": "Maps found in Area have layers of Delirium",
+    "tags": "scarab,scarab_grants_extra_content,delirium_scarab,rare_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Delirium Scarab of Mania",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabDelirium2",
+    "description": "Delirium Reward Meters fill 100% faster in Area&lt;br&gt;Delirium in Area increases 50% faster with distance from the mirror",
+    "tags": "scarab,scarab_grants_extra_content,delirium_scarab,uncommon_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "2"
+  },
+  {
+    "name": "Delirium Scarab of Neuroses",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabDelirium4",
+    "description": "Delirium Encounters in Area contain all Unique Delirium Bosses&lt;br&gt;Delirium Reward Types in Area gain +1 to count on defeating a Unique Delirium Boss&lt;br&gt;Can only be used with Tier 11+ Maps",
+    "tags": "scarab,scarab_grants_extra_content,delirium_scarab,rare_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Delirium Scarab of Paranoia",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabDelirium3",
+    "description": "Delirium Encounters in Area generate 2 additional Reward types",
+    "tags": "scarab,scarab_grants_extra_content,delirium_scarab,uncommon_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "5"
+  },
+  {
+    "name": "Divination Scarab of Pilfering",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabDivinationCardsNew3",
+    "description": "Divination Cards which drop in Area are stolen by a Final Map Boss&lt;br&gt;That Final Map Boss becomes more Difficult and deals&lt;br&gt;increased Damage the more Divination Cards they have stolen&lt;br&gt;That Final Map Boss duplicates all stolen Divination Cards when defeated",
+    "tags": "scarab,divination_scarab,rare_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Divination Scarab of Plenty",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabDivinationCardsNew2",
+    "description": "Area contains 6 to 10 additional Packs of Divination Touched Magic Monsters that&lt;br&gt;have 1000% increased chance to drop Divination Cards",
+    "tags": "scarab,divination_scarab,rare_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "5"
+  },
+  {
+    "name": "Divination Scarab of The Cloister",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabDivinationCardsNew1",
+    "description": "Area contains 8 to 12 additional packs of Doedre&#039;s Devoted&lt;br&gt;Doedre&#039;s Devoted have 1% additional chance to drop a Stacked Deck",
+    "tags": "scarab,divination_scarab,common_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "5"
+  },
+  {
+    "name": "Domination Scarab",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabDomination1",
+    "description": "Area contains 3 additional Shrines",
+    "tags": "scarab,scarab_grants_extra_content,domination_scarab,common_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "4"
+  },
+  {
+    "name": "Domination Scarab of Apparitions",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabDomination2",
+    "description": "Area contains 2 additional Apparition Shrines",
+    "tags": "scarab,scarab_grants_extra_content,domination_scarab,uncommon_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Domination Scarab of Evolution",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabDomination3",
+    "description": "Area contains an additional Evolving Shrine",
+    "tags": "scarab,scarab_grants_extra_content,domination_scarab,rare_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "2"
+  },
+  {
+    "name": "Domination Scarab of Terrors",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabDomination4",
+    "description": "Shrines in Area are guarded by an Atlas Boss&lt;br&gt;Modifiers to the Final Map Boss also apply to these Atlas Bosses",
+    "tags": "scarab,scarab_grants_extra_content,domination_scarab,mythic_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Essence Scarab",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabEssence1",
+    "description": "Area contains 3 additional Imprisoned Monsters",
+    "tags": "scarab,scarab_grants_extra_content,essence_scarab,common_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "5"
+  },
+  {
+    "name": "Essence Scarab of Adaptation",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabEssence5",
+    "description": "Imprisoned Monsters released in Areas grant a random Essence Modifier to another Imprisoned Monster in the Area&lt;br&gt;Imprisoned Monsters in Areas have increased Difficulty and Reward for&lt;br&gt;each Essence Modifier",
+    "tags": "scarab,scarab_grants_extra_content,essence_scarab,mythic_scarab,default",
+    "release_version": "3.24.2",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Essence Scarab of Ascent",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabEssence2",
+    "description": "Essences found in Area are a tier higher",
+    "tags": "scarab,scarab_grants_extra_content,essence_scarab,rare_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Essence Scarab of Calcification",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabEssence4",
+    "description": "Rare monsters that are natural inhabitants of the Area are imprisoned by Essences",
+    "tags": "scarab,scarab_grants_extra_content,essence_scarab,mythic_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Essence Scarab of Stability",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabEssence3",
+    "description": "Corrupting an Essence in Area can only result in&lt;br&gt;upgrading or transforming Essences",
+    "tags": "scarab,scarab_grants_extra_content,essence_scarab,uncommon_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Expedition Scarab",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabExpedition1",
+    "description": "Area contains an Expedition Encounter",
+    "tags": "scarab,scarab_grants_extra_content,expedition_scarab,common_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Expedition Scarab of Archaeology",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabExpedition5",
+    "description": "Remnants in Expedition Encounters in Area have 2 additional Suffixes and Prefixes",
+    "tags": "scarab,scarab_grants_extra_content,expedition_scarab,rare_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Expedition Scarab of Infusion",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabExpedition4",
+    "description": "Logbooks found in Area always have 4 Implicits&lt;br&gt;Expedition Monsters gain increased Difficulty and Reward for each Remnant detonated",
+    "tags": "scarab,scarab_grants_extra_content,expedition_scarab,rare_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Expedition Scarab of Runefinding",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabExpedition2",
+    "description": "Expedition Encounters in Area have 100% increased&lt;br&gt;number of Runic Monster Markers",
+    "tags": "scarab,scarab_grants_extra_content,expedition_scarab,uncommon_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "2"
+  },
+  {
+    "name": "Expedition Scarab of Verisium Powder",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabExpedition3",
+    "description": "Expedition Encounters in Area have 50% increased number of Explosives&lt;br&gt;80% increased Explosive Radius",
+    "tags": "scarab,scarab_grants_extra_content,expedition_scarab,uncommon_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Harbinger Scarab",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabHarbingerNew1",
+    "description": "Area contains 3 additional Harbingers",
+    "tags": "scarab,scarab_grants_extra_content,harbinger_scarab,common_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.28.0",
+    "limit": "4"
+  },
+  {
+    "name": "Harbinger Scarab of Obelisks",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabHarbingerNew2",
+    "description": "Harbingers in Area spawn Empowered Obelisks&lt;br&gt;Empowered Obelisks drop Currency Shards when defeated",
+    "tags": "scarab,scarab_grants_extra_content,harbinger_scarab,uncommon_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.28.0",
+    "limit": "1"
+  },
+  {
+    "name": "Harbinger Scarab of Regency",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabHarbingerNew3",
+    "description": "Harbingers in Area have a 50% chance to be replaced by a powerful Harbinger Boss",
+    "tags": "scarab,scarab_grants_extra_content,harbinger_scarab,rare_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.28.0",
+    "limit": "1"
+  },
+  {
+    "name": "Harbinger Scarab of Warhoards",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabHarbingerNew4",
+    "description": "Currency shards dropped by Harbingers in Area are duplicated",
+    "tags": "scarab,scarab_grants_extra_content,harbinger_scarab,rare_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.28.0",
+    "limit": "1"
+  },
+  {
+    "name": "Harvest Scarab",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabHarvest1",
+    "description": "Area contains the Sacred Grove",
+    "tags": "scarab,scarab_grants_extra_content,harvest_scarab,common_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Harvest Scarab of Cornucopia",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabHarvest3",
+    "description": "If Area contains the Sacred Grove, it will contain up to 1 additional Tier 4 seed of each type, if possible",
+    "tags": "scarab,scarab_grants_extra_content,harvest_scarab,mythic_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Harvest Scarab of Doubling",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabHarvest2",
+    "description": "Lifeforce dropped by Harvest Monsters in Area is duplicated&lt;br&gt;Harvest Monsters in Area have 100% more Life",
+    "tags": "scarab,scarab_grants_extra_content,harvest_scarab,rare_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Horned Scarab of Awakening",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabUber4",
+    "description": "Tier 16+ Areas contain the Bosses from a random Maven Invitation",
+    "tags": "scarab,uber_scarab,mythic_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Horned Scarab of Bloodlines",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabUber1",
+    "description": "Area has 150% increased Magic Monsters&lt;br&gt;Magic Monsters in area have an additional Modifier",
+    "tags": "scarab,uber_scarab,extreme_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Horned Scarab of Glittering",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabUber6",
+    "description": "Players in Area gain increased Item Rarity for each Monster&lt;br&gt;slain, up to 400%, decaying over time",
+    "tags": "scarab,uber_scarab,mythic_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Horned Scarab of Nemeses",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabUber2",
+    "description": "Rare Monsters in Area have 2 additional Modifiers",
+    "tags": "scarab,uber_scarab,rare_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "2"
+  },
+  {
+    "name": "Horned Scarab of Pandemonium",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabUber7",
+    "description": "Monster packs in Area have a 15% chance to be replaced by a random Atlas Boss&lt;br&gt;Modifiers to the Final Map Boss also apply to these Atlas Bosses",
+    "tags": "scarab,uber_scarab,mythic_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Horned Scarab of Preservation",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabUber3",
+    "description": "Other Scarabs are not consumed on use",
+    "tags": "scarab,uber_scarab,extreme_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Horned Scarab of Tradition",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabUber5",
+    "description": "All Rare and Unique Monsters in Area have dropped items&lt;br&gt;transformed by a Reward Modifier",
+    "tags": "scarab,uber_scarab,mythic_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Incursion Scarab",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabIncursion1",
+    "description": "Area contains Alva",
+    "tags": "scarab,scarab_grants_extra_content,incursion_scarab,common_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Incursion Scarab of Champions",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabIncursion3",
+    "description": "Incursions in Area have a 35% chance for all Monsters to be at least Magic&lt;br&gt;Incursions in Area have 15% increased Pack Size",
+    "tags": "scarab,scarab_grants_extra_content,incursion_scarab,rare_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "2"
+  },
+  {
+    "name": "Incursion Scarab of Invasion",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabIncursion2",
+    "description": "Area contains 12 to 16 additional packs of Incursion Monsters",
+    "tags": "scarab,scarab_grants_extra_content,incursion_scarab,uncommon_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "3"
+  },
+  {
+    "name": "Incursion Scarab of Timelines",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabIncursion4",
+    "description": "Final Architect slain in Area will drop an Itemised Temple&lt;br&gt; Itemised Temples dropped in Area are generated based on current Temple layout, but with randomised room tiers",
+    "tags": "scarab,scarab_grants_extra_content,incursion_scarab,mythic_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Influencing Scarab of Hordes",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabInfluenceNew3",
+    "description": "Influenced Monster Packs in Area have 40% increased Pack Size",
+    "tags": "scarab,scarab_grants_extra_content,influence_scarab,uncommon_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Influencing Scarab of Interference",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabInfluenceNew4",
+    "description": "A Map Boss is accompanied by a random Shaper Guardian, Elder Guardian, Conqueror or Synthesis Boss&lt;br&gt;Can only be used with Tier 14+ Maps",
+    "tags": "scarab,influence_scarab,rare_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Influencing Scarab of the Elder",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabInfluenceNew2",
+    "description": "Adds Elder Influence outcome to Area",
+    "tags": "scarab,scarab_grants_extra_content,influence_scarab,common_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Influencing Scarab of the Shaper",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabInfluenceNew1",
+    "description": "Adds Shaper Influence outcome to Area",
+    "tags": "scarab,scarab_grants_extra_content,influence_scarab,common_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Kalguuran Scarab",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabSettlers1",
+    "description": "Area contains 2 additional Ore Deposits",
+    "tags": "scarab,scarab_grants_extra_content,common_scarab,settlers_scarab,default",
+    "release_version": "3.26.0",
+    "removal_version": "3.30.0",
+    "limit": "2"
+  },
+  {
+    "name": "Kalguuran Scarab of Enriching",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabSettlers4",
+    "description": "Monsters guarding Ore Deposits have increased Difficulty and&lt;br&gt;Reward and Ore Deposits contain 15% increased Ore&lt;br&gt;for each Ore Deposit completed in Area",
+    "tags": "scarab,scarab_grants_extra_content,rare_scarab,settlers_scarab,default",
+    "release_version": "3.28.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Kalguuran Scarab of Guarded Riches",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabSettlers2",
+    "description": "Monsters guarding Ore Deposits in Area are at least Magic",
+    "tags": "scarab,scarab_grants_extra_content,uncommon_scarab,settlers_scarab,default",
+    "release_version": "3.26.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Kalguuran Scarab of Refinement",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabSettlers3",
+    "description": "Ore Deposits in Area grant Smelted Bars instead of Marking Ore",
+    "tags": "scarab,scarab_grants_extra_content,mythic_scarab,settlers_scarab,default",
+    "release_version": "3.26.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Legion Scarab",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabLegionNew1",
+    "description": "Area contains an additional Legion Encounter",
+    "tags": "scarab,scarab_grants_extra_content,legion_scarab,common_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "5"
+  },
+  {
+    "name": "Legion Scarab of Eternal Conflict",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabLegionNew5",
+    "description": "Legion Monsters in Area can be broken out of Stasis multiple times&lt;br&gt;Legion Monsters in Area gain increased Difficulty and Reward for each time they are broken out",
+    "tags": "scarab,scarab_grants_extra_content,legion_scarab,mythic_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Legion Scarab of Officers",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabLegionNew2",
+    "description": "Legion Factions in Area have 5 additional Sergeants",
+    "tags": "scarab,scarab_grants_extra_content,legion_scarab,rare_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Legion Scarab of The Sekhema",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabLegionNew4",
+    "description": "Legion Encounters in Area always contain the Maraketh Faction",
+    "tags": "scarab,scarab_grants_extra_content,legion_scarab,mythic_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.25.0",
+    "limit": "1"
+  },
+  {
+    "name": "Legion Scarab of Treasures",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabLegionNew3",
+    "description": "Legion Chests in Area have a 20% chance to spread their Rewards&lt;br&gt; to Legion Monsters they release from stasis when they are broken out&lt;br&gt;Legion Monsters that have gained Rewards have increased Difficulty",
+    "tags": "scarab,scarab_grants_extra_content,legion_scarab,rare_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "3"
+  },
+  {
+    "name": "Ritual Scarab of Abundance",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabRitual3",
+    "description": "Rituals in Area offer 100% increased Favours",
+    "tags": "scarab,scarab_grants_extra_content,ritual_scarab,rare_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "2"
+  },
+  {
+    "name": "Ritual Scarab of Corpses",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabRitual4",
+    "description": "Rituals in Area contain an additional Rare Itemised Corpse Monster",
+    "tags": "scarab,scarab_grants_extra_content,ritual_scarab,rare_scarab,default",
+    "release_version": "3.28.0",
+    "removal_version": "3.30.0",
+    "limit": "2"
+  },
+  {
+    "name": "Ritual Scarab of Selectiveness",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabRitual1",
+    "description": "Rerolling Favours at Ritual Altars in Area has no cost the first 2 times&lt;br&gt;Ritual Altars in Area allow rerolling Favours 2 additional times",
+    "tags": "scarab,scarab_grants_extra_content,ritual_scarab,common_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "2"
+  },
+  {
+    "name": "Ritual Scarab of Wisps",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabRitual2",
+    "description": "Ritual Altars in Area spawn a Wildwood Wisp&lt;br&gt;Wildwood Wisps grant 100% increased Tribute Gained to nearby Players",
+    "tags": "scarab,scarab_grants_extra_content,ritual_scarab,uncommon_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Scarab of Adversaries",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabMisc2",
+    "description": "Area contains 4 additional Packs with Mirrored Rare Monsters",
+    "tags": "scarab,misc_scarab,common_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "2"
+  },
+  {
+    "name": "Scarab of Divinity",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabMisc3",
+    "description": "Up to 3 additional Rare Monsters in Area will be Pantheon-Touched&lt;br&gt;Apparitions spawned by Pantheon-Touched Monsters deal 100% increased damage",
+    "tags": "scarab,misc_scarab,uncommon_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "3"
+  },
+  {
+    "name": "Scarab of Hunted Traitors",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabMisc4",
+    "description": "Area contains Hunted Traitors",
+    "tags": "scarab,misc_scarab,uncommon_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Scarab of Monstrous Lineage",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabMisc1",
+    "description": "40% increased Magic Pack Size",
+    "tags": "scarab,misc_scarab,common_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "2"
+  },
+  {
+    "name": "Scarab of Radiant Storms",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabMisc11",
+    "description": "Area contains a Resplendent Tempest",
+    "tags": "scarab,misc_scarab,mythic_scarab,scarab_grants_extra_content,default",
+    "release_version": "3.24.2",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Scarab of Stability",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabMisc5",
+    "description": "Portals to Area have a 50% chance to not be consumed on use",
+    "tags": "scarab,misc_scarab,rare_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Scarab of the Dextral",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabMisc10",
+    "description": "100% increased effect of Area Suffix Modifiers&lt;br&gt;Area Prefix Modifiers have no effect",
+    "tags": "scarab,misc_scarab,rare_scarab,default",
+    "release_version": null,
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Scarab of the Sinistral",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabMisc9",
+    "description": "100% increased effect of Area Prefix Modifiers&lt;br&gt;Area Suffix Modifiers have no effect",
+    "tags": "scarab,misc_scarab,rare_scarab,default",
+    "release_version": null,
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Scarab of Wisps",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabMisc8",
+    "description": "Monsters in Area have a chance to be Empowered by 2000 Wildwood Wisps",
+    "tags": "scarab,misc_scarab,rare_scarab,scarab_grants_extra_content,default",
+    "release_version": "3.24.2",
+    "removal_version": "3.30.0",
+    "limit": "2"
+  },
+  {
+    "name": "Sulphite Scarab",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabSulphiteNew1",
+    "description": "Area contains Niko",
+    "tags": "scarab,scarab_grants_extra_content,delve_scarab,common_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Sulphite Scarab of Fumes",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabSulphiteNew3",
+    "description": "Sulphite found in Map Area releases Enraging Fumes&lt;br&gt;Monsters affected by Enraging Fumes have 50% increased Item Quantity&lt;br&gt;Sulphite in your maps is guarded by Monsters from the Azurite Mine",
+    "tags": "scarab,scarab_grants_extra_content,delve_scarab,rare_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Sulphite Scarab of Greed",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabSulphiteNew2",
+    "description": "Map owner gains 150% more Sulphite",
+    "tags": "scarab,scarab_grants_extra_content,delve_scarab,uncommon_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.25.0",
+    "limit": "1"
+  },
+  {
+    "name": "Titanic Scarab",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabUniquesNew1",
+    "description": "Unique Monsters have 1% increased Toughness, Damage, Rarity and Quantity of items dropped per 1% increased Pack Size of Area",
+    "tags": "scarab,uniques_scarab,common_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Titanic Scarab of Legend",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabUniquesNew3",
+    "description": "Unique Monsters in Area have 4 additional Monster Modifiers",
+    "tags": "scarab,uniques_scarab,mythic_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Titanic Scarab of Treasures",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabUniquesNew2",
+    "description": "Unique Monsters in Area have an additional Reward&lt;br&gt;Unique Monsters in Area have 30% increased Toughness",
+    "tags": "scarab,uniques_scarab,rare_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "3"
+  },
+  {
+    "name": "Torment Scarab",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabTormentNew1",
+    "description": "Area is haunted by 4 additional Tormented Spirits&lt;br&gt;Tormented Spirits in Area have a 10% chance to&lt;br&gt;be set free when Possessed Monsters are slain&lt;br&gt; and dig up a Possessed Monster",
+    "tags": "scarab,scarab_grants_extra_content,torment_scarab,common_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "2"
+  },
+  {
+    "name": "Torment Scarab of Peculiarity",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabTormentNew2",
+    "description": "Tormented Spirits in Area are replaced with unusual variants",
+    "tags": "scarab,scarab_grants_extra_content,torment_scarab,uncommon_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Torment Scarab of Possession",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabTormentNew4",
+    "description": "Rare Monsters in Area have a quarter chance to be Possessed by up to 3 Tormented Spirits",
+    "tags": "scarab,scarab_grants_extra_content,torment_scarab,rare_scarab,default",
+    "release_version": "3.24.2",
+    "removal_version": "3.30.0",
+    "limit": "3"
+  },
+  {
+    "name": "Torment Scarab of Release",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabTormentNew3",
+    "description": "Tormented Spirits in Area have a 25% chance to&lt;br&gt;be set free when Possessed Monsters are slain",
+    "tags": "scarab,scarab_grants_extra_content,torment_scarab,uncommon_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.25.0",
+    "limit": "1"
+  },
+  {
+    "name": "Trarthan Scarab",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabMercenaries1",
+    "description": "Area is inhabited by a Mercenary",
+    "tags": "scarab,scarab_grants_extra_content,common_scarab,mercenaries_scarab,default",
+    "release_version": "3.29.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Trarthan Scarab of Infamy",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabMercenaries2",
+    "description": "Mercenaries found in Area are Infamous&lt;br&gt;Mercenaries found in Area are accompanied by two Wild Mercenaries",
+    "tags": "scarab,scarab_grants_extra_content,uncommon_scarab,mercenaries_scarab,default",
+    "release_version": "3.29.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Trarthan Scarab of Renown",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabMercenaries3",
+    "description": "All Equipment Items on Mercenaries found in Area are Unique",
+    "tags": "scarab,scarab_grants_extra_content,rare_scarab,mercenaries_scarab,default",
+    "release_version": "3.29.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Trarthan Scarab of Surprising Alliances",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabMercenaries4",
+    "description": "Wild Rogue Exiles in Area have 50% chance to be accompanied by a Wild Mercenary&lt;br&gt;Wild Mercenaries have increased Difficulty for each Wild Mercenary in Area",
+    "tags": "scarab,scarab_grants_extra_content,mythic_scarab,mercenaries_scarab,default",
+    "release_version": "3.29.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Ultimatum Scarab",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabUltimatum1",
+    "description": "Area contains an Ultimatum Encounter",
+    "tags": "scarab,scarab_grants_extra_content,ultimatum_scarab,common_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Ultimatum Scarab of Bribing",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabUltimatum2",
+    "description": "Ultimatum Monsters grant 150% increased Experience&lt;br&gt;Ultimatum Encounters grant rewards as though you completed 2 additional Rounds",
+    "tags": "scarab,scarab_grants_extra_content,ultimatum_scarab,uncommon_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "2"
+  },
+  {
+    "name": "Ultimatum Scarab of Catalysing",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabUltimatum4",
+    "description": "Ultimatum Encounters in Area will only offer Catalysts&lt;br&gt;as Rewards to the Map Owner",
+    "tags": "scarab,scarab_grants_extra_content,ultimatum_scarab,extreme_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Ultimatum Scarab of Dueling",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabUltimatum3",
+    "description": "Ultimatum Encounters in Area will always lead to a Unique Boss if possible",
+    "tags": "scarab,scarab_grants_extra_content,ultimatum_scarab,mythic_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  },
+  {
+    "name": "Ultimatum Scarab of Inscription",
+    "metadata_id": "Metadata/Items/Scarabs/ScarabUltimatum5",
+    "description": "Ultimatum Encounter rewards in Area offering Catalysts&lt;br&gt;will offer Inscribed Ultimatums to the Map Owner instead",
+    "tags": "scarab,scarab_grants_extra_content,ultimatum_scarab,rare_scarab,default",
+    "release_version": "3.24.0",
+    "removal_version": "3.30.0",
+    "limit": "1"
+  }
+]

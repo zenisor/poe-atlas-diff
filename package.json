@@ -1,0 +1,33 @@
+{
+  "name": "poe-scarab-rework-diff",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Path of Exile 3.29 -> 3.30 Atlas tree diff, scarab fate analysis and strategy comparison",
+  "scripts": {
+    "fetch-data": "node scripts/fetch-data.ts",
+    "build-data": "node scripts/build-data.ts",
+    "dev": "vite",
+    "build": "npm run build-data && tsc -p tsconfig.json && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "engines": {
+    "node": ">=23.6"
+  },
+  "dependencies": {
+    "@fontsource/cinzel": "5.3.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.6",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.3.0",
+    "typescript": "7.0.2",
+    "vite": "8.3.8",
+    "vitest": "5.1.0"
+  }
+}
