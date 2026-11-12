@@ -11,6 +11,7 @@ import { toTemplate } from '../lib/stats.ts';
 import { CATEGORY_COLOR, FATE_COLOR, FateBadge, FATES, Retention, STATUS_LABEL, StatList, StatusBadge } from './ui.tsx';
 import { ItemIcon, MechanicIcon, NodeIcon } from './art.tsx';
 import { Tip } from './tooltip.tsx';
+import { trackOnce } from '../lib/analytics.ts';
 
 const Sep = () => <div className="sep" />;
 
@@ -123,7 +124,12 @@ export function ScarabIcon({ s, name, size = 36, underline = false }: { s?: Scar
   const scarab = s ?? (name ? scarabsByName.get(name) : undefined);
   if (!scarab) return <ItemIcon name={name ?? ''} size={size} />;
   return (
-    <Tip content={() => <ScarabTooltip s={scarab} />}>
+    <Tip
+      content={() => {
+        trackOnce(`tooltip/scarab/${scarab.name}`);
+        return <ScarabTooltip s={scarab} />;
+      }}
+    >
       <span style={underline ? { borderBottom: `3px solid ${FATE_COLOR[scarab.fate]}`, lineHeight: 0, paddingBottom: 1, display: 'inline-block' } : { lineHeight: 0, display: 'inline-block' }}>
         <ItemIcon name={scarab.name} size={size} />
       </span>

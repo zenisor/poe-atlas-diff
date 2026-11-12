@@ -1,4 +1,5 @@
 import { Fragment, useEffect, useMemo, useState } from 'react';
+import { track } from '../lib/analytics.ts';
 import { data, notablesByOldName, oldNotableMechanic, oldNotableNames, oldNotableNode, PRESETS, scarabsById, strategyMechanic } from '../data.ts';
 import { MechanicIcon } from '../components/art.tsx';
 import { MechIcon, NodeTip, ScarabIcon } from '../components/tips.tsx';
@@ -75,18 +76,21 @@ export function Strategies() {
 
   const update = (next: Strategy) => setCustom((list) => list.map((s) => (s.id === next.id ? next : s)));
   const clone = (s: Strategy) => {
+    track(`strategy/clone/${s.preset ? s.name : 'custom'}`);
     const copy: Strategy = { ...s, id: newId(), name: `${s.name} (copy)`, preset: false, scarabs: s.scarabs.map((x) => ({ ...x })), notables: [...s.notables] };
     setCustom((list) => [...list, copy]);
     setSelectedId(copy.id);
     setMode('edit');
   };
   const create = () => {
+    track('strategy/new');
     const s: Strategy = { id: newId(), name: 'New strategy', scarabs: [], notables: [] };
     setCustom((list) => [...list, s]);
     setSelectedId(s.id);
     setMode('edit');
   };
   const remove = (id: string) => {
+    track('strategy/delete');
     setCustom((list) => list.filter((s) => s.id !== id));
     setSelectedId(PRESETS[0]?.id ?? '');
   };
@@ -103,7 +107,10 @@ export function Strategies() {
         <button className={`btn${mode === 'edit' ? ' primary' : ''}`} onClick={() => setMode('edit')}>
           Edit & evaluate
         </button>
-        <button className={`btn${mode === 'compare' ? ' primary' : ''}`} onClick={() => setMode('compare')}>
+        <button className={`btn${mode === 'compare' ? ' primary' : ''}`} onClick={() => {
+            setMode('compare');
+            track('strategy/compare');
+          }}>
           Compare all ({all.length})
         </button>
         <button className="btn" onClick={create}>
@@ -126,7 +133,14 @@ export function Strategies() {
               Presets (examples)
             </div>
             {PRESETS.map((s) => (
-              <button key={s.id} className={`btn${s.id === selected?.id ? ' active' : ''}`} onClick={() => setSelectedId(s.id)}>
+              <button
+                key={s.id}
+                className={`btn${s.id === selected?.id ? ' active' : ''}`}
+                onClick={() => {
+                  setSelectedId(s.id);
+                  track(`strategy/view/${s.name}`);
+                }}
+              >
                 <StrategyIcon s={s} />
                 {s.name}
               </button>
@@ -136,7 +150,14 @@ export function Strategies() {
             </div>
             {custom.length === 0 && <div className="small muted">None yet. Clone a preset or create a new one.</div>}
             {custom.map((s) => (
-              <button key={s.id} className={`btn${s.id === selected?.id ? ' active' : ''}`} onClick={() => setSelectedId(s.id)}>
+              <button
+                key={s.id}
+                className={`btn${s.id === selected?.id ? ' active' : ''}`}
+                onClick={() => {
+                  setSelectedId(s.id);
+                  track('strategy/view/custom');
+                }}
+              >
                 <StrategyIcon s={s} />
                 {s.name}
               </button>
@@ -171,11 +192,13 @@ function Editor({ strategy, onChange, onClone, onDelete }: { strategy: Strategy;
   };
   const addScarab = () => {
     if (!pick || strategy.scarabs.some((s) => s.id === pick)) return;
+    track(`strategy/add-scarab/${scarabsById.get(pick)?.name ?? pick}`);
     onChange({ ...strategy, scarabs: [...strategy.scarabs, { id: pick, count: 1 }] });
     setPick('');
   };
   const addNotable = () => {
     if (!oldNotableNames.includes(notable) || strategy.notables.includes(notable)) return;
+    track(`strategy/add-notable/${notable}`);
     onChange({ ...strategy, notables: [...strategy.notables, notable] });
     setNotable('');
   };
@@ -509,6 +532,7 @@ function ImportExport({ custom, setCustom }: { custom: Strategy[]; setCustom: (s
       const valid = parsed.filter((s) => s && typeof s.name === 'string' && Array.isArray(s.scarabs) && Array.isArray(s.notables));
       setCustom([...custom, ...valid.map((s) => ({ ...s, id: newId(), preset: false }))]);
       setMsg(`Imported ${valid.length} strateg${valid.length === 1 ? 'y' : 'ies'}.`);
+      track('strategy/import');
       setText('');
     } catch (e) {
       setMsg(`Import failed: ${(e as Error).message}`);
@@ -518,7 +542,13 @@ function ImportExport({ custom, setCustom }: { custom: Strategy[]; setCustom: (s
     <details style={{ marginTop: 16 }}>
       <summary className="small">Import / export</summary>
       <div style={{ marginTop: 8 }}>
-        <button className="btn" onClick={() => setText(JSON.stringify(custom, null, 2))}>
+        <button
+          className="btn"
+          onClick={() => {
+            setText(JSON.stringify(custom, null, 2));
+            track('strategy/export');
+          }}
+        >
           Export mine
         </button>
         <textarea rows={8} style={{ width: '100%', marginTop: 6 }} value={text} onChange={(e) => setText(e.target.value)} placeholder="Paste exported JSON here…" />

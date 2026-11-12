@@ -1,4 +1,5 @@
 import { Fragment, useMemo, useState } from 'react';
+import { track, trackToggle, useTrackedSearch } from '../lib/analytics.ts';
 import { data, scarabLinksByNode } from '../data.ts';
 import type { EffectDiff, EffectSide, EffectStatus } from '../lib/types.ts';
 import { likeText, prettyTemplate, signedPct, surpass, trimNum } from '../lib/format.ts';
@@ -50,6 +51,7 @@ export function Effects({ mechanic, embedded = false }: { mechanic: string; embe
   }, [statuses, mechanic, q, sortDelta]);
 
   const count = (s: EffectStatus) => data.effects.filter((e) => e.status === s && matchesMechanic(e.mechanic, mechanic)).length;
+  useTrackedSearch(embedded ? 'mechanic-effects' : 'effects', q);
   const header = makeGroupHeaders();
   const single = !!mechanic && !mechanic.startsWith('cat:');
 
@@ -66,10 +68,16 @@ export function Effects({ mechanic, embedded = false }: { mechanic: string; embe
       <div className="toolbar">
         <input type="search" placeholder="Search effect text or node…" value={q} onChange={(e) => setQ(e.target.value)} />
         <label className="small">
-          <input type="checkbox" checked={sortDelta} onChange={(e) => setSortDelta(e.target.checked)} /> biggest nerfs first
+          <input type="checkbox" checked={sortDelta} onChange={(e) => {
+              setSortDelta(e.target.checked);
+              trackToggle('effects', 'biggest-nerfs-first', e.target.checked);
+            }} /> biggest nerfs first
         </label>
         {STATUSES.map((s) => (
-          <Chip key={s} on={statuses.has(s)} color={STATUS_COLOR[s]} onClick={() => setStatuses(toggle(statuses, s))}>
+          <Chip key={s} on={statuses.has(s)} color={STATUS_COLOR[s]} onClick={() => {
+            setStatuses(toggle(statuses, s));
+            trackToggle('effects', `status-${s}`, !statuses.has(s));
+          }}>
             {STATUS_LABEL[s]} ({count(s)})
           </Chip>
         ))}
@@ -110,7 +118,13 @@ export function Effects({ mechanic, embedded = false }: { mechanic: string; embe
                       </td>
                     </tr>
                   )}
-                  <tr className="clickable" onClick={() => setOpen(toggle(open, e.key))}>
+                  <tr
+                    className="clickable"
+                    onClick={() => {
+                      if (!open.has(e.key)) track(`effect/open/${e.label}`);
+                      setOpen(toggle(open, e.key));
+                    }}
+                  >
                     <td>
                       <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
                       {(() => {

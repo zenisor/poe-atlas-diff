@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type PointerEvent, type WheelEvent } from 'react';
+import { track, trackToggle, useTrackedSearch } from '../lib/analytics.ts';
 import { data, relatedScarabsByNode, scarabLinksByNode } from '../data.ts';
 import type { MapNode, MapNodeStatus, SheetKey, Version } from '../lib/types.ts';
 import { matchesMechanic } from '../lib/mechanics.ts';
@@ -131,6 +132,7 @@ export function TreeMap({ mechanic }: { mechanic: string }) {
     fit();
   }, [fit, side]);
 
+  useTrackedSearch('map', q);
   const needle = q.trim().toLowerCase();
   const isLit = useCallback(
     (n: MapNode) =>
@@ -352,16 +354,41 @@ export function TreeMap({ mechanic }: { mechanic: string }) {
   return (
     <>
       <div className="toolbar">
-        <Chip on={side === 'old'} onClick={() => setSide('old')}>
+        <Chip
+          on={side === 'old'}
+          onClick={() => {
+            setSide('old');
+            track('map/tree/3.29');
+          }}
+        >
           3.29 tree
         </Chip>
-        <Chip on={side === 'new'} onClick={() => setSide('new')}>
+        <Chip
+          on={side === 'new'}
+          onClick={() => {
+            setSide('new');
+            track('map/tree/3.30');
+          }}
+        >
           3.30 tree
         </Chip>
-        <Chip on={onlyChanged} onClick={() => setOnlyChanged(!onlyChanged)}>
+        <Chip
+          on={onlyChanged}
+          onClick={() => {
+            setOnlyChanged(!onlyChanged);
+            trackToggle('map', 'only-changed', !onlyChanged);
+          }}
+        >
           Only changed nodes
         </Chip>
-        <Chip on={onlyScarab} color="var(--poe-currency)" onClick={() => setOnlyScarab(!onlyScarab)}>
+        <Chip
+          on={onlyScarab}
+          color="var(--poe-currency)"
+          onClick={() => {
+            setOnlyScarab(!onlyScarab);
+            trackToggle('map', 'took-over-scarab', !onlyScarab);
+          }}
+        >
           ❖ Took over a scarab
         </Chip>
         <input type="search" placeholder="Highlight node name or stat…" value={q} onChange={(e) => setQ(e.target.value)} />
@@ -369,7 +396,13 @@ export function TreeMap({ mechanic }: { mechanic: string }) {
       </div>
       <div className="map-wrap" ref={wrapRef}>
         <div className="map-controls">
-          <button className="btn" onClick={fit}>
+          <button
+            className="btn"
+            onClick={() => {
+              fit();
+              track('map/reset-view');
+            }}
+          >
             Reset view
           </button>
         </div>

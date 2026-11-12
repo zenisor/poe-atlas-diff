@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { track, trackToggle, useTrackedSearch } from '../lib/analytics.ts';
 import { data, relatedScarabsByNode, scarabLinksByNode } from '../data.ts';
 import { RelatedScarabs, ScarabLinks } from '../components/tips.tsx';
 
@@ -34,6 +35,7 @@ export function Notables({ mechanic, embedded = false }: { mechanic: string; emb
     );
   }, [statuses, mechanic, kind, q, onlyScarab]);
 
+  useTrackedSearch(embedded ? 'mechanic-notables' : 'notables', q);
   const grouped = new Map<string, NotableDiff[]>();
   for (const r of rows) grouped.set(r.mechanic, [...(grouped.get(r.mechanic) ?? []), r]);
   const count = (s: NotableStatus) => data.notables.filter((n) => n.status === s && matchesMechanic(n.mechanic, mechanic)).length;
@@ -50,16 +52,25 @@ export function Notables({ mechanic, embedded = false }: { mechanic: string; emb
       )}
       <div className="toolbar">
         <input type="search" placeholder="Search name or stat…" value={q} onChange={(e) => setQ(e.target.value)} />
-        <Chip on={onlyScarab} color="var(--poe-currency)" onClick={() => setOnlyScarab(!onlyScarab)}>
+        <Chip on={onlyScarab} color="var(--poe-currency)" onClick={() => {
+            setOnlyScarab(!onlyScarab);
+            trackToggle('notables', 'took-over-scarab', !onlyScarab);
+          }}>
           ❖ Took over a scarab ({data.notables.filter((n) => (linksOf(n).length || relatedOf(n).length) && matchesMechanic(n.mechanic, mechanic)).length})
         </Chip>
-        <select value={kind} onChange={(e) => setKind(e.target.value as typeof kind)}>
+        <select value={kind} onChange={(e) => {
+            setKind(e.target.value as typeof kind);
+            track(`notables/kind/${e.target.value}`);
+          }}>
           <option value="all">Notables + keystones</option>
           <option value="keystone">Keystones only</option>
           <option value="notable">Notables only</option>
         </select>
         {STATUSES.map((s) => (
-          <Chip key={s} on={statuses.has(s)} color={STATUS_COLOR[s]} onClick={() => setStatuses(toggle(statuses, s))}>
+          <Chip key={s} on={statuses.has(s)} color={STATUS_COLOR[s]} onClick={() => {
+            setStatuses(toggle(statuses, s));
+            trackToggle('notables', `status-${s}`, !statuses.has(s));
+          }}>
             {STATUS_LABEL[s]} ({count(s)})
           </Chip>
         ))}

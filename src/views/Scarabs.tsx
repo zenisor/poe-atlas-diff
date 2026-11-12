@@ -1,4 +1,5 @@
 import { Fragment, useMemo, useState } from 'react';
+import { track, trackToggle, useTrackedSearch } from '../lib/analytics.ts';
 import { data } from '../data.ts';
 import type { Fate, MatchedContribution, ScarabEffectResult, ScarabResult } from '../lib/types.ts';
 import { FATE_LABEL } from '../lib/scarabs.ts';
@@ -30,6 +31,7 @@ export function Scarabs({ mechanic, embedded = false }: { mechanic: string; embe
     return list;
   }, [fates, mechanic, q, sort]);
 
+  useTrackedSearch(embedded ? 'mechanic-scarabs' : 'scarabs', q);
   const counts = Object.fromEntries(FATES.map((f) => [f, data.scarabs.filter((s) => s.fate === f && matchesMechanic(s.mechanics, mechanic)).length]));
   const header = makeGroupHeaders();
   // On a single-mechanic page, list multi-mechanic scarabs under that mechanic.
@@ -47,13 +49,19 @@ export function Scarabs({ mechanic, embedded = false }: { mechanic: string; embe
       )}
       <div className="toolbar">
         <input type="search" placeholder="Search scarab or effect…" value={q} onChange={(e) => setQ(e.target.value)} />
-        <select value={sort} onChange={(e) => setSort(e.target.value as SortKey)}>
+        <select value={sort} onChange={(e) => {
+            setSort(e.target.value as SortKey);
+            track(`scarabs/sort/${e.target.value}`);
+          }}>
           <option value="mechanic">Group by mechanic</option>
           <option value="retention">Most nerfed first</option>
           <option value="name">Name</option>
         </select>
         {FATES.map((f) => (
-          <Chip key={f} on={fates.has(f)} color={FATE_COLOR[f]} onClick={() => setFates(toggle(fates, f))}>
+          <Chip key={f} on={fates.has(f)} color={FATE_COLOR[f]} onClick={() => {
+            setFates(toggle(fates, f));
+            trackToggle('scarabs', `fate-${f}`, !fates.has(f));
+          }}>
             {FATE_LABEL[f]} ({counts[f]})
           </Chip>
         ))}
@@ -99,7 +107,13 @@ export function Scarabs({ mechanic, embedded = false }: { mechanic: string; embe
                       </td>
                     </tr>
                   )}
-                  <tr className="clickable" onClick={() => setOpen(toggle(open, s.id))}>
+                  <tr
+                    className="clickable"
+                    onClick={() => {
+                      if (!open.has(s.id)) track(`scarab/open/${s.name}`);
+                      setOpen(toggle(open, s.id));
+                    }}
+                  >
                     <td>
                       <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
                         <ScarabIcon s={s} size={44} />

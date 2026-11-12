@@ -21,6 +21,19 @@ npm run build        # static site in dist/ (serve with `npm run preview` or any
 
 Visits are counted with [GoatCounter](https://www.goatcounter.com/) (cookieless; script in `index.html`). Each hash route (`#/scarabs`, `#/map/Essence`…) is counted as its own page, so the dashboard shows which tabs and mechanics people open. Local dev on `localhost` is not counted.
 
+Page actions are sent as GoatCounter events (`src/lib/analytics.ts`), named `area/action/detail`:
+
+| Event | When |
+|---|---|
+| `scarab/open/<scarab>` | a scarab row is expanded |
+| `tooltip/scarab/<scarab>` | a scarab tooltip is opened (first time per visit) |
+| `scarabs/fate-<fate>:on\|off`, `scarabs/sort/<key>` | fate filter / sort changed |
+| `notables/status-<status>:on\|off`, `notables/took-over-scarab:on\|off`, `notables/kind/<kind>` | notable filters |
+| `effects/status-<status>:on\|off`, `effects/biggest-nerfs-first:on\|off`, `effect/open/<effect>` | effect filters / row expanded |
+| `map/tree/3.29\|3.30`, `map/only-changed:on\|off`, `map/took-over-scarab:on\|off`, `map/reset-view` | tree map controls |
+| `strategy/view/<preset>`, `strategy/clone/<preset>`, `strategy/new`, `strategy/delete`, `strategy/compare`, `strategy/add-scarab/<scarab>`, `strategy/add-notable/<notable>`, `strategy/import`, `strategy/export` | strategy actions |
+| `<area>/search/<term>` | a search term (≥ 3 chars) once typing stops |
+
 ## Tabs
 
 | Tab | What it shows |
