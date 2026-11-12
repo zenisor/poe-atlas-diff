@@ -11,6 +11,7 @@ import { MechanicIcon } from './components/art.tsx';
 import { MechanicSidebar } from './components/sidebar.tsx';
 import { TooltipLayer } from './components/tooltip.tsx';
 import type { CSSProperties } from 'react';
+import { REPO_URL, REPORT_URL } from './links.ts';
 
 const TABS = [
   { id: 'overview', label: 'Overview' },
@@ -102,8 +103,37 @@ export function App() {
       </main>
       <TooltipLayer />
       <footer className="footer">
-        Trees: grindinggear/atlastree-export {data.meta.old.label} (<span className="mono">{data.meta.old.commit.slice(0, 7)}</span>) vs {data.meta.new.label} (
-        <span className="mono">{data.meta.new.commit.slice(0, 7)}</span>) · Scarab effects & limits: poewiki.net · Built {new Date(data.meta.generatedAt).toLocaleString()}
+        <div className="footer-links">
+          <a href={REPORT_URL} target="_blank" rel="noopener noreferrer">
+            Report a mistake
+          </a>
+          <span>·</span>
+          <a href={REPO_URL} target="_blank" rel="noopener noreferrer">
+            Source on GitHub
+          </a>
+        </div>
+        <div>
+          Fan-made and non-commercial. Not affiliated with or endorsed by Grinding Gear Games. Path of Exile, its game data and art are © Grinding Gear Games.
+        </div>
+        <div>
+          Atlas trees and art:{' '}
+          <a href="https://github.com/grindinggear/atlastree-export" target="_blank" rel="noopener noreferrer">
+            grindinggear/atlastree-export
+          </a>{' '}
+          {data.meta.old.label} (<span className="mono">{data.meta.old.commit.slice(0, 7)}</span>) vs {data.meta.new.label} (
+          <span className="mono">{data.meta.new.commit.slice(0, 7)}</span>) · Scarab effects, limits and icons:{' '}
+          <a href="https://www.poewiki.net/wiki/Scarab" target="_blank" rel="noopener noreferrer">
+            poewiki.net
+          </a>{' '}
+          (CC BY-NC-SA 3.0) · Built {new Date(data.meta.generatedAt).toLocaleDateString()}
+        </div>
+        <div>
+          Anonymous, cookieless visit and click counts via{' '}
+          <a href="https://www.goatcounter.com/" target="_blank" rel="noopener noreferrer">
+            GoatCounter
+          </a>
+          . No cookies, no personal data, nothing you type is recorded.
+        </div>
       </footer>
     </div>
   );

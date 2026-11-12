@@ -247,7 +247,8 @@ td.num, th.num { text-align: right; white-space: nowrap; font-variant-numeric: t
 .kv dt { color: var(--muted); }
 .kv dd { margin: 0; }
 details summary { cursor: pointer; color: var(--muted); }
-.footer { color: var(--muted); font-size: 12px; padding: 18px; text-align: center; border-top: 1px solid #2e2416; background: rgba(0, 0, 0, .5); }
+.footer { color: var(--muted); font-size: 12px; padding: 18px; text-align: center; border-top: 1px solid #2e2416; background: rgba(0, 0, 0, .5); display: flex; flex-direction: column; gap: 5px; line-height: 1.5; }
+.footer-links { display: flex; gap: 10px; justify-content: center; font-family: var(--serif); font-size: 13px; letter-spacing: .04em; }
 
 /* ---------- mechanic taxonomy ---------- */
 tr.cat-row td { background: rgba(0, 0, 0, .55); padding-top: 18px; border-bottom: 1px solid #4a3a22; }
@@ -296,3 +297,12 @@ tr.cat-row td { background: rgba(0, 0, 0, .55); padding-top: 18px; border-bottom
 
 .scarab-box { margin-top: 8px; padding: 8px 10px; border: 1px solid #3f3424; background: rgba(170, 158, 130, .05); }
 .scarab-links { display: flex; flex-direction: column; gap: 6px; }
+
+/* data caveat box */
+.caveat {
+  margin: -4px 0 20px; padding: 10px 16px 10px 14px; max-width: 980px; font-size: 13px; line-height: 1.5;
+  border: 1px solid #5a4626; border-left: 3px solid var(--gold); background: linear-gradient(90deg, rgba(201, 164, 99, .08), rgba(0, 0, 0, .25));
+}
+.caveat-title { font-family: var(--serif); font-weight: 700; color: var(--title); letter-spacing: .05em; margin-bottom: 4px; }
+.caveat ul { margin: 0; padding-left: 18px; color: var(--text); }
+.caveat li { margin: 2px 0; }

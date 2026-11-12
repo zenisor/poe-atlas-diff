@@ -32,7 +32,7 @@ Page actions are sent as GoatCounter events (`src/lib/analytics.ts`), named `are
 | `effects/status-<status>:on\|off`, `effects/biggest-nerfs-first:on\|off`, `effect/open/<effect>` | effect filters / row expanded |
 | `map/tree/3.29\|3.30`, `map/only-changed:on\|off`, `map/took-over-scarab:on\|off`, `map/reset-view` | tree map controls |
 | `strategy/view/<preset>`, `strategy/clone/<preset>`, `strategy/new`, `strategy/delete`, `strategy/compare`, `strategy/add-scarab/<scarab>`, `strategy/add-notable/<notable>`, `strategy/import`, `strategy/export` | strategy actions |
-| `<area>/search/<term>` | a search term (≥ 3 chars) once typing stops |
+| `<area>/search` | a search was used (≥ 3 chars, once typing stops); the search text is never sent |
 
 ## Tabs
 

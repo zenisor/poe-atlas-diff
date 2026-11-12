@@ -1,0 +1,26 @@
+name: Report a data mistake
+description: A scarab fate, node pairing, number or note looks wrong.
+title: "[Data] "
+labels: ["data"]
+body:
+  - type: input
+    id: where
+    attributes:
+      label: Where
+      description: Scarab, notable/node or effect name, and the tab you saw it on.
+      placeholder: e.g. Cartography Scarab of Risk / Scarab fates tab
+    validations:
+      required: true
+  - type: textarea
+    id: wrong
+    attributes:
+      label: What the tool says
+    validations:
+      required: true
+  - type: textarea
+    id: right
+    attributes:
+      label: What you think is correct, and why
+      description: Patch notes, in-game tooltip, datamine, screenshot… anything that backs it up.
+    validations:
+      required: true

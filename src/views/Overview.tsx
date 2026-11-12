@@ -1,6 +1,7 @@
 import { Fragment } from 'react';
 import { data, mechanicsByCategory } from '../data.ts';
 import type { TabId } from '../App.tsx';
+import { REPORT_URL } from '../links.ts';
 import type { MechanicSummary } from '../lib/types.ts';
 import { FATE_LABEL } from '../lib/scarabs.ts';
 import { CATEGORY_LABEL, CATEGORY_NOTE } from '../lib/mechanics.ts';
@@ -32,6 +33,30 @@ export function Overview({ go }: { go: (tab: TabId, mechanic?: string) => void }
         layers</b> that stack on top of any map (Maven, Exarch, Eater…), and generic <b>map juice</b>. Surpassing Chance counts as +1 guaranteed
         per 100%.
       </p>
+
+      <div className="caveat">
+        <div className="caveat-title">Before you trust a number</div>
+        <ul>
+          <li>
+            Built from the <b>3.30.0 preview 2</b> Atlas tree export. GGG can still change values before or after launch.
+          </li>
+          <li>
+            <b>Surpassing Chance</b> is read as +1 guaranteed per 100% (the remainder is the chance for one more). Content base spawn rates aren't
+            modelled, only what the Atlas tree and scarabs add.
+          </li>
+          <li>
+            Which tree node replaces which scarab effect is a <b>curated judgment call</b> (every pairing and note is on the Scarab fates tab).
+            Thread modifiers are random and not scored.
+          </li>
+          <li>
+            Spotted something wrong?{' '}
+            <a href={REPORT_URL} target="_blank" rel="noopener noreferrer">
+              Report a mistake
+            </a>{' '}
+            and it gets fixed for everyone.
+          </li>
+        </ul>
+      </div>
 
       <div className="grid tiles">
         <Tile label="Atlas points" value={`${meta.old.totalPoints} → ${meta.new.totalPoints}`} sub={`+${meta.new.totalPoints - meta.old.totalPoints} points`} />

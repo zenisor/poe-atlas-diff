@@ -28,7 +28,10 @@ export function trackOnce(path: string): void {
   track(path);
 }
 
-/** Counts a search term once the user stops typing (min 3 chars, no repeats). */
+/**
+ * Counts that a search was used (once the user stops typing, min 3 chars).
+ * The search text itself is never sent.
+ */
 export function useTrackedSearch(scope: string, query: string, delayMs = 1500): void {
   const last = useRef('');
   useEffect(() => {
@@ -36,7 +39,7 @@ export function useTrackedSearch(scope: string, query: string, delayMs = 1500): 
     if (q.length < 3 || q === last.current) return;
     const t = setTimeout(() => {
       last.current = q;
-      track(`${scope}/search/${q}`);
+      track(`${scope}/search`);
     }, delayMs);
     return () => clearTimeout(t);
   }, [scope, query, delayMs]);
