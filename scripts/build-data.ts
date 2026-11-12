@@ -34,6 +34,7 @@ import { EFFECT_LINKS } from '../data/curation/effect-links.ts';
 import { NOTABLE_LINKS } from '../data/curation/notable-links.ts';
 import { REVIEWED_LOOKALIKES, SCARAB_MAP } from '../data/curation/scarab-map.ts';
 import { PRESET_STRATEGIES } from '../data/curation/strategies.ts';
+import { ATLAS_WIDE, PATCH_NOTES, PATCH_NOTES_URL } from '../data/curation/patch-notes.ts';
 import { TREE_SOURCES } from './tree-sources.ts';
 import { categoryOf, compareMechanics, MECHANIC_CATEGORY } from '../src/lib/mechanics.ts';
 import { resemblance } from '../src/lib/resemblance.ts';
@@ -308,7 +309,7 @@ const data: GeneratedData = {
     sources: [
       { label: 'grindinggear/atlastree-export', url: 'https://github.com/grindinggear/atlastree-export' },
       { label: 'Scarab effects & limits: poewiki.net Cargo (items + map_fragments)', url: 'https://www.poewiki.net/wiki/Scarab' },
-      { label: '3.30 patch notes (Maxroll mirror)', url: 'https://maxroll.gg/poe/news/3-30-covens-of-umbra-patch-notes' },
+      { label: '3.30.0 patch notes', url: PATCH_NOTES_URL },
     ],
   },
   mechanics: summarize(),
@@ -327,6 +328,14 @@ const outDir = join(root, 'src', 'data', 'generated');
 await mkdir(outDir, { recursive: true });
 await writeFile(join(outDir, 'atlas-data.json'), JSON.stringify(data));
 await writeFile(join(outDir, 'presets.json'), JSON.stringify(PRESET_STRATEGIES, null, 2));
+
+// Patch-note context: every tagged mechanic must exist, so a typo can't silently hide a note.
+const mechanicNames = new Set(data.mechanics.map((m) => m.name));
+for (const n of PATCH_NOTES) {
+  for (const m of n.mechanics) if (!mechanicNames.has(m)) throw new Error(`patch-notes: unknown mechanic "${m}" in "${n.text.slice(0, 50)}…"`);
+}
+await writeFile(join(outDir, 'patch-notes.json'), JSON.stringify({ url: PATCH_NOTES_URL, atlasWide: ATLAS_WIDE, notes: PATCH_NOTES }, null, 2));
+console.log(`patch notes: ${PATCH_NOTES.length} mechanic notes, ${ATLAS_WIDE.length} Atlas-wide`);
 
 const count = <T>(list: T[], key: (t: T) => string) => list.reduce<Record<string, number>>((acc, x) => ((acc[key(x)] = (acc[key(x)] ?? 0) + 1), acc), {});
 console.log(`nodes: 3.29=${data.meta.old.nodeCount} 3.30=${data.meta.new.nodeCount}`);

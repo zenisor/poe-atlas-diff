@@ -8,6 +8,8 @@ import { Notables } from './Notables.tsx';
 import { Effects } from './Effects.tsx';
 import { MechanicIcon } from '../components/art.tsx';
 import { MechanicSidebar } from '../components/sidebar.tsx';
+import { PatchNotes } from '../components/patchnotes.tsx';
+import { patchNotesFor } from '../data.ts';
 
 export function MechanicView({ mechanic, go }: { mechanic: string; go: (tab: TabId, mechanic?: string) => void }) {
   const current = mechanicSummary.has(mechanic) ? mechanic : mechanicsByCategory[0].items[0].name;
@@ -65,6 +67,13 @@ export function MechanicView({ mechanic, go }: { mechanic: string; go: (tab: Tab
             sub={scarabs.length ? <Stack title={`${current} scarabs`} parts={FATES.map((f) => ({ value: scarabs.filter((s) => s.fate === f).length, color: FATE_COLOR[f], label: FATE_LABEL[f] }))} /> : 'none in 3.29'}
           />
         </div>
+
+        {patchNotesFor([current]).length > 0 && (
+          <>
+            <div className="section-title">Other 3.30 changes</div>
+            <PatchNotes mechanics={[current]} />
+          </>
+        )}
 
         {scarabs.length > 0 && (
           <>

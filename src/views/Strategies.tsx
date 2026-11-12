@@ -1,6 +1,7 @@
 import { Fragment, useEffect, useMemo, useState } from 'react';
+import { PatchNotes } from '../components/patchnotes.tsx';
 import { track } from '../lib/analytics.ts';
-import { notablesByOldName, oldNotableMechanic, oldNotableNames, oldNotableNode, PRESETS, scarabsById, strategyMechanic } from '../data.ts';
+import { notablesByOldName, oldNotableMechanic, oldNotableNames, oldNotableNode, PRESETS, scarabsById, strategyMechanic, patchNotesFor } from '../data.ts';
 import { MechanicIcon } from '../components/art.tsx';
 import { Autocomplete } from '../components/Autocomplete.tsx';
 import { SEARCH_INDEX } from '../searchIndex.ts';
@@ -458,6 +459,21 @@ function EvaluationPanel({ ev }: { ev: StrategyEvaluation }) {
         </tbody>
       </table>
       {!ev.notables.length && <p className="muted small">No notables listed.</p>}
+
+      {(() => {
+        // Patch-note context for every mechanic this setup touches.
+        const mechs = [...new Set([...ev.scarabs.flatMap((r) => r.scarab.mechanics), ...ev.notables.map((n) => n.mechanic)])];
+        const count = patchNotesFor(mechs).length;
+        if (!count) return null;
+        return (
+          <details className="pn-details">
+            <summary>
+              <h3>Other 3.30 changes for this setup <span className="small muted">({count})</span></h3>
+            </summary>
+            <PatchNotes mechanics={mechs} showMechanics />
+          </details>
+        );
+      })()}
     </div>
   );
 }

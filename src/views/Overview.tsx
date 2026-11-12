@@ -1,5 +1,5 @@
 import { Fragment, type CSSProperties } from 'react';
-import { data, mechanicsByCategory } from '../data.ts';
+import { data, mechanicsByCategory, patchNotes } from '../data.ts';
 import type { TabId } from '../App.tsx';
 import type { Fate, MechanicSummary, ScarabResult } from '../lib/types.ts';
 import { CATEGORY_LABEL } from '../lib/mechanics.ts';
@@ -130,6 +130,26 @@ export function Overview({ go }: { go: (tab: TabId, mechanic?: string) => void }
           {effectCount('buffed')} stronger, {effectCount('nerfed')} weaker, {effectCount('added')} new, {effectCount('removed')} gone
         </dd>
       </dl>
+
+      <h2 className="section-title">Outside the tree</h2>
+      <p className="muted section-lead">
+        The 3.30.0 patch notes also changed how Maps and loot work. Each mechanic page lists its own changes.
+      </p>
+      <dl className="wide-changes">
+        {patchNotes.atlasWide.map((c) => (
+          <div key={c.title}>
+            <dt>{c.title}</dt>
+            <dd>{c.text}</dd>
+          </div>
+        ))}
+      </dl>
+      <p className="small muted">
+        Paraphrased from the{' '}
+        <a href={patchNotes.url} target="_blank" rel="noopener noreferrer">
+          3.30.0 patch notes
+        </a>
+        .
+      </p>
 
       <h2 className="section-title">By mechanic</h2>
       <div className="panel">

@@ -930,6 +930,18 @@ const OUTSIDE: Record<string, OutsideNote> = {
   ScarabDomination1: { note: 'Covetous Shrines now have a base chance to spawn, and Gloom and Resonating Shrines spawn more often.' },
   ScarabEssence1: { note: 'The average number of Essences on Imprisoned Monsters now scales with the Map\'s Atlas Drop scaling.' },
   ScarabEssence2: { note: 'Weeping Essences no longer appear in yellow or red Maps, and Wailing Essences no longer in red Maps.' },
+  ScarabHarvest1: { note: 'Sacred Flora now spawn in the Map itself, and in high-tier Maps one can be a Sacred Specimen that spawns a Harvest Boss.' },
+  ScarabHarvest3: { note: 'The closest thing in 3.30: in high-tier Maps a Sacred Flora can be a Sacred Specimen that spawns a Harvest Boss.' },
+  ScarabHarvest2: { note: 'Lifeforce now drops in bigger stacks from fewer seeds (about the same total), and Atlas Drops raise the Lifeforce found.' },
+  ScarabRitual2: { note: "Wisp's Blessing in Ritual encounters now gives 50% increased Tribute (was 30%), but the patch notes don't say what spawns the wisp now." },
+  ScarabUltimatum2: { note: 'Ultimatum rewards now keep improving after round 10.' },
+  ScarabBeastsNew2: { note: 'Yellow beasts are no longer captured. Red beasts, which this scarab added, still are.' },
+  ...Object.fromEntries(
+    ['ScarabDivinationCardsNew1', 'ScarabMapsNew5', 'ScarabMisc3'].map((id) => [
+      id,
+      { note: "Allflame Embers drop from Syndicate rewards in non-Intervention Safehouses and from Elreon's Transportation. The patch notes don't list which reward gives which Ember." },
+    ]),
+  ),
 };
 
 for (const [id, outside] of Object.entries(OUTSIDE)) {

@@ -467,3 +467,19 @@ td.num.wrap { white-space: normal; min-width: 110px; }
   .rtable .retention .bar { min-width: 40px; }
 }
 @media (min-width: 1001px) and (max-width: 1300px) { .mech-layout { grid-template-columns: 200px minmax(0, 1fr); gap: 20px; } }
+
+/* 3.30 changes outside the tree (paraphrased patch notes) */
+.patch-notes ul { margin: 0 0 6px; padding-left: 20px; max-width: 90ch; }
+.patch-notes li { margin: 5px 0; color: var(--text); }
+.patch-notes .pn-mech { display: inline-flex; gap: 2px; margin-right: 6px; vertical-align: middle; }
+.pn-details { margin-top: 18px; }
+.pn-details summary { cursor: pointer; list-style: none; }
+.pn-details summary::-webkit-details-marker { display: none; }
+.pn-details summary h3 { display: inline; }
+.pn-details summary::after { content: ' show'; color: var(--gold); font-size: 14px; }
+.pn-details[open] summary::after { content: ' hide'; }
+.section-lead { margin: -4px 0 12px; max-width: 80ch; }
+.wide-changes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 36px; margin: 0 0 8px; max-width: 1200px; }
+.wide-changes dt { color: var(--title); font-weight: 500; margin-bottom: 2px; }
+.wide-changes dd { margin: 0; color: var(--dim); }
+@media (max-width: 900px) { .wide-changes { grid-template-columns: 1fr; } }

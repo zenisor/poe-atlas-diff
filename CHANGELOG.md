@@ -2,6 +2,15 @@
 
 What changed on the site and in its data, newest first. Spotted a mistake? [Report it on GitHub](https://github.com/zenisor/poe-atlas-diff/issues/new?template=data-mistake.yml).
 
+## 12 November 2026: the rest of the patch notes
+
+The Endgame, League, Item generation and Monster sections of the [3.30.0 patch notes](https://www.pathofexile.com/forum/view-thread/4013680), paraphrased and sorted by mechanic.
+
+- The Overview has a new **Outside the tree** section with the Atlas-wide changes. League mechanics now come from Threads, Item Quantity on Maps became Atlas Drops, Rarity now decides what drops, Map juice gives less Rarity, and the tree has 150 points.
+- Every mechanic page lists its **Other 3.30 changes** (71 notes in total). Examples: Harvest without the Sacred Grove, Ritual vessels that need Ritual Threads, and Ultimatum rewards that keep improving after round 10.
+- Strategies show the changes for every mechanic in the setup, under the notables.
+- More scarab notes: the three Harvest scarabs, [Ritual Scarab of Wisps](https://zenisor.github.io/poe-atlas-diff/#/scarabs/Ritual?focus=ScarabRitual2), [Ultimatum Scarab of Bribing](https://zenisor.github.io/poe-atlas-diff/#/scarabs/Ultimatum?focus=ScarabUltimatum2), [Bestiary Scarab of the Herd](https://zenisor.github.io/poe-atlas-diff/#/scarabs/Bestiary?focus=ScarabBeastsNew2), and where the new Allflame Embers drop.
+
 ## 12 November 2026: patch notes pass
 
 Every scarab was checked against the [3.30.0 patch notes](https://www.pathofexile.com/forum/view-thread/4013680) (Endgame and Atlas sections) and the wiki.

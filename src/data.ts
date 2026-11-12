@@ -1,5 +1,7 @@
 import raw from './data/generated/atlas-data.json';
 import presetsRaw from './data/generated/presets.json';
+import patchRaw from './data/generated/patch-notes.json';
+import type { PatchNote } from '../data/curation/patch-notes.ts';
 import type { EffectDiff, GeneratedData, MapNode, MechanicSummary, ScarabResult, Strategy } from './lib/types.ts';
 import { mainValue, toTemplate } from './lib/stats.ts';
 import { notableIndex } from './lib/strategy.ts';
@@ -7,6 +9,15 @@ import { CATEGORIES, type MechanicCategory } from './lib/mechanics.ts';
 
 export const data = raw as unknown as GeneratedData;
 export const PRESETS = presetsRaw as Strategy[];
+
+/** Paraphrased 3.30.0 patch notes that matter for Atlas farming (data/curation/patch-notes.ts). */
+export const patchNotes = patchRaw as { url: string; atlasWide: { title: string; text: string }[]; notes: PatchNote[] };
+
+/** Patch notes for any of these mechanics, in curated order, without duplicates. */
+export function patchNotesFor(mechanicNames: string[]): PatchNote[] {
+  const wanted = new Set(mechanicNames);
+  return patchNotes.notes.filter((n) => n.mechanics.some((m) => wanted.has(m)));
+}
 
 export const scarabsById = new Map<string, ScarabResult>(data.scarabs.map((s) => [s.id, s]));
 export const notablesByOldName = notableIndex(data.notables);
