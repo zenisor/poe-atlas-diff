@@ -1,5 +1,8 @@
 import { useMemo, useState } from 'react';
 import { track, trackToggle, useTrackedSearch } from '../lib/analytics.ts';
+import { Autocomplete } from '../components/Autocomplete.tsx';
+import { SEARCH_INDEX } from '../searchIndex.ts';
+import { flashFocus, useFocusTarget } from '../lib/focus.ts';
 import { data, relatedScarabsByNode, scarabLinksByNode } from '../data.ts';
 import { RelatedScarabs, ScarabLinks } from '../components/tips.tsx';
 
@@ -13,7 +16,7 @@ import { CATEGORY_LABEL, categoryOf, matchesMechanic } from '../lib/mechanics.ts
 
 const STATUSES: NotableStatus[] = ['removed', 'added', 'replaced', 'changed', 'buffed', 'nerfed', 'mixed', 'unchanged'];
 
-export function Notables({ mechanic, embedded = false }: { mechanic: string; embedded?: boolean }) {
+export function Notables({ mechanic, embedded = false, focus, focusNonce }: { mechanic: string; embedded?: boolean; focus?: string; focusNonce?: number }) {
   const [statuses, setStatuses] = useState<Set<NotableStatus>>(
     // A single mechanic page is short enough to show everything, including what didn't change.
     new Set(embedded ? STATUSES : STATUSES.filter((s) => s !== 'unchanged')),
@@ -36,6 +39,22 @@ export function Notables({ mechanic, embedded = false }: { mechanic: string; emb
   }, [statuses, mechanic, kind, q, onlyScarab]);
 
   useTrackedSearch(embedded ? 'mechanic-notables' : 'notables', q);
+
+  /** Show a notable diff (clearing filters that would hide it) and scroll to its card. */
+  const reveal = (key: string, query = '') => {
+    const d = data.notables.find((x) => x.key === key);
+    if (!d) return;
+    if (!statuses.has(d.status)) setStatuses(new Set([...statuses, d.status]));
+    setOnlyScarab(false);
+    setKind('all');
+    setQ(query);
+    flashFocus(`notable:${key}`);
+  };
+  useFocusTarget(focus, focusNonce, (key) => reveal(key));
+  const localEntries = useMemo(
+    () => SEARCH_INDEX.filter((e) => (e.kind === 'notable' || e.kind === 'keystone') && matchesMechanic(e.mechanics, mechanic)),
+    [mechanic],
+  );
   const grouped = new Map<string, NotableDiff[]>();
   for (const r of rows) grouped.set(r.mechanic, [...(grouped.get(r.mechanic) ?? []), r]);
   const count = (s: NotableStatus) => data.notables.filter((n) => n.status === s && matchesMechanic(n.mechanic, mechanic)).length;
@@ -51,7 +70,13 @@ export function Notables({ mechanic, embedded = false }: { mechanic: string; emb
       </p>
       )}
       <div className="toolbar">
-        <input type="search" placeholder="Search name or stat…" value={q} onChange={(e) => setQ(e.target.value)} />
+        <Autocomplete
+          entries={localEntries}
+          value={q}
+          onChange={setQ}
+          onSelect={(h) => reveal(h.entry.target.focus!, h.entry.label)}
+          placeholder="Search name or stat…"
+        />
         <Chip on={onlyScarab} color="var(--poe-currency)" onClick={() => {
             setOnlyScarab(!onlyScarab);
             trackToggle('notables', 'took-over-scarab', !onlyScarab);
@@ -127,7 +152,7 @@ function Side({ refs, empty, version }: { refs: NotableRef[]; empty: string; ver
 function NotableCard({ n }: { n: NotableDiff }) {
   const numeric = n.changes.filter((c) => c.old != null && c.new != null);
   return (
-    <div className="card">
+    <div className="card" data-focus={`notable:${n.key}`}>
       <div className="card-head">
         <StatusBadge status={n.status} />
         {linksOf(n).length > 0 && (

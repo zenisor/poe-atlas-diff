@@ -12,6 +12,10 @@ import { MechanicSidebar } from './components/sidebar.tsx';
 import { TooltipLayer } from './components/tooltip.tsx';
 import type { CSSProperties } from 'react';
 import { REPO_URL, REPORT_URL } from './links.ts';
+import { Autocomplete } from './components/Autocomplete.tsx';
+import { SEARCH_INDEX } from './searchIndex.ts';
+import type { SearchHit } from './lib/search.ts';
+import { track } from './lib/analytics.ts';
 
 const TABS = [
   { id: 'overview', label: 'Overview' },
@@ -42,14 +46,23 @@ const SIDEBAR_COUNT = {
  */
 const ATLAS_BG = new URL(data.art.atlas['3.30'].background, document.baseURI).href;
 
-function readHash(): { tab: TabId; mechanic: string } {
-  const [tab, mech] = window.location.hash.replace(/^#\/?/, '').split('/');
+/** Routes look like #/<tab>/<mechanic>?focus=<item>; focus = what a search result points at. */
+function readHash(): { tab: TabId; mechanic: string; focus: string } {
+  const [path, query] = window.location.hash.replace(/^#\/?/, '').split('?');
+  const [tab, mech] = path.split('/');
   const valid = TABS.some((t) => t.id === tab) ? (tab as TabId) : 'overview';
-  return { tab: valid, mechanic: mech ? decodeURIComponent(mech) : '' };
+  return { tab: valid, mechanic: mech ? decodeURIComponent(mech) : '', focus: new URLSearchParams(query ?? '').get('focus') ?? '' };
+}
+
+function hashFor(tab: string, mechanic?: string, focus?: string): string {
+  return `#/${tab}${mechanic ? '/' + encodeURIComponent(mechanic) : ''}${focus ? '?focus=' + encodeURIComponent(focus) : ''}`;
 }
 
 export function App() {
-  const [{ tab, mechanic }, setRoute] = useState(readHash);
+  const [{ tab, mechanic, focus }, setRoute] = useState(readHash);
+  // Bumped on every search pick so re-selecting the same item still scrolls to it.
+  const [focusNonce, setFocusNonce] = useState(0);
+  const [globalQuery, setGlobalQuery] = useState('');
 
   // New page (or a different mechanic page) starts at the top; filter changes on the same tab keep the scroll.
   const pageKey = tab === 'mechanic' ? `${tab}/${mechanic}` : tab;
@@ -65,8 +78,18 @@ export function App() {
   }, []);
 
   const go = (nextTab: TabId, nextMech = mechanic) => {
-    window.location.hash = `/${nextTab}${nextMech ? '/' + encodeURIComponent(nextMech) : ''}`;
+    window.location.hash = hashFor(nextTab, nextMech);
   };
+
+  const openHit = (hit: SearchHit) => {
+    const { tab: t, mechanic: m, focus: f } = hit.entry.target;
+    const next = hashFor(t, m, f);
+    if (window.location.hash !== next) window.location.hash = next;
+    setFocusNonce((n) => n + 1);
+    setGlobalQuery('');
+    track(`search/global/${hit.entry.kind}/${hit.entry.label}`);
+  };
+  const focusProps = { focus, focusNonce };
 
   return (
     <div className="app" style={{ '--atlas-bg': `url(${ATLAS_BG})` } as CSSProperties}>
@@ -84,6 +107,16 @@ export function App() {
           ))}
         </nav>
         <div className="spacer" />
+        <Autocomplete
+          className="global"
+          entries={SEARCH_INDEX}
+          value={globalQuery}
+          onChange={setGlobalQuery}
+          onSelect={openHit}
+          placeholder="Search scarabs, notables, mechanics…"
+          hotkey="/"
+          limit={14}
+        />
       </header>
       <main>
         {tab === 'overview' && <Overview go={go} />}
@@ -92,14 +125,14 @@ export function App() {
           <div className="mech-layout">
             <MechanicSidebar value={mechanic} onChange={(v) => go(tab, v)} count={SIDEBAR_COUNT[tab].count} countLabel={SIDEBAR_COUNT[tab].label} />
             <div style={{ minWidth: 0 }}>
-              {tab === 'scarabs' && <Scarabs mechanic={mechanic} />}
-              {tab === 'notables' && <Notables mechanic={mechanic} />}
-              {tab === 'effects' && <Effects mechanic={mechanic} />}
-              {tab === 'map' && <TreeMap mechanic={mechanic} />}
+              {tab === 'scarabs' && <Scarabs mechanic={mechanic} {...focusProps} />}
+              {tab === 'notables' && <Notables mechanic={mechanic} {...focusProps} />}
+              {tab === 'effects' && <Effects mechanic={mechanic} {...focusProps} />}
+              {tab === 'map' && <TreeMap mechanic={mechanic} {...focusProps} />}
             </div>
           </div>
         )}
-        {tab === 'strategies' && <Strategies />}
+        {tab === 'strategies' && <Strategies {...focusProps} />}
       </main>
       <TooltipLayer />
       <footer className="footer">

@@ -1,7 +1,27 @@
 import { Fragment, useEffect, useMemo, useState } from 'react';
 import { track } from '../lib/analytics.ts';
-import { data, notablesByOldName, oldNotableMechanic, oldNotableNames, oldNotableNode, PRESETS, scarabsById, strategyMechanic } from '../data.ts';
+import { notablesByOldName, oldNotableMechanic, oldNotableNames, oldNotableNode, PRESETS, scarabsById, strategyMechanic } from '../data.ts';
 import { MechanicIcon } from '../components/art.tsx';
+import { Autocomplete } from '../components/Autocomplete.tsx';
+import { SEARCH_INDEX } from '../searchIndex.ts';
+import { useFocusTarget } from '../lib/focus.ts';
+import type { SearchEntry } from '../lib/search.ts';
+import { normalize } from '../lib/search.ts';
+
+/** Every 3.29 notable/keystone, for the "add notable" search in the builder. */
+const OLD_NOTABLE_ENTRIES: SearchEntry[] = oldNotableNames.map((name) => {
+  const n = oldNotableNode.get(name)!;
+  return {
+    id: `old-notable:${name}`,
+    kind: n.kind === 'keystone' ? 'keystone' : 'notable',
+    label: name,
+    sub: `${n.mechanic} · ${n.stats[0] ?? ''}`,
+    keywords: normalize(`${n.mechanic} ${n.stats.join(' ')}`),
+    mechanics: [n.mechanic],
+    target: { tab: 'strategies' },
+    art: { type: 'node', version: '3.29', kind: n.kind, icon: n.icon },
+  };
+});
 import { MechIcon, NodeTip, ScarabIcon } from '../components/tips.tsx';
 import type { Strategy } from '../lib/types.ts';
 import { evaluateStrategy, LAYER_LABEL, LAYERS, MAP_DEVICE_SLOTS, VERDICT_LABEL, type LayerBreakdown, type StrategyEvaluation, type StrategyLayer } from '../lib/strategy.ts';
@@ -62,10 +82,15 @@ function LayerCards({ layers }: { layers: LayerBreakdown[] }) {
   );
 }
 
-export function Strategies() {
+export function Strategies({ focus, focusNonce }: { focus?: string; focusNonce?: number } = {}) {
   const [custom, setCustom] = useState<Strategy[]>(loadCustom);
   const [selectedId, setSelectedId] = useState<string>(PRESETS[0]?.id ?? '');
   const [mode, setMode] = useState<'edit' | 'compare'>('edit');
+  // A search pick for an example strategy opens it.
+  useFocusTarget(focus, focusNonce, (id) => {
+    setSelectedId(id);
+    setMode('edit');
+  });
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(custom));
@@ -178,29 +203,30 @@ export function Strategies() {
 
 function Editor({ strategy, onChange, onClone, onDelete }: { strategy: Strategy; onChange: (s: Strategy) => void; onClone: () => void; onDelete: () => void }) {
   const ro = !!strategy.preset;
-  const [pick, setPick] = useState('');
-  const [notable, setNotable] = useState('');
-  const families = useMemo(() => {
-    const map = new Map<string, typeof data.scarabs>();
-    for (const s of data.scarabs) map.set(s.mechanic, [...(map.get(s.mechanic) ?? []), s]);
-    return [...map];
-  }, []);
+  const [scarabQuery, setScarabQuery] = useState('');
+  const [notableQuery, setNotableQuery] = useState('');
+  // Scarabs not already in the strategy; 3.29 notables/keystones not already listed.
+  const scarabEntries = useMemo(
+    () => SEARCH_INDEX.filter((e) => e.kind === 'scarab' && !strategy.scarabs.some((x) => `scarab:${x.id}` === e.id)),
+    [strategy.scarabs],
+  );
+  const notableEntries = useMemo(() => OLD_NOTABLE_ENTRIES.filter((e) => !strategy.notables.includes(e.label)), [strategy.notables]);
   const setCount = (id: string, count: number) => {
     const limit = scarabsById.get(id)?.limit ?? 1;
     const c = Math.max(0, Math.min(count, limit));
     onChange({ ...strategy, scarabs: c ? strategy.scarabs.map((s) => (s.id === id ? { ...s, count: c } : s)) : strategy.scarabs.filter((s) => s.id !== id) });
   };
-  const addScarab = () => {
-    if (!pick || strategy.scarabs.some((s) => s.id === pick)) return;
-    track(`strategy/add-scarab/${scarabsById.get(pick)?.name ?? pick}`);
-    onChange({ ...strategy, scarabs: [...strategy.scarabs, { id: pick, count: 1 }] });
-    setPick('');
+  const addScarab = (id: string) => {
+    if (strategy.scarabs.some((s) => s.id === id)) return;
+    track(`strategy/add-scarab/${scarabsById.get(id)?.name ?? id}`);
+    onChange({ ...strategy, scarabs: [...strategy.scarabs, { id, count: 1 }] });
+    setScarabQuery('');
   };
-  const addNotable = () => {
-    if (!oldNotableNames.includes(notable) || strategy.notables.includes(notable)) return;
-    track(`strategy/add-notable/${notable}`);
-    onChange({ ...strategy, notables: [...strategy.notables, notable] });
-    setNotable('');
+  const addNotable = (name: string) => {
+    if (!oldNotableNames.includes(name) || strategy.notables.includes(name)) return;
+    track(`strategy/add-notable/${name}`);
+    onChange({ ...strategy, notables: [...strategy.notables, name] });
+    setNotableQuery('');
   };
   const slots = strategy.scarabs.reduce((a, s) => a + s.count, 0);
 
@@ -275,21 +301,13 @@ function Editor({ strategy, onChange, onClone, onDelete }: { strategy: Strategy;
           </table>
           {!ro && (
             <div className="toolbar" style={{ marginTop: 8 }}>
-              <select value={pick} onChange={(e) => setPick(e.target.value)}>
-                <option value="">Add scarab…</option>
-                {families.map(([mech, list]) => (
-                  <optgroup key={mech} label={mech}>
-                    {list.map((s) => (
-                      <option key={s.id} value={s.id} disabled={strategy.scarabs.some((x) => x.id === s.id)}>
-                        {s.name} (limit {s.limit})
-                      </option>
-                    ))}
-                  </optgroup>
-                ))}
-              </select>
-              <button className="btn" onClick={addScarab} disabled={!pick}>
-                Add
-              </button>
+              <Autocomplete
+                entries={scarabEntries}
+                value={scarabQuery}
+                onChange={setScarabQuery}
+                onSelect={(h) => addScarab(h.entry.target.focus!)}
+                placeholder="Add scarab… (type to search)"
+              />
             </div>
           )}
         </div>
@@ -313,15 +331,13 @@ function Editor({ strategy, onChange, onClone, onDelete }: { strategy: Strategy;
           </div>
           {!ro && (
             <div className="toolbar" style={{ marginTop: 8 }}>
-              <input type="text" list="old-notables" placeholder="Add 3.29 notable…" value={notable} onChange={(e) => setNotable(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && addNotable()} />
-              <datalist id="old-notables">
-                {oldNotableNames.map((n) => (
-                  <option key={n} value={n} />
-                ))}
-              </datalist>
-              <button className="btn" onClick={addNotable} disabled={!oldNotableNames.includes(notable)}>
-                Add
-              </button>
+              <Autocomplete
+                entries={notableEntries}
+                value={notableQuery}
+                onChange={setNotableQuery}
+                onSelect={(h) => addNotable(h.entry.label)}
+                placeholder="Add 3.29 notable… (type to search)"
+              />
             </div>
           )}
         </div>

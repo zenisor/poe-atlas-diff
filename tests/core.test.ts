@@ -194,3 +194,36 @@ describe('scarab look-alike detection', () => {
     expect(resemblance(risk, 'Your Maps have 50% increased chance to contain a Mirage')).toBeLessThan(0.2);
   });
 });
+
+import { rank, type SearchEntry } from '../src/lib/search.ts';
+
+describe('search ranking', () => {
+  const e = (label: string, kind: SearchEntry['kind'], keywords = ''): SearchEntry => ({ id: `${kind}:${label}`, kind, label, keywords, mechanics: [], target: { tab: 'x' } });
+  const entries = [
+    e('Cartography Scarab of Risk', 'scarab', 'area has 2 additional random modifiers'),
+    e('Shaping the Valleys', 'notable', 'your maps have an additional random modifier'),
+    e('Essence Scarab', 'scarab'),
+    e('Essence Scarab of Ascent', 'scarab'),
+    e('Essence', 'mechanic'),
+  ];
+
+  it('ranks exact and prefix label matches first', () => {
+    expect(rank(entries, 'essence').map((h) => h.entry.label)).toEqual(['Essence', 'Essence Scarab', 'Essence Scarab of Ascent']);
+  });
+
+  it('matches every word anywhere (label or keywords), labels first', () => {
+    // Neither label contains the words, so both are found through their keywords.
+    const hits = rank(entries, 'random modifier');
+    expect(hits.map((h) => h.entry.label).sort()).toEqual(['Cartography Scarab of Risk', 'Shaping the Valleys']);
+    expect(rank(entries, 'risk')[0].entry.label).toBe('Cartography Scarab of Risk');
+  });
+
+  it('marks the matched part of the label for highlighting', () => {
+    const [hit] = rank(entries, 'valley');
+    expect(hit.entry.label.slice(...hit.match!)).toBe('Valley');
+  });
+
+  it('returns nothing for an empty query', () => {
+    expect(rank(entries, '   ')).toEqual([]);
+  });
+});

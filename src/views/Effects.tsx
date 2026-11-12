@@ -1,5 +1,8 @@
 import { Fragment, useMemo, useState } from 'react';
 import { track, trackToggle, useTrackedSearch } from '../lib/analytics.ts';
+import { Autocomplete } from '../components/Autocomplete.tsx';
+import { SEARCH_INDEX } from '../searchIndex.ts';
+import { flashFocus, useFocusTarget } from '../lib/focus.ts';
 import { data, scarabLinksByNode } from '../data.ts';
 import type { EffectDiff, EffectSide, EffectStatus } from '../lib/types.ts';
 import { likeText, prettyTemplate, signedPct, surpass, trimNum } from '../lib/format.ts';
@@ -29,7 +32,7 @@ function effectNode(e: EffectDiff): { version: Version; id: string; kind: 'small
 
 const STATUSES: EffectStatus[] = ['removed', 'added', 'buffed', 'nerfed', 'reworded', 'reshuffled', 'unchanged'];
 
-export function Effects({ mechanic, embedded = false }: { mechanic: string; embedded?: boolean }) {
+export function Effects({ mechanic, embedded = false, focus, focusNonce }: { mechanic: string; embedded?: boolean; focus?: string; focusNonce?: number }) {
   const [statuses, setStatuses] = useState<Set<EffectStatus>>(
     // A single mechanic page is short enough to show everything, including what didn't change.
     new Set(embedded ? STATUSES : STATUSES.filter((s) => s !== 'unchanged')),
@@ -52,6 +55,22 @@ export function Effects({ mechanic, embedded = false }: { mechanic: string; embe
 
   const count = (s: EffectStatus) => data.effects.filter((e) => e.status === s && matchesMechanic(e.mechanic, mechanic)).length;
   useTrackedSearch(embedded ? 'mechanic-effects' : 'effects', q);
+
+  /** Expand an effect row (clearing filters that would hide it) and scroll to it. */
+  const reveal = (key: string) => {
+    const e = data.effects.find((x) => x.key === key);
+    if (!e) return;
+    if (!statuses.has(e.status)) setStatuses(new Set([...statuses, e.status]));
+    setQ('');
+    setOpen((o) => new Set([...o, key]));
+    flashFocus(`effect:${key}`);
+  };
+  useFocusTarget(focus, focusNonce, (key) => reveal(key));
+  // Effects by their text, plus node names (picking a node filters to the effects it gives).
+  const localEntries = useMemo(
+    () => SEARCH_INDEX.filter((e) => (e.kind === 'effect' || e.kind === 'node' || e.kind === 'notable' || e.kind === 'keystone') && matchesMechanic(e.mechanics, mechanic)),
+    [mechanic],
+  );
   const header = makeGroupHeaders();
   const single = !!mechanic && !mechanic.startsWith('cat:');
 
@@ -66,7 +85,13 @@ export function Effects({ mechanic, embedded = false }: { mechanic: string; embe
       </p>
       )}
       <div className="toolbar">
-        <input type="search" placeholder="Search effect text or node…" value={q} onChange={(e) => setQ(e.target.value)} />
+        <Autocomplete
+          entries={localEntries}
+          value={q}
+          onChange={setQ}
+          onSelect={(h) => (h.entry.kind === 'effect' ? reveal(h.entry.target.focus!) : setQ(h.entry.label))}
+          placeholder="Search effect text or node…"
+        />
         <label className="small">
           <input type="checkbox" checked={sortDelta} onChange={(e) => {
               setSortDelta(e.target.checked);
@@ -119,6 +144,7 @@ export function Effects({ mechanic, embedded = false }: { mechanic: string; embe
                     </tr>
                   )}
                   <tr
+                    data-focus={`effect:${e.key}`}
                     className="clickable"
                     onClick={() => {
                       if (!open.has(e.key)) track(`effect/open/${e.label}`);

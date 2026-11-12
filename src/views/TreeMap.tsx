@@ -5,6 +5,10 @@ import type { MapNode, MapNodeStatus, SheetKey, Version } from '../lib/types.ts'
 import { matchesMechanic } from '../lib/mechanics.ts';
 import { Chip, Legend, STATUS_LABEL } from '../components/ui.tsx';
 import { NodeTooltip } from '../components/tips.tsx';
+import { Autocomplete } from '../components/Autocomplete.tsx';
+import { SEARCH_INDEX } from '../searchIndex.ts';
+import { useFocusTarget } from '../lib/focus.ts';
+import type { SearchEntry } from '../lib/search.ts';
 
 type Side = 'old' | 'new';
 const VERSION: Record<Side, Version> = { old: '3.29', new: '3.30' };
@@ -95,7 +99,7 @@ function useSheets(version: Version) {
   return images;
 }
 
-export function TreeMap({ mechanic }: { mechanic: string }) {
+export function TreeMap({ mechanic, focus, focusNonce }: { mechanic: string; focus?: string; focusNonce?: number }) {
   const [side, setSide] = useState<Side>('new');
   const [q, setQ] = useState('');
   const [onlyChanged, setOnlyChanged] = useState(false);
@@ -133,6 +137,35 @@ export function TreeMap({ mechanic }: { mechanic: string }) {
   }, [fit, side]);
 
   useTrackedSearch('map', q);
+
+  // Node to centre on once the view/side is ready (set by a search pick).
+  const [centerOn, setCenterOn] = useState<{ name: string; n: number } | null>(null);
+  /** Highlight a node by name, switch to the tree that has it, and zoom onto it. */
+  const showNode = (name: string, preferred?: Version) => {
+    const inNew = data.nodes.new.some((n) => n.name === name);
+    const inOld = data.nodes.old.some((n) => n.name === name);
+    const want: Side = preferred === '3.29' && inOld ? 'old' : inNew ? 'new' : inOld ? 'old' : side;
+    if (want !== side) setSide(want);
+    setQ(name);
+    setCenterOn({ name, n: Date.now() });
+  };
+  useEffect(() => {
+    if (!centerOn || !size.w) return;
+    const matches = nodes.filter((n) => n.name === centerOn.name && n.kind !== 'mastery');
+    if (!matches.length) return;
+    // Centre on the matches' bounding box; zoom in for a single node, less for a group.
+    const xs = matches.map((n) => n.x);
+    const ys = matches.map((n) => n.y);
+    const w = Math.max(...xs) - Math.min(...xs) + 1200;
+    const h = Math.max(...ys) - Math.min(...ys) + 1200;
+    setView({ cx: (Math.max(...xs) + Math.min(...xs)) / 2, cy: (Math.max(...ys) + Math.min(...ys)) / 2, scale: Math.min(0.45, size.w / w, size.h / h) });
+    setCenterOn(null);
+  }, [centerOn, nodes, size]);
+  useFocusTarget(focus, focusNonce, (f) => showNode(f.replace(/^q:/, '')));
+  const localEntries = useMemo(
+    () => SEARCH_INDEX.filter((e: SearchEntry) => (e.kind === 'node' || e.kind === 'notable' || e.kind === 'keystone') && matchesMechanic(e.mechanics, mechanic)),
+    [mechanic],
+  );
   const needle = q.trim().toLowerCase();
   const isLit = useCallback(
     (n: MapNode) =>
@@ -391,7 +424,13 @@ export function TreeMap({ mechanic }: { mechanic: string }) {
         >
           ❖ Took over a scarab
         </Chip>
-        <input type="search" placeholder="Highlight node name or stat…" value={q} onChange={(e) => setQ(e.target.value)} />
+        <Autocomplete
+          entries={localEntries}
+          value={q}
+          onChange={setQ}
+          onSelect={(h) => showNode(h.entry.label, h.entry.art?.type === 'node' ? h.entry.art.version : undefined)}
+          placeholder="Find a node or stat…"
+        />
         <span className="small muted">Greyed = unchanged · lit + coloured ring = changed · scarab badge = took over a scarab effect. Scroll to zoom, drag to pan.</span>
       </div>
       <div className="map-wrap" ref={wrapRef}>

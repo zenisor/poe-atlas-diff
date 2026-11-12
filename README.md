@@ -33,6 +33,7 @@ Page actions are sent as GoatCounter events (`src/lib/analytics.ts`), named `are
 | `map/tree/3.29\|3.30`, `map/only-changed:on\|off`, `map/took-over-scarab:on\|off`, `map/reset-view` | tree map controls |
 | `strategy/view/<preset>`, `strategy/clone/<preset>`, `strategy/new`, `strategy/delete`, `strategy/compare`, `strategy/add-scarab/<scarab>`, `strategy/add-notable/<notable>`, `strategy/import`, `strategy/export` | strategy actions |
 | `<area>/search` | a search was used (≥ 3 chars, once typing stops); the search text is never sent |
+| `search/global/<kind>/<item>` | a global search result was picked (the picked item, not the typed text) |
 
 ## Tabs
 
@@ -45,6 +46,12 @@ Page actions are sent as GoatCounter events (`src/lib/analytics.ts`), named `are
 | **All tree effects** | Every stat line grouped by wording, with tree-wide totals in 3.29 vs 3.30. Click a row to see the nodes |
 | **Tree map** | Both trees drawn from the export, coloured by per-node change; hover for stats, scroll to zoom |
 | **Strategies** | Build or clone a 3.29 setup (scarabs + notables), see how much survives, compare all strategies. Saved in localStorage, import/export as JSON |
+
+## Search
+
+- **Global** (top bar, press `/`): scarabs, notables/keystones, mechanics, tree effects, node names and example strategies, with autocomplete. Picking a result jumps to it. The scarab row opens, the notable card or effect row is highlighted, the tree map zooms onto the node, the strategy opens. The URL (`#/<tab>/<mechanic>?focus=<item>`) is shareable.
+- **Per page**: each page's search box autocompletes only that page's items within the selected mechanic. The strategy builder uses the same autocomplete to add scarabs and 3.29 notables.
+- Ranking lives in `src/lib/search.ts` (pure, unit-tested) and the index in `src/searchIndex.ts`.
 
 ## Look & feel
 

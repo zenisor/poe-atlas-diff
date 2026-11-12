@@ -6,12 +6,15 @@ import { FATE_LABEL } from '../lib/scarabs.ts';
 import { fmtValue, pct } from '../lib/format.ts';
 import { CATEGORY_COLOR, Chip, FATE_COLOR, FateBadge, FATES, makeGroupHeaders, Retention, StatText, toggle } from '../components/ui.tsx';
 import { CATEGORY_LABEL, matchesMechanic } from '../lib/mechanics.ts';
+import { Autocomplete } from '../components/Autocomplete.tsx';
+import { SEARCH_INDEX } from '../searchIndex.ts';
+import { flashFocus, useFocusTarget } from '../lib/focus.ts';
 import { ItemIcon } from '../components/art.tsx';
 import { MechIcon, NodeTip, ScarabIcon } from '../components/tips.tsx';
 
 type SortKey = 'mechanic' | 'retention' | 'name';
 
-export function Scarabs({ mechanic, embedded = false }: { mechanic: string; embedded?: boolean }) {
+export function Scarabs({ mechanic, embedded = false, focus, focusNonce }: { mechanic: string; embedded?: boolean; focus?: string; focusNonce?: number }) {
   const [fates, setFates] = useState<Set<Fate>>(new Set(FATES));
   const [q, setQ] = useState('');
   const [sort, setSort] = useState<SortKey>('mechanic');
@@ -32,6 +35,18 @@ export function Scarabs({ mechanic, embedded = false }: { mechanic: string; embe
   }, [fates, mechanic, q, sort]);
 
   useTrackedSearch(embedded ? 'mechanic-scarabs' : 'scarabs', q);
+
+  /** Open a scarab's row, making sure no filter hides it, and scroll to it. */
+  const reveal = (id: string, query = '') => {
+    const s = data.scarabs.find((x) => x.id === id);
+    if (!s) return;
+    if (!fates.has(s.fate)) setFates(new Set([...fates, s.fate]));
+    setQ(query);
+    setOpen((o) => new Set([...o, id]));
+    flashFocus(`scarab:${id}`);
+  };
+  useFocusTarget(focus, focusNonce, (id) => reveal(id));
+  const localEntries = useMemo(() => SEARCH_INDEX.filter((e) => e.kind === 'scarab' && matchesMechanic(e.mechanics, mechanic)), [mechanic]);
   const counts = Object.fromEntries(FATES.map((f) => [f, data.scarabs.filter((s) => s.fate === f && matchesMechanic(s.mechanics, mechanic)).length]));
   const header = makeGroupHeaders();
   // On a single-mechanic page, list multi-mechanic scarabs under that mechanic.
@@ -48,7 +63,13 @@ export function Scarabs({ mechanic, embedded = false }: { mechanic: string; embe
       </p>
       )}
       <div className="toolbar">
-        <input type="search" placeholder="Search scarab or effect…" value={q} onChange={(e) => setQ(e.target.value)} />
+        <Autocomplete
+          entries={localEntries}
+          value={q}
+          onChange={setQ}
+          onSelect={(h) => reveal(h.entry.target.focus!, h.entry.label)}
+          placeholder="Search scarab or effect…"
+        />
         <select value={sort} onChange={(e) => {
             setSort(e.target.value as SortKey);
             track(`scarabs/sort/${e.target.value}`);
@@ -108,6 +129,7 @@ export function Scarabs({ mechanic, embedded = false }: { mechanic: string; embe
                     </tr>
                   )}
                   <tr
+                    data-focus={`scarab:${s.id}`}
                     className="clickable"
                     onClick={() => {
                       if (!open.has(s.id)) track(`scarab/open/${s.name}`);
