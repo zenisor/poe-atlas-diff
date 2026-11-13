@@ -6,17 +6,23 @@ import { flashFocus, useFocusTarget } from '../lib/focus.ts';
 import { data, scarabLinksByNode } from '../data.ts';
 import type { EffectDiff, EffectSide, EffectStatus } from '../lib/types.ts';
 import { effectTexts, effectTitle, likeText, prettyTemplate, signedPct, surpass, trimNum } from '../lib/format.ts';
-import { CATEGORY_COLOR, Chip, makeGroupHeaders, STATUS_COLOR, STATUS_LABEL, StatText, StatusBadge, toggle } from '../components/ui.tsx';
+import { CATEGORY_COLOR, Chip, FateBadge, makeGroupHeaders, STATUS_COLOR, STATUS_LABEL, StatText, StatusBadge, toggle } from '../components/ui.tsx';
 import { CATEGORY_LABEL, matchesMechanic } from '../lib/mechanics.ts';
 import { MechIcon, NodeTip, ScarabIcon } from '../components/tips.tsx';
 
-/** Scarabs whose effect this tree effect (partly) replaced. */
-function scarabsOf(e: EffectDiff) {
-  const seen = new Map<string, ScarabResult>();
-  for (const c of e.new?.contributions ?? []) for (const l of scarabLinksByNode.get(c.nodeId) ?? []) seen.set(l.scarab.id, l.scarab);
+/**
+ * Scarabs whose effect this tree effect (partly) took over, with that scarab effect's fate.
+ * Matched by stat line, not just by node: a notable with two lines (e.g. Renowned Fighter)
+ * only links each line to the scarab it replaced.
+ */
+function scarabsOf(e: EffectDiff): { scarab: ScarabResult; fate: Fate }[] {
+  const seen = new Map<string, { scarab: ScarabResult; fate: Fate }>();
+  for (const c of e.new?.contributions ?? [])
+    for (const l of scarabLinksByNode.get(c.nodeId) ?? [])
+      if (l.effect.matches330.some((m) => m.nodeId === c.nodeId && m.text === c.text)) seen.set(l.scarab.id, { scarab: l.scarab, fate: l.effect.fate });
   return [...seen.values()];
 }
-import type { ScarabResult, Version } from '../lib/types.ts';
+import type { Fate, ScarabResult, Version } from '../lib/types.ts';
 
 const iconOf = { '3.29': new Map(data.nodes.old.map((n) => [n.id, n])), '3.30': new Map(data.nodes.new.map((n) => [n.id, n])) };
 /** The art of the most prominent node giving this effect (notables first, new tree first). */
@@ -111,7 +117,7 @@ export function Effects({ mechanic, embedded = false, focus, focusNonce }: { mec
               <th className="num" title="Taking every node that has this effect">3.29 max (all nodes)</th>
               <th className="num" title="Taking every node that has this effect">3.30 max (all nodes)</th>
               <th className="num">Δ</th>
-              <th>Status</th>
+              <th title="3.30 tree compared with the 3.29 tree. Scarab fates are under each effect.">Status</th>
             </tr>
           </thead>
           <tbody>
@@ -155,14 +161,23 @@ export function Effects({ mechanic, embedded = false, focus, focusNonce }: { mec
                       })()}
                       <div>
                       {e.key.startsWith('link:') ? <b>{e.label}</b> : <span className="mod">{effectTitle(e.label, effectTexts(e))}</span>}
-                      {scarabsOf(e).length > 0 && (
-                        <span className="icon-strip" style={{ marginLeft: 8 }} onClick={(ev) => ev.stopPropagation()}>
-                          {scarabsOf(e).map((sc) => (
-                            <ScarabIcon key={sc.id} s={sc} size={22} underline />
-                          ))}
-                        </span>
-                      )}
                       {e.old?.surpassing || e.new?.surpassing ? <span className="badge" style={{ color: 'var(--gold)', marginLeft: 6 }}>Surpassing</span> : null}
+                      {(() => {
+                        // The Status column compares the two trees. Each scarab gets its own fate here,
+                        // so "Stronger" isn't read as "stronger than the scarab".
+                        const links = scarabsOf(e);
+                        return links.length > 0 && (
+                          <div className="effect-scarabs small" onClick={(ev) => ev.stopPropagation()}>
+                            <span className="muted">{links.length > 1 ? 'Scarabs:' : 'Scarab:'}</span>
+                            {links.map(({ scarab, fate }) => (
+                              <span key={scarab.id} className="with-icon" style={{ gap: 4 }}>
+                                <ScarabIcon s={scarab} size={22} />
+                                <FateBadge fate={fate} short />
+                              </span>
+                            ))}
+                          </div>
+                        );
+                      })()}
                       {e.similar && <div className="small muted">similar {e.status === 'removed' ? 'new' : 'old'} effect: {prettyTemplate(e.similar.label)}</div>}
                       {e.note && <div className="note">{e.note}</div>}
                       </div>

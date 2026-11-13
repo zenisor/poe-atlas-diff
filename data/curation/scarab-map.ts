@@ -716,11 +716,10 @@ export const SCARAB_MAP: Record<string, ScarabSpec> = {
     effects: [
       {
         label: 'Additional reward on unique monsters',
-        scarab: 100,
-        unit: '%',
-        stacks: false,
+        scarab: 1,
+        unit: 'count',
         fate: 'partial',
-        treeUnit: 'see nodes',
+        treeUnit: '% increased Gold',
         tree330: [{ text: 'increased Gold dropped by Unique Monsters', nodes: ['Gilded Armour'] }],
         note: 'Gilded Armour is this scarab in disguise: it keeps the same 30% increased Toughness for Unique Monsters, but the extra reward (up to 3 with 3 scarabs) became only 100% increased Gold.',
       },
@@ -802,12 +801,17 @@ export const SCARAB_MAP: Record<string, ScarabSpec> = {
       {
         label: 'All mercenary gear Unique',
         scarab: 100,
-        unit: '%',
+        unit: '% of items',
         stacks: false,
         fate: 'partial',
-        treeUnit: 'see nodes',
-        tree330: [{ text: 'Equipment Items on Infamous Mercenaries found in your Maps are Unique' }, { text: 'chance for Items worn by Mercenaries found in Maps to be Unique' }],
-        note: 'Renowned Fighter: at least 3 items Unique, Infamous mercenaries only. Plus % increased unique chance on small nodes.',
+        treeUnit: 'Unique items (Infamous only)',
+        // The small nodes' "% increased chance" is a different unit from a guaranteed count: shown, not added.
+        tree329: [{ text: 'chance for Items worn by Mercenaries found in Maps to be Unique', unit: '% increased chance' }],
+        tree330: [
+          { text: 'Equipment Items on Infamous Mercenaries found in your Maps are Unique' },
+          { text: 'chance for Items worn by Mercenaries found in Maps to be Unique', unit: '% increased chance' },
+        ],
+        note: 'The scarab made every Equipment Item on every Mercenary Unique. On the 3.30 tree only Renowned Fighter guarantees anything: at least 3 Unique items, on Infamous Mercenaries only. The small nodes give 100% increased chance (45% on the 3.29 tree), which raises an unknown base chance and guarantees nothing.',
       },
     ],
   },

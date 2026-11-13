@@ -3,10 +3,10 @@
  * built on the raw sprite components in art.tsx and the shared tooltip layer.
  */
 import { data, effectByTemplate, lineStacks, mapNodeById, mechanicSummary, notableDiffByNodeId, relatedScarabsByNode, scarabLinksByNode, scarabsByName, type ScarabLink } from '../data.ts';
-import type { MapNode, MatchedContribution, NodeKind, NotableDiff, OutsideNote, ScarabResult, Version } from '../lib/types.ts';
+import type { MapNode, MatchedContribution, NodeKind, NotableDiff, OutsideNote, ScarabEffectResult, ScarabResult, Version } from '../lib/types.ts';
 import { FATE_LABEL } from '../lib/scarabs.ts';
 import { CATEGORY_LABEL, CATEGORY_NOTE, categoryOf } from '../lib/mechanics.ts';
-import { fmtValue, lcFirst, likeText, pct, prettyTemplate, signedPct, surpass, surpassLong, trimNum, withValue } from '../lib/format.ts';
+import { fmtValue, lcFirst, matchUnit, likeText, pct, prettyTemplate, signedPct, surpass, surpassLong, trimNum, withValue } from '../lib/format.ts';
 import { toTemplate } from '../lib/stats.ts';
 import { CATEGORY_COLOR, FATE_COLOR, FateBadge, FATES, Retention, STATUS_LABEL, StatList, StatusBadge } from './ui.tsx';
 import { ItemIcon, MechanicIcon, NodeIcon } from './art.tsx';
@@ -17,25 +17,26 @@ const Sep = () => <div className="sep" />;
 
 // ---------------- scarabs ----------------
 
-function nodeList(list: MatchedContribution[], version: Version, unit: string) {
+function nodeList(list: MatchedContribution[], version: Version, effect: ScarabEffectResult) {
   const byName = new Map<string, { c: MatchedContribution; n: number; sum: number }>();
   for (const c of list) {
-    const e = byName.get(c.nodeName);
+    const key = `${c.nodeName}|${c.unit ?? ''}`;
+    const e = byName.get(key);
     if (e) {
       e.n++;
       e.sum += c.value;
-    } else byName.set(c.nodeName, { c, n: 1, sum: c.value });
+    } else byName.set(key, { c, n: 1, sum: c.value });
   }
   const nodes = version === '3.30' ? mapNodeById.new : mapNodeById.old;
   return (
     <div className="pt-nodes">
       {[...byName.values()].slice(0, 6).map(({ c, n, sum }) => (
-        <div key={c.nodeName} className="with-icon" style={{ gap: 6 }}>
+        <div key={c.nodeName + (c.unit ?? '')} className="with-icon" style={{ gap: 6 }}>
           <NodeIcon version={version} kind={c.kind} icon={nodes.get(c.nodeId)?.icon ?? ''} size={c.kind === 'small' ? 20 : 26} />
           <span>
             <b>{c.nodeName}</b>
             {n > 1 && ` ×${n}`}
-            <span className="muted"> → {fmtValue(sum, unit, c.surpassing)}</span>
+            <span className="muted"> → {fmtValue(sum, matchUnit(c, effect), c.surpassing)}</span>
             {c.choice && <span className="muted"> (choice)</span>}
           </span>
         </div>
@@ -98,10 +99,10 @@ export function ScarabTooltip({ s }: { s: ScarabResult }) {
                 </div>
               </div>
             )}
-            {e.retention == null && e.fate !== 'thread' && e.fate !== 'ember' && e.treeUnit && e.treeUnit !== 'see nodes' && (
+            {e.retention == null && e.fate !== 'thread' && e.fate !== 'ember' && e.treeUnit && (
               <div className="small muted">3.30 tree: {fmtValue(e.tree330, e.treeUnit)}</div>
             )}
-            {e.matches330.length > 0 && nodeList(e.matches330, '3.30', e.unit)}
+            {e.matches330.length > 0 && nodeList(e.matches330, '3.30', e)}
             {e.note && <div className="note">{e.note}</div>}
           </div>
         ))}

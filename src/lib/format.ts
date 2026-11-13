@@ -31,6 +31,15 @@ export function fmtValue(value: number, unit: string, surpassing = false): strin
   return `${trimNum(value)} ${unit}`;
 }
 
+/**
+ * Unit to show next to a matched tree line. Lines with their own unit keep it; when the
+ * effect isn't comparable with the scarab, the tree side is shown in its tree unit, so
+ * "180% increased chance" doesn't read as a plain 180% chance.
+ */
+export function matchUnit(c: { unit?: string }, e: { unit: string; treeUnit?: string; retention: number | null }): string {
+  return c.unit ?? (e.retention == null && e.treeUnit ? e.treeUnit : e.unit);
+}
+
 export function signedPct(n: number | null): string {
   if (n == null) return '';
   return `${n > 0 ? '+' : ''}${trimNum(n, 1)}%`;

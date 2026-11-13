@@ -153,6 +153,11 @@ export interface TreeMatch {
   valueIndex?: number;
   /** Use this fixed value for every matching line (for effects without a number). */
   fixed?: number;
+  /**
+   * The line measures something else than the effect (e.g. "% increased chance" next to a
+   * guaranteed count). It is listed with the effect in this unit, but not added to the total.
+   */
+  unit?: string;
 }
 
 export interface ScarabEffectSpec {
@@ -169,7 +174,7 @@ export interface ScarabEffectSpec {
   tree330?: TreeMatch[];
   /** Force a fate instead of deriving it from the numbers. */
   fate?: Fate;
-  /** Display unit for the tree side when it is not comparable (fate 'chance'). */
+  /** Display unit for the tree side when it is not comparable (fates 'chance' and 'partial'). */
   treeUnit?: string;
   weight?: number;
   note?: string;
@@ -202,6 +207,8 @@ export interface MatchedContribution {
   value: number;
   choice: boolean;
   surpassing: boolean;
+  /** Set for lines that are shown but not counted (see TreeMatch.unit). */
+  unit?: string;
 }
 
 export interface ScarabEffectResult {

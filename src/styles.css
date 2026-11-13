@@ -207,6 +207,8 @@ td.num, th.num { text-align: right; white-space: nowrap; }
 .node-icon-frame { pointer-events: none; }
 .item-icon { flex: none; vertical-align: middle; }
 .icon-strip { display: inline-flex; gap: 2px; align-items: center; flex-wrap: wrap; }
+/* Scarabs an effect took over, each with its own fate (All tree effects). */
+.effect-scarabs { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; margin-top: 4px; }
 
 /* ---------- overview: the stash tab ---------- */
 .hero { margin-bottom: 8px; }

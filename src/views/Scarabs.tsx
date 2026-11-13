@@ -3,7 +3,7 @@ import { track, trackToggle, useTrackedSearch } from '../lib/analytics.ts';
 import { data } from '../data.ts';
 import type { Fate, MatchedContribution, ScarabEffectResult, ScarabResult } from '../lib/types.ts';
 import { FATE_LABEL } from '../lib/scarabs.ts';
-import { fmtValue, pct } from '../lib/format.ts';
+import { fmtValue, matchUnit, pct } from '../lib/format.ts';
 import { CATEGORY_COLOR, Chip, FATE_COLOR, FateBadge, FATES, makeGroupHeaders, Retention, StatText, toggle } from '../components/ui.tsx';
 import { CATEGORY_LABEL, matchesMechanic } from '../lib/mechanics.ts';
 import { Autocomplete } from '../components/Autocomplete.tsx';
@@ -175,15 +175,13 @@ export function Scarabs({ mechanic, embedded = false, focus, focusNonce }: { mec
                           {e.matches330.length > 0 && (
                             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2px 10px', marginTop: 3 }}>
                               {uniqueNodes(e.matches330).map((n) => (
-                                <span key={n.name} className="with-icon muted" style={{ gap: 4 }}>
+                                <span key={n.name + (n.unit ?? '')} className="with-icon muted" style={{ gap: 4 }}>
                                   <NodeTip version="3.30" id={n.id} kind={n.kind} icon={n.icon} size={n.kind === 'small' ? 22 : 28} />
                                   {/* one text run, so it wraps like a sentence instead of per piece */}
                                   <span>
                                     {n.name}
                                     {n.count > 1 && ` ×${n.count}`}
-                                    {e.unit !== 'binary' && e.unit !== 'content' && (
-                                      <span style={{ color: 'var(--text)', whiteSpace: 'nowrap' }}> {fmtValue(n.sum, e.unit, n.surpassing)}</span>
-                                    )}
+                                    {e.unit !== 'binary' && e.unit !== 'content' && <> {nodeValue(fmtValue(n.sum, matchUnit(n, e), n.surpassing))}</>}
                                   </span>
                                 </span>
                               ))}
@@ -225,17 +223,23 @@ export function Scarabs({ mechanic, embedded = false, focus, focusNonce }: { mec
   );
 }
 
+/** A node's value in the effect column. Short values stay on one line; long ones ("3 Unique items (Infamous only)") wrap. */
+function nodeValue(text: string) {
+  return <span style={{ color: 'var(--text)', whiteSpace: text.includes(' ') ? undefined : 'nowrap' }}>{text}</span>;
+}
+
 const nodeIconById = new Map(data.nodes.new.map((n) => [n.id, n.icon]));
 
 /** Distinct matched nodes (by name) with how many copies the tree has. Notables first. */
 function uniqueNodes(list: MatchedContribution[]) {
-  const map = new Map<string, { id: string; name: string; kind: MatchedContribution['kind']; icon: string; count: number; sum: number; surpassing: boolean }>();
+  const map = new Map<string, { id: string; name: string; kind: MatchedContribution['kind']; icon: string; count: number; sum: number; surpassing: boolean; unit?: string }>();
   for (const c of list) {
-    const e = map.get(c.nodeName);
+    const key = `${c.nodeName}|${c.unit ?? ''}`;
+    const e = map.get(key);
     if (e) {
       e.count++;
       e.sum += c.value;
-    } else map.set(c.nodeName, { id: c.nodeId, name: c.nodeName, kind: c.kind, icon: nodeIconById.get(c.nodeId) ?? '', count: 1, sum: c.value, surpassing: c.surpassing });
+    } else map.set(key, { id: c.nodeId, name: c.nodeName, kind: c.kind, icon: nodeIconById.get(c.nodeId) ?? '', count: 1, sum: c.value, surpassing: c.surpassing, ...(c.unit ? { unit: c.unit } : {}) });
   }
   const rank = { keystone: 0, notable: 1, small: 2 } as Record<string, number>;
   return [...map.values()].sort((a, b) => (rank[a.kind] ?? 3) - (rank[b.kind] ?? 3));
@@ -245,9 +249,7 @@ function bestCase(e: ScarabEffectResult): string {
   if (e.fate === 'thread') return 'via Threads';
   if (e.fate === 'ember') return 'via an Allflame Ember';
   if (e.unit === 'binary') return 'yes → no';
-  if (e.retention == null) {
-    return e.treeUnit && e.treeUnit !== 'see nodes' ? `tree: ${fmtValue(e.tree330, e.treeUnit)}` : '—';
-  }
+  if (e.retention == null) return e.treeUnit ? `tree: ${fmtValue(e.tree330, e.treeUnit)}` : '—';
   return `${fmtValue(e.before, e.unit)} → ${fmtValue(e.after, e.unit, e.surpassing)}`;
 }
 
@@ -348,6 +350,7 @@ function MatchList({ title, list }: { title: string; list: MatchedContribution[]
             {n > 1 && ` ×${n}`}
             {c.kind !== 'small' && <span className="muted"> ({c.kind})</span>}: <StatText text={c.text} />
             {c.choice && <span className="muted"> (choice; pick one variant)</span>}
+            {c.unit && <span className="muted"> (shown, not counted)</span>}
           </li>
         ))}
       </ul>

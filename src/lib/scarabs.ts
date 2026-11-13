@@ -93,7 +93,8 @@ const MATCHABLE = new Set(['small', 'notable', 'keystone']);
 /**
  * Sums the tree's contribution for one effect. Lines with Surpassing Chance are
  * converted to an expected count (100% = +1) when the effect is measured in counts.
- * Multiple-choice nodes contribute only their best matching variant.
+ * Multiple-choice nodes contribute only their best matching variant. Lines matched
+ * with their own `unit` are listed but not added to the total.
  */
 export function sumMatches(nodes: TreeNode[], matches: TreeMatch[] | undefined, unit: string): { total: number; contributions: MatchedContribution[] } {
   const contributions: MatchedContribution[] = [];
@@ -124,8 +125,10 @@ export function sumMatches(nodes: TreeNode[], matches: TreeMatch[] | undefined, 
           value: round(raw * scale, 4),
           choice,
           surpassing: line.surpassing,
+          ...(m.unit ? { unit: m.unit } : {}),
         };
-        if (choice) {
+        if (m.unit) contributions.push(c); // shown with the effect, not counted
+        else if (choice) {
           const prev = bestChoice.get(node.id);
           if (!prev || c.value > prev.value) bestChoice.set(node.id, c);
         } else {
@@ -160,7 +163,7 @@ export function evaluateEffect(spec: ScarabEffectSpec, limit: number, oldNodes: 
   let fate: Fate;
   let autoNote: string | undefined;
   if (spec.fate) fate = spec.fate;
-  else if (!m330.contributions.length) fate = 'removed';
+  else if (!m330.contributions.some((c) => !c.unit)) fate = 'removed';
   else if (retention != null && retention >= FULL_THRESHOLD) fate = 'full';
   else if (after <= oldTreeOnly + 1e-9) {
     fate = 'removed';

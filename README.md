@@ -96,7 +96,7 @@ Every filter accepts a single mechanic or a whole category. Scarabs that touch s
 
 Matching scarab effects to tree nodes takes judgment, so it lives in reviewed files. **The numbers themselves always come from the tree data.**
 
-- `scarab-map.ts`: per scarab, which 3.29/3.30 stat lines replicate each effect (substring of the stat template, `#` = number), plus scaling, caps, forced fates and notes.
+- `scarab-map.ts`: per scarab, which 3.29/3.30 stat lines replicate each effect (substring of the stat template, `#` = number), plus scaling, caps, forced fates and notes. A line given its own `unit` (e.g. "% increased chance" next to a guaranteed count) is listed with the effect but not added to its total.
 - `effect-links.ts`: effects whose wording changed (e.g. "chance for an additional Shrine" → "Surpassing Chance to contain a Shrine").
 - `notable-links.ts`: renames, merges into multiple-choice notables, and same-name notables that changed meaning.
 - `strategies.ts`: example 3.29 setups. These are typical shapes, not exact meta builds.
@@ -117,4 +117,4 @@ Matching scarab effects to tree nodes takes judgment, so it lives in reviewed fi
 - Thread modifiers are random per Thread and aren't in the export, so Thread-replaced content isn't scored.
 - Node mechanic grouping is keyword-based with a nearest-mastery fallback (`src/lib/tree.ts`).
 
-Sources: [grindinggear/atlastree-export](https://github.com/grindinggear/atlastree-export), [poewiki.net](https://www.poewiki.net/wiki/Scarab), [3.30 patch notes (Maxroll)](https://maxroll.gg/poe/news/3-30-covens-of-umbra-patch-notes).
+Sources: [grindinggear/atlastree-export](https://github.com/grindinggear/atlastree-export), [poewiki.net](https://www.poewiki.net/wiki/Scarab), [3.30.0 patch notes](https://www.pathofexile.com/forum/view-thread/4013680).

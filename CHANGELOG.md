@@ -2,6 +2,13 @@
 
 What changed on the site and in its data, newest first. Spotted a mistake? [Report it on GitHub](https://github.com/zenisor/poe-atlas-diff/issues/new?template=data-mistake.yml).
 
+## 13 November 2026: Mercenary Unique gear
+
+- [Trarthan Scarab of Renown](https://zenisor.github.io/poe-atlas-diff/#/scarabs/Mercenaries?focus=ScarabMercenaries3) added two different kinds of number together into "103". The scarab made every Equipment Item on every Mercenary Unique. On the 3.30 tree only Renowned Fighter guarantees Unique items: at least 3, and only on Infamous Mercenaries. The small nodes' 100% increased chance (45% on the 3.29 tree) is now listed next to it but not counted, because it raises an unknown base chance.
+- **All tree effects**: each scarab icon now shows that scarab's own fate (Kept, Weaker, Partly, Chance only). The Stronger or Weaker status compares the 3.30 tree with the 3.29 tree, not with the scarab. A notable with several lines now links a scarab only to the line that replaced it.
+- Tree lines on Scarab fates and in tooltips show their real unit, like "180% increased chance" instead of "180%".
+- [Titanic Scarab of Treasures](https://zenisor.github.io/poe-atlas-diff/#/scarabs/Unique%20Monsters?focus=ScarabUniquesNew2) shows Gilded Armour as "100% increased Gold" instead of "100 see nodes".
+
 ## 12 November 2026: the rest of the patch notes
 
 The Endgame, League, Item generation and Monster sections of the [3.30.0 patch notes](https://www.pathofexile.com/forum/view-thread/4013680), paraphrased and sorted by mechanic.

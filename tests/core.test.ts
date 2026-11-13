@@ -107,6 +107,19 @@ describe('scarab effect evaluation', () => {
     expect(r.fate).toBe('removed');
   });
 
+  it('lists lines with their own unit but does not add them to the total', () => {
+    const nodes = [
+      node('a', 'Renowned Fighter', ['At least 3 Equipment Items on Infamous Mercenaries found in your Maps are Unique']),
+      node('b', 'Mercenary Unique Item Chance', ['20% increased chance for Items worn by Mercenaries found in Maps to be Unique']),
+    ];
+    const r = sumMatches(nodes, [{ text: 'are Unique' }, { text: 'worn by Mercenaries', unit: '% increased chance' }], '% of items');
+    expect(r.total).toBe(3);
+    expect(r.contributions.map((c) => c.unit)).toEqual([undefined, '% increased chance']);
+    // An effect matched only by such lines has nothing on the tree.
+    const only = evaluateEffect({ label: 'Gear', scarab: 100, unit: '%', tree330: [{ text: 'worn by Mercenaries', unit: '% increased chance' }] }, 1, [], nodes);
+    expect(only.fate).toBe('removed');
+  });
+
   it('keeps forced fates and derives the scarab fate from the primary effect', () => {
     const r = evaluateEffect({ label: 'Abyss', scarab: 1, unit: 'content', fate: 'thread' }, 5, [], []);
     expect(r.fate).toBe('thread');
